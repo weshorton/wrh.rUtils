@@ -3,3 +3,4 @@
 export(convertDFT)
 export(listToDT)
 export(mkdir)
+export(returnSessionInfo)

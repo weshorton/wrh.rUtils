@@ -25,10 +25,15 @@ data.frames/matrices into data.tables, copying over row.names as the first colum
 If data.frame/matrix doesn't have row.names, then no columns will be added to data.table
 }
 \examples{
+# Data
 my_df <- data.frame("A" = 1:10, "B" = LETTERS[1:10], "C" = letters[11:20])
+my_df2 <- my_df; rownames(my_df2) <- paste0("Row", 1:10)
+my_mat <- as.matrix(my_df); my_mat2 <- as.matrix(my_df2)
 my_dt <- data.table("AA" = 10:1, "BB" = LETTERS[5:14], "CC" = letters[20:11])
 convertDFT(data_dft = my_df)
-convertDFT(data_dft = my_df, newName_v = "Test")
+convertDFT(data_dft = my_df2)
+convertDFT(data_dft = my_df2, newName_v = "Test")
+convertDFT(data_dft = my_mat2, newName_v = "MatTest")
 convertDFT(data_dft = my_dt)
 convertDFT(data_dft = my_dt, col_v = NULL)
 convertDFT(data_dft = my_dt, col_v = "BB")
