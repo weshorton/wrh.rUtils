@@ -12,7 +12,8 @@ convertDFT(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T)
 \item{col_v}{character or numeric vector. if converting from dt to df, column name or index of which column to use as row.names.
 NA (default) will use 1st column; NULL will not add rownames}
 
-\item{newName_v}{character vector. if converting from df/mat to dt, what to name new column. (default is "V1")}
+\item{newName_v}{character vector. if converting from df/mat to dt, what to name new column. (default is "V1")
+if newName_v is already a column name, will paste "_2" to end of newName_v.}
 
 \item{rmCol_v}{boolean value indicating whether to remove the column used to make the rownames from the output table (T) or to leave it (F)}
 }
