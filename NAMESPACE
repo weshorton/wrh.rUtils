@@ -2,7 +2,9 @@
 
 export(convertDFT)
 export(detachAllPackages)
+export(geomMean)
 export(listToDT)
 export(mkdir)
+export(naTo0)
 export(returnSessionInfo)
 export(splitChar)
