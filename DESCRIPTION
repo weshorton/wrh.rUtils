@@ -6,6 +6,8 @@ Description: Just a collection of different functions I've written to make my li
 Depends: R (>= 3.5.1)
 Imports: 
     data.table
+    ggplot2
+    RColorBrewer
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
