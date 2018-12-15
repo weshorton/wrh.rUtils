@@ -5,8 +5,8 @@ Authors@R: person("Wes", "Horton", email = "wrhorton592@gmail.com", role = c("au
 Description: Just a collection of different functions I've written to make my life easier.
 Depends: R (>= 3.5.1)
 Imports: 
-    data.table
-    ggplot2
+    data.table,
+    ggplot2,
     RColorBrewer
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
