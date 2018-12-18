@@ -11,7 +11,11 @@ library(ggplot2)
 #         legend.text = element_text(size = 12),
 #         legend.title = element_text(size = 14))
 
-my_theme <- function(base_size=12) {
+my_theme <- function() {
+  #' Base Custom Theme
+  #' @description Minor changes to theme_classic()
+  #' @export
+  
   theme_classic() +
     theme(plot.title = element_text(hjust = 0.5, size = 18),
         axis.text = element_text(size = 12),
