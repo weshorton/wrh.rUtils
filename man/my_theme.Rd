@@ -7,5 +7,5 @@
 my_theme()
 }
 \description{
-Minor changes to theme_classic()
+Minor changes to theme_classic() - slightly larger text and centered title
 }
