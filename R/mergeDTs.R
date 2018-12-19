@@ -33,7 +33,7 @@ mergeDTs <- function(data_lsdt, mergeCol_v, keepCol_v = NULL, ...) {
   
   ## Create initial table by extracting the 2 columns of interest from the rest
   merge_dt <- data_lsdt[[1]][,mget(c(mergeCol_v, keepCol_v))]
-  
+
   ## Create initial column names (first check if list has names and add if not)
   if (is.null(names(data_lsdt))) {
     names_v <- paste("V", 1:length(data_lsdt))
@@ -67,6 +67,6 @@ mergeDTs <- function(data_lsdt, mergeCol_v, keepCol_v = NULL, ...) {
     
     ## Rename columns
     colnames(merge_dt) <- colNames_v
-  } # for
+  } # for i
   return(merge_dt)
 } # mergeDTs
