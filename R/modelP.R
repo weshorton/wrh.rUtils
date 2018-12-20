@@ -29,7 +29,7 @@ modelP <- function(model, round_v = T, verbose_v = F) {
   
   ## Get p-value
   if (class_v == "aov") {
-    p_v <- model[[1]][["Pr(>F)"]][[1]]
+    p_v <- summary_v[[1]][["Pr(>F)"]][[1]]
   } else {
     temp <- summary_v$fstatistic
     p_v <- pf(temp[1], temp[2], temp[3], lower.tail = F)
