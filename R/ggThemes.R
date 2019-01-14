@@ -11,10 +11,11 @@ my_theme <- function() {
   
   theme_classic() +
     theme(plot.title = element_text(hjust = 0.5, size = 18),
-        axis.text = element_text(size = 12),
-        axis.title = element_text(size = 14),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 14))
+          plot.subtitle = element_text(hjust = 0.5, size = 14),
+          axis.text = element_text(size = 12),
+          axis.title = element_text(size = 14),
+          legend.text = element_text(size = 12),
+          legend.title = element_text(size = 14))
 }
 
 ###
@@ -28,6 +29,7 @@ big_label <- function() {
   
   theme_classic() +
     theme(plot.title = element_text(hjust = 0.5, size = 20),
+          plot.subtitle = element_text(hjust = 0.5, size = 16),
           axis.text = element_text(size = 16),
           axis.text.y = element_text(angle = 45),
           axis.title = element_text(size = 18),
@@ -75,6 +77,7 @@ times <- function() {
   
   my_theme +
     theme(plot.title = element_text(family = "Times New Roman", hjust = 0.5, size = 18),
+          plot.subtitle = element_text(family = "Times New Roman", hjust = 0.5, size = 14),
           axis.text = element_text(family = "Times New Roman", size = 12),
           axis.title = element_text(family = "Times New Roman", size = 14),
           legend.text = element_text(family = "Times New Roman", size = 12),
@@ -93,6 +96,7 @@ bl_times <- function() {
   
   my_theme +
     theme(plot.title = element_text(family = "Times New Roman", hjust = 0.5, size = 20),
+          plot.subtitle = element_text(family = "Times New Roman", hjust = 0.5, size = 16),
           axis.text = element_text(family = "Times New Roman", size = 16),
           axis.title = element_text(family = "Times New Roman", size = 18),
           legend.text = element_text(family = "Times New Roman", size = 16),
