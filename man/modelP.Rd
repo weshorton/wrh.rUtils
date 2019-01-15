@@ -4,14 +4,18 @@
 \alias{modelP}
 \title{Extract p-value from model}
 \usage{
-modelP(model, round_v = T, verbose_v = F)
+modelP(model, var_v = NULL, round_v = NULL, verbose_v = F)
 }
 \arguments{
 \item{model}{model object of class 'lm' for linear model, classes 'lm' and 'aov' for ANOVA.}
 
-\item{round_v}{logical. TRUE - round p-value to 3 decimals; FALSE - do not round.}
+\item{var_v}{character string of variable to get p-value from. If NULL (default) will take 1st.}
+
+\item{round_v}{numeric. how many digits to round p-value output to. If NULL (default) will not round.}
 
 \item{verbose_v}{logical. TRUE - print model type; FALSE - don't print}
+
+\item{round_v}{logical. TRUE - round p-value to 3 decimals; FALSE - do not round.}
 }
 \value{
 numeric vector of p-value
