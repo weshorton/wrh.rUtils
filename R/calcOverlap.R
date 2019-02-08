@@ -1,4 +1,4 @@
-calcOverlap <- function(set1_v, set2_v, total_v = NA, digits_v = 4) {
+calcOverlap <- function(set1_v, set2_v, total_v = NA, digits_v = 4, fullOut_v = T) {
   #' Calculate Overlap
   #' @description Calculate the Jaccard Index of two different sets. Can also calculate BUB.
   #' @param set1_v Character vector of values to compare
@@ -6,6 +6,9 @@ calcOverlap <- function(set1_v, set2_v, total_v = NA, digits_v = 4) {
   #' @param total_v Optional global set to compare set1 and set2 against. Only used for BUB. 
   #' If 'NA' (default), will just calculate Jaccard index.
   #' @param digits_v how many digits to round output to. Default is 4.
+  #' @param fullOut_v logical. TRUE - output number of elements in 'set1', 'set2', their intersection, their union, 
+  #' and number of elements in 'total', in addition to jaccard and BUB values.
+  #' FALSE - just output jaccard and BUB values
   #' @details This will calculate overlap between two sets by comparing the identities of each element within
   #' set1 and set2. Jaccard Index is the Intersection of the two sets divided by the union of the two sets. BUB
   #' (Baroni Urbani Binary Index) is similar, but compares against a global set (rather than just the union of 1 and 2).
@@ -43,6 +46,12 @@ calcOverlap <- function(set1_v, set2_v, total_v = NA, digits_v = 4) {
     
   ## Make output
   out_v <- c("Jaccard" = jaccard_v, "BUB" = bub_v)
+  
+  ## Add
+  if (fullOut_v) {
+    out_v <- c(out_v, "n1" = length(set1_v), "n2" = length(set2_v), 
+               "nInt" = length(intersect_v), 'nUnion' = length(union_v), 'nTotal' = length(total_v))
+  }
   
   ## Return output
   return(out_v)

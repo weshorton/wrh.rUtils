@@ -4,7 +4,8 @@
 \alias{calcOverlap}
 \title{Calculate Overlap}
 \usage{
-calcOverlap(set1_v, set2_v, total_v = NA, digits_v = 4)
+calcOverlap(set1_v, set2_v, total_v = NA, digits_v = 4,
+  fullOut_v = T)
 }
 \arguments{
 \item{set1_v}{Character vector of values to compare}
@@ -15,6 +16,10 @@ calcOverlap(set1_v, set2_v, total_v = NA, digits_v = 4)
 If 'NA' (default), will just calculate Jaccard index.}
 
 \item{digits_v}{how many digits to round output to. Default is 4.}
+
+\item{fullOut_v}{logical. TRUE - output number of elements in 'set1', 'set2', their intersection, their union, 
+and number of elements in 'total', in addition to jaccard and BUB values.
+FALSE - just output jaccard and BUB values}
 }
 \description{
 Calculate the Jaccard Index of two different sets. Can also calculate BUB.
