@@ -21,6 +21,7 @@ rmDupGenes <- function(data_dt, idCol_v = "ID", symbolCol_v = "Symbol", method_v
   
   ## Get count columns
   countCol_v <- setdiff(colnames(data_dt), c(idCol_v, symbolCol_v))
+  otherCol_v <- setdiff(colnames(data_dt), countCol_v)
   
   ## Filter
   for (i in 1:dupGenes_dt[,.N]) {
@@ -31,14 +32,21 @@ rmDupGenes <- function(data_dt, idCol_v = "ID", symbolCol_v = "Symbol", method_v
     
     ## Make output row
     if (method_v == "max") {
+      
       currMean_v <- rowMeans(currData_dt[,mget(countCol_v)])
       currMax_v <- which.max(currMean_v)
       keepRows_dt <- rbind(keepRows_dt, currData_dt[currMax_v,])
+      
     } else if (method_v == "mean") {
-      currMean_dt <- currData_dt[, lapply(.SD, mean, na.rm = T), by = "Symbol", .SDcols = countCol_v]
-      keepRows_dt <- rbind(keepRows_dt, currMean_dt)
+      
+      currMean_dt <- currData_dt[, lapply(.SD, mean, na.rm = T), by = symbolCol_v, .SDcols = countCol_v]
+      currMean_dt <- merge(currData_dt[1,mget(otherCol_v)], currMean_dt, by = symbolCol_v)
+      keepRows_dt <- rbind(keepRows_dt, currMean_dt[,mget(c(otherCol_v, countCol_v))])
+      
     } else {
+      
       stop(sprintf("Please proved either 'max' or 'mean' as argument to method_v. You have provided: %s.", method_v))
+      
     }
     
     ## Remove duplicate rows
