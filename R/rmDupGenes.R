@@ -37,7 +37,9 @@ rmDupGenes <- function(data_dt, idCol_v = "ID", symbolCol_v = "Symbol", method_v
     } else if (method_v == "mean") {
       currMean_dt <- currData_dt[, lapply(.SD, mean, na.rm = T), by = "Symbol", .SDcols = countCol_v]
       keepRows_dt <- rbind(keepRows_dt, currMean_dt)
-    } # fi
+    } else {
+      stop(sprintf("Please proved either 'max' or 'mean' as argument to method_v. You have provided: %s.", method_v))
+    }
     
     ## Remove duplicate rows
     rmIdx_v <- which(data_dt[[symbolCol_v]] == currGene_v)
