@@ -44,10 +44,12 @@ modelP <- function(model, var_v = NULL, round_v = NULL, verbose_v = F) {
   out_p_v <- ifelse(is.null(round_v), p_v, round(p_v, digits = round_v))
   
   ## If 0, make it < 2.2e-16
-  if (out_p_v == 0 & p_v > 0) {
-    if (verbose_v) print("Rounded p-value is 0, so using unrounded p-value instead.")
-    out_p_v <- p_v
-  }
+  if (!is.na(out_p_v)) {
+    if (out_p_v == 0 & p_v > 0) {
+      if (verbose_v) print("Rounded p-value is 0, so using unrounded p-value instead.")
+      out_p_v <- p_v
+    } # fi
+  } # fi
   
   ## Output
   return(out_p_v)
