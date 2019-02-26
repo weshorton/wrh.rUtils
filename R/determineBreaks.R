@@ -5,7 +5,7 @@ determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal
   #' @param data_mat matrix of counts. Most likely will be row-scaled, but doesn't have to be. if data.table provided, 1st column is assumed to be
   #' an identifier column and will be assigned to row.names.
   #' @param colors_v Vector of colors that will be used. Default is red (high) to blue (low)
-  #' @param cut_v Either a numeric value indicating which percentile to use (3 would use the 3% and 97% percentile). Or "max" (default)
+  #' @param cut_v Either a numeric value indicating which percentile to use (3 would use the 3rd and 97th percentile). Or "max" (default)
   #' which will cut off the maximum value on either end.
   #' @param print_v logical indicating whether or not to print a test heatmap
   #' @param verbose_v logical indicating whether or not to print out messages
@@ -21,14 +21,14 @@ determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal
   }
   
   ## Get min and max
-  min_v <- min(data_mat); max_v <- max(data_mat)
+  min_v <- min(data_mat, na.rm = T); max_v <- max(data_mat, na.rm = T)
   
   ## Get cut-off
   if (cut_v == "max") {
     min2_v <- unique(sort(data_mat))[2]
     max2_v <- unique(sort(data_mat, decreasing = T))[2]
   } else {
-    percentile_v <- quantile(data_mat, probs = seq(0, 1, 0.01))
+    percentile_v <- quantile(data_mat, probs = seq(0, 1, 0.01), na.rm = T)
     min2_v <- percentile_v[[paste0(cut_v, "%")]]
     max2_v <- percentile_v[[paste0((100-cut_v), "%")]]
   }

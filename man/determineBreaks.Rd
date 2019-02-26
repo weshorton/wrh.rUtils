@@ -13,7 +13,7 @@ an identifier column and will be assigned to row.names.}
 
 \item{colors_v}{Vector of colors that will be used. Default is red (high) to blue (low)}
 
-\item{cut_v}{Either a numeric value indicating which percentile to use (3 would use the 3% and 97% percentile). Or "max" (default)
+\item{cut_v}{Either a numeric value indicating which percentile to use (3 would use the 3rd and 97th percentile). Or "max" (default)
 which will cut off the maximum value on either end.}
 
 \item{print_v}{logical indicating whether or not to print a test heatmap}
