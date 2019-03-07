@@ -21,7 +21,12 @@ plotDensity <- function(density_ls, colors_ls = brewer.pal(8, "Dark2"), main_v =
     stop(sprintf("density_ls must be all one class, 'density' or 'numeric'. You have: %s\n",
                  paste(class_v, collapse = " ; ")))
   } else if (class_v != "density") {
-    density_ls <- lapply(density_ls, density)
+    density_ls <- lapply(density_ls, function(x) {
+      if (class(x) != 'density') {
+        return(density(x))
+        } else {
+          return(x)
+        }})
   } 
   
   ## Get legend
@@ -32,10 +37,10 @@ plotDensity <- function(density_ls, colors_ls = brewer.pal(8, "Dark2"), main_v =
   legendColor_v <- unlist(colors_ls)
   
   ## Get axis parameters
-  xMin_v <- min(unlist(lapply(density_ls, function(x) min(x$x))))
-  xMax_v <- max(unlist(lapply(density_ls, function(x) max(x$x))))
-  yMin_v <- min(unlist(lapply(density_ls, function(x) min(x$y))))
-  yMax_v <- max(unlist(lapply(density_ls, function(x) max(x$y))))
+  xMin_v <- min(unlist(lapply(density_ls, function(x) min(x$x, na.rm = T))))
+  xMax_v <- max(unlist(lapply(density_ls, function(x) max(x$x, na.rm = T))))
+  yMin_v <- min(unlist(lapply(density_ls, function(x) min(x$y, na.rm = T))))
+  yMax_v <- max(unlist(lapply(density_ls, function(x) max(x$y, na.rm = T))))
   
   ## Plot first
   plot(density_ls[[1]],
