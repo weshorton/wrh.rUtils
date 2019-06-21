@@ -13,7 +13,7 @@ myT <- function(data_dt, newName_v = NA, toClass_v = 'numeric', outType_v = 'dt'
   
   ### New Column Names
   colnames(t_mat) <- t_mat[1,]
-  t_mat <- t_mat[-1,]
+  t_mat <- t_mat[-1,,drop=F]
   
   ### Convert class, if desired
   if (!is.null(toClass_v)) {
