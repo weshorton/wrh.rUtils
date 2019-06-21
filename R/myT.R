@@ -1,4 +1,4 @@
-myT <- function(data_dt, newName_v, toClass_v = 'numeric', outType_v = 'dt') {
+myT <- function(data_dt, newName_v = NA, toClass_v = 'numeric', outType_v = 'dt') {
   #' My Transpose
   #' Transpose data. Make the first column of original data be the colnames
   #' of the new data and the colnames of original data be either the 
@@ -26,6 +26,7 @@ myT <- function(data_dt, newName_v, toClass_v = 'numeric', outType_v = 'dt') {
   } else if (outType_v == "df") {
     return(as.data.frame(t_mat))
   } else if (outType_v == "dt") {
+    if (is.na(newName_v)) newName_v <- "Rows"
     return(convertDFT(t_mat, newName_v = newName_v))
   } # fi
   

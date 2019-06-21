@@ -7,7 +7,7 @@ Transpose data. Make the first column of original data be the colnames
 of the new data and the colnames of original data be either the 
 rownames or the 1st column of new data (depends on output type)}
 \usage{
-myT(data_dt, newName_v, toClass_v = "numeric", outType_v = "dt")
+myT(data_dt, newName_v = NA, toClass_v = "numeric", outType_v = "dt")
 }
 \arguments{
 \item{data_dt}{data to transpose}
