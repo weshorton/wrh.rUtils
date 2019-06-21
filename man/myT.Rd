@@ -2,10 +2,7 @@
 % Please edit documentation in R/myT.R
 \name{myT}
 \alias{myT}
-\title{My Transpose
-Transpose data. Make the first column of original data be the colnames
-of the new data and the colnames of original data be either the 
-rownames or the 1st column of new data (depends on output type)}
+\title{My Transpose}
 \usage{
 myT(data_dt, newName_v = NA, toClass_v = "numeric", outType_v = "dt")
 }
@@ -19,7 +16,6 @@ myT(data_dt, newName_v = NA, toClass_v = "numeric", outType_v = "dt")
 \item{outType_v}{which type of object to return (dt for data.table, df for data.frame, mat for matrix)}
 }
 \description{
-My Transpose
 Transpose data. Make the first column of original data be the colnames
 of the new data and the colnames of original data be either the 
 rownames or the 1st column of new data (depends on output type)

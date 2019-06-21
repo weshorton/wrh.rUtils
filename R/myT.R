@@ -1,6 +1,6 @@
 myT <- function(data_dt, newName_v = NA, toClass_v = 'numeric', outType_v = 'dt') {
   #' My Transpose
-  #' Transpose data. Make the first column of original data be the colnames
+  #' @description Transpose data. Make the first column of original data be the colnames
   #' of the new data and the colnames of original data be either the 
   #' rownames or the 1st column of new data (depends on output type)
   #' @param data_dt data to transpose
