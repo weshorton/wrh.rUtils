@@ -5,7 +5,7 @@
 \title{Merge and Fill Columns}
 \usage{
 mergeAndFillCols(data_dt, toMerge_v, outName_v = "merged",
-  search_lsv = NULL, replace_lsv = NULL)
+  search_lsv = NULL, replace_lsv = NULL, check_v = T)
 }
 \arguments{
 \item{data_dt}{data.table with values}
@@ -18,6 +18,8 @@ mergeAndFillCols(data_dt, toMerge_v, outName_v = "merged",
 One example is the 'age' columns that have KJ in them. Can search for those and replace with NA to take the value in the other column.}
 
 \item{replace_lsv}{list of values to replace. Each element must match with search_lsv}
+
+\item{check_v}{logical. TRUE (default) check new column accuracy by searching for '_'; FALSE - don't check}
 }
 \description{
 Takes >= 2 columns with overlapping, incomplete data and merges them into 1 column.

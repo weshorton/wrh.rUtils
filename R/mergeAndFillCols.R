@@ -45,10 +45,12 @@ mergeAndFillCols <- function(data_dt, toMerge_v, outName_v = 'merged', search_ls
   })
   
   ## Check new columns
-  splitNewCol_v <- lapply(data_dt$newCol, function(x) strsplit(x, split = "_")[[1]])
-  tooLong_v <- which(lapply(splitNewCol_v, length) > 1)
-  if (length(tooLong_v) > 0) {
-    warning(sprintf("At least one value in merged column may be incorrectly substituted. '_' was found, but could be part of true value.\nCheck these indices: %s\n", paste(tooLong_v, collapse = ", ")))
+  if (check_v) {
+    splitNewCol_v <- lapply(data_dt$newCol, function(x) strsplit(x, split = "_")[[1]])
+    tooLong_v <- which(lapply(splitNewCol_v, length) > 1)
+    if (length(tooLong_v) > 0) {
+      warning(sprintf("At least one value in merged column may be incorrectly substituted.\n '_' was found, but could be part of true value.\nCheck these indices in %s:\n%s\n", outName_v, paste(tooLong_v, collapse = ", ")))
+    }
   }
   
   ## Rename new column
