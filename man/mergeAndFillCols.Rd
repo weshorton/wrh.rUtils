@@ -14,7 +14,8 @@ mergeAndFillCols(data_dt, toMerge_v, outName_v = "merged",
 
 \item{outName_v}{name of the resulting merged column. Default is 'merged'.}
 
-\item{search_lsv}{list of values to search for within the columns}
+\item{search_lsv}{list of values to search for within the columns. This is done before merge. 
+One example is the 'age' columns that have KJ in them. Can search for those and replace with NA to take the value in the other column.}
 
 \item{replace_lsv}{list of values to replace. Each element must match with search_lsv}
 }

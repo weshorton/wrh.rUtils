@@ -4,7 +4,8 @@ mergeAndFillCols <- function(data_dt, toMerge_v, outName_v = 'merged', search_ls
   #' @param data_dt data.table with values
   #' @param toMerge_v vector of column names that should be merged
   #' @param outName_v name of the resulting merged column. Default is 'merged'.
-  #' @param search_lsv list of values to search for within the columns
+  #' @param search_lsv list of values to search for within the columns. This is done before merge. 
+  #' One example is the 'age' columns that have KJ in them. Can search for those and replace with NA to take the value in the other column.
   #' @param replace_lsv list of values to replace. Each element must match with search_lsv
   #' @export
   
@@ -26,6 +27,13 @@ mergeAndFillCols <- function(data_dt, toMerge_v, outName_v = 'merged', search_ls
   
   ## Remove original columns
   data_dt[, (toMerge_v) := NULL]
+  
+  ## Check new columns
+  splitNewCol_v <- lapply(data_dt$newCol, function(x) strsplit(x, split = "_")[[1]])
+  tooLong_v <- which(lapply(splitNewCol_v, length) > 1)
+  if (length(tooLong_v) > 0) {
+    warning(sprintf("At least one value in merged column may be incorrectly substituted. '_' was found, but could be part of true value.\nCheck these indices: %s\n", paste(tooLong_v, collapse = ", ")))
+  }
   
   ## Rename new column
   colnames(data_dt)[colnames(data_dt) == "newCol"] <- outName_v
