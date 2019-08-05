@@ -16,10 +16,11 @@ myT <- function(data_dt, newName_v = NA, toClass_v = 'numeric', outType_v = 'dt'
   t_mat <- t_mat[-1,,drop=F]
   
   ### Convert class, if desired
-  if (!is.null(toClass_v)) {
-    t_mat <- apply(t_mat, 2, function(x) {class(x) <- toClass_v; return(x)})
-  }
-  
+  ### Doesn't work. turns it into numeric instead of matrix, if it only has one row.
+  # if (!is.null(toClass_v)) {
+  #   t_mat <- apply(t_mat, 2, function(x) {class(x) <- toClass_v; return(x)})
+  # }
+  # 
   ### Convert to specified output
   if (outType_v == 'mat') {
     return(t_mat)
