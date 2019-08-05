@@ -7,6 +7,7 @@ myT <- function(data_dt, newName_v = NA, toClass_v = 'numeric', outType_v = 'dt'
   #' @param newName_v name for new 1st column of transposed data (only used if dt is output type)
   #' @param toClass_v which class to convert output to (only 'numeric' and 'character' work right now, NULL to avoid.)
   #' @param outType_v which type of object to return (dt for data.table, df for data.frame, mat for matrix)
+  #' @export
   
   ### Transpose
   t_mat <- t(data_dt)
