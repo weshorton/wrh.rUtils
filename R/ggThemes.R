@@ -103,3 +103,71 @@ bl_times <- function() {
           legend.title = element_text(family = "Times New Roman", size = 18),
           strip.text = element_text(family = "Times New Roman", size = 18))
 }
+
+###
+### Black ggplot theme #######################################################################################################
+###
+
+my_black <- function() {
+  #' Base Custom Theme
+  #' @description Minor changes to theme_classic() - slightly larger text and centered title. Along with black bkgd, white text.
+  #' @export
+  
+  theme_classic() +
+    theme(
+      ## Text
+      plot.title = element_text(hjust = 0.5, size = 18, color = "white"),
+      plot.subtitle = element_text(hjust = 0.5, size = 14, color = "white"),
+      axis.text = element_text(size = 12, color = "white"),
+      axis.title = element_text(size = 14, color = "white"),
+      legend.text = element_text(size = 12), color = "white",
+      legend.title = element_text(size = 14, color = "white"),
+      ## Axis
+      axis.ticks = element_line(color = "white"),
+      ## Legend
+      legend.background = element_rect(color = NA, fill = "black"),
+      legend.key = element_rect(color = "white", fill = "grey30"),
+      ## Panel
+      panel.background = element_rect(fill = "black", color = NA),
+      panel.border = element_rect(fill = NA, color = "white"),
+      ## Facet
+      strip.background = element_rect(fill = "grey30", color = "grey10"),
+      strip.text = element_text(size = 12, color = "white"),
+      ## Background
+      plot.background = element_rect(color = "black", fill = "black")
+      )
+}
+
+###
+### Big Label - Black ggplot theme #####################################################################################################
+###
+
+bl_black <- function() {
+  #' Big Label Theme
+  #' @description Same as my_theme(), but even larger text and also y-axis labels are angled 45
+  #' @export
+  
+  theme_classic() +
+    theme(
+      ## Text
+      plot.title = element_text(hjust = 0.5, size = 20, color = "white"),
+      plot.subtitle = element_text(hjust = 0.5, size = 16, color = "white"),
+      axis.text = element_text(size = 16, color = "white"),
+      axis.text.y = element_text(angle = 45, color = "white"),
+      axis.title = element_text(size = 18, color = "white"),
+      legend.text = element_text(size = 16, color = "white"),
+      legend.title = element_text(size = 18, color = "white"),
+      ## Axis
+      axis.ticks = element_line(color = "white"),
+      ## Legend
+      legend.background = element_rect(color = NA, fill = "black"),
+      legend.key = element_rect(color = "white", fill = "grey30"),
+      ## Panel
+      panel.background = element_rect(fill = "black", color = NA),
+      panel.border = element_rect(fill = NA, color = "white"),
+      ## Facet
+      strip.background = element_rect(fill = "grey30", color = "grey10"),
+      strip.text = element_text(size = 16, color = "white"),
+      ## Background
+      plot.background = element_rect(color = "black", fill = "black"))
+}
