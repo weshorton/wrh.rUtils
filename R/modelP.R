@@ -22,8 +22,10 @@ modelP <- function(model, var_v = NULL, round_v = NULL, verbose_v = F) {
     class_v <- "aov"
   } else if (length(class_v) == 1 & class_v == "lm") {
     if (verbose_v) print("Supplied lm model.")
+  } else if (length(class_v) == 1 & class_v == "coxph") {
+    if (verbose_v) print("Supplied coxph model.")
   } else {
-    if (verbose_v) print("Supplied model is not an object of class 'aov' or 'lm'.")
+    if (verbose_v) print("Supplied model is not an object of class 'aov', 'lm', or 'coxph'.")
   } # fi
   
   ## Take summary
@@ -34,11 +36,14 @@ modelP <- function(model, var_v = NULL, round_v = NULL, verbose_v = F) {
     summary_v <- summary_v[[1]]
     which_v <- ifelse(is.null(var_v), 1, which(trimws(rownames(summary_v)) == var_v))
     p_v <- summary_v[["Pr(>F)"]][[which_v]]
-  } else {
+  } else if (class_v == 'lm') {
     temp <- summary_v$fstatistic
     p_v <- pf(temp[1], temp[2], temp[3], lower.tail = F)
     attributes(p_v) <- NULL
-  } # fi
+  } else if (class_v == "coxph") {
+    temp <- summary_v$coefficients
+    p_v <- temp[5]
+  }
   
   ## Round
   out_p_v <- ifelse(is.null(round_v), p_v, round(p_v, digits = round_v))
