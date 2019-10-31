@@ -41,8 +41,8 @@ modelP <- function(model, var_v = NULL, round_v = NULL, verbose_v = F) {
     p_v <- pf(temp[1], temp[2], temp[3], lower.tail = F)
     attributes(p_v) <- NULL
   } else if (class_v == "coxph") {
-    temp <- summary_v$coefficients
-    p_v <- temp[5]
+    temp <- summary_v$logtest
+    p_v <- temp[3]
   }
   
   ## Round
