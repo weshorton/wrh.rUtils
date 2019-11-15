@@ -18,18 +18,33 @@ myT <- function(data_dt, newName_v = NA, toClass_v = 'numeric', outType_v = 'dt'
   
   ### Convert class, if desired
   ### Doesn't work. turns it into numeric instead of matrix, if it only has one row.
-  # if (!is.null(toClass_v)) {
-  #   t_mat <- apply(t_mat, 2, function(x) {class(x) <- toClass_v; return(x)})
-  # }
-  # 
+  if (!is.null(toClass_v)) {
+    if (nrow(t_mat) == 1) {
+      rnames_v <- row.names(t_mat)
+      t_mat <- t(as.matrix(apply(t_mat, 2, function(x) {class(x) <- toClass_v; return(x)})))
+      rownames(t_mat) <- rnames_v
+    } else {
+      t_mat <- apply(t_mat, 2, function(x) {class(x) <- toClass_v; return(x)})
+    }
+  }
+
+  
   ### Convert to specified output
   if (outType_v == 'mat') {
+    
     return(t_mat)
+    
   } else if (outType_v == "df") {
-    return(as.data.frame(t_mat))
+    
+    t_df <- as.data.frame(t_mat)
+    return(t_df)
+    
   } else if (outType_v == "dt") {
+    
     if (is.na(newName_v)) newName_v <- "Rows"
-    return(convertDFT(t_mat, newName_v = newName_v))
+    t_dt <- convertDFT(t_mat, newName_v = newName_v)
+    return(t_dt)
+
   } # fi
   
 } # myT
