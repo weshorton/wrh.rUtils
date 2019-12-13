@@ -1,0 +1,99 @@
+cpmThresh <- function(raw_dt, cpm_dt, metaCols_v = "Gene", rawTest_v = c(10,20,30),
+                      indPlot_v = F, histPlot_v = T, densPlot_v = T, plotDir_v = NA) {
+  #' Plot CPM Thresh
+  #' @description Plot the cpm counts for a dataset to determine a potential filter threshold.
+  #' @param raw_dt data.table of raw values. rows = genes; columns = samples. 
+  #' @param cpm_dt data.table of cpm values. rows = genes; columns = samples.
+  #' @param metaCols_v columns that should not be used for cpm values. Default is "Gene"
+  #' @param rawTest_v vector of numbers to use as raw values to test for cpm equivalents.
+  #' @param indPlot_v logical. TRUE - print raw-cpm comparison plot for each sample; FALSE - do not print plot.
+  #' @param histPlot_v logical. TRUE - print summary histogram plot; FALSE - do not print
+  #' @param densPlot_v logical. TRUE - print density plot; FALSE - do not print
+  #' @param plotDir_v character vector of where to save plots.
+  #' @export
+  
+  ## Get measure columns
+  measureCols_v <- setdiff(colnames(raw_dt), metaCols_v)
+  
+  ## Set variables
+  mapCPM_mat <- matrix(nrow = length(measureCols_v), ncol = length(rawTest_v))
+  mapRaw_v <- numeric(length = length(measureCols_v))
+  if (is.na(plotDir_v)) plotDir_v <- getwd()
+  
+  ## Run for each
+  for (i in 1:length(measureCols_v)) {
+    
+    ## Get name and data
+    currName_v <- measureCols_v[i]
+    currRaw_v <- raw_dt[[currName_v]]
+    currCPM_v <- cpm_dt[[currName_v]]
+    
+    ## Get cpm values corresponding to raw
+    ## What if none of them are equal??
+    currRawIDX_v <- sapply(rawTest_v, function(x) which(currRaw_v == x)[1])
+    currVert_v <- currCPM_v[currRawIDX_v]
+    mapCPM_mat[i,] <- currVert_v
+    
+    ## Get raw value corresponding with cpm of 1
+    currCPMIDX_v <- which(currCPM_v >= 0.98 & currCPM_v <= 1.02)
+    if (is.na(currCPMIDX_v[1])) currCPMIDX_v <- which(currCPM_v >= 0.95 & currCPM_v <= 1.05)
+    currCPMDiff_v <- abs(1 - currCPM_v[currCPMIDX_v])
+    currCPMFinalIDX_v <- currCPMIDX_v[which.min(currCPMDiff_v)]
+    mapRaw_v[i] <- currRaw_v[currCPMFinalIDX_v]
+    
+    ## Add to other vars
+    currRawTest_v <- c(rawTest_v, round(mapRaw_v[i]))
+    currVert_v <- c(currVert_v, 1)
+    
+    ## Plot
+    if (indPlot_v) {
+      ## Make legend
+      rawLeg_v <- paste0("raw", currRawTest_v)
+      cpmLeg_v <- paste0("cpm", round(currVert_v, digits = 3))
+      currLegend_v <- mapply(function(x,y) paste(x,y,sep = " - "), rawLeg_v, cpmLeg_v)
+      
+      pdf(file = file.path(plotDir_v, paste0(currName_v, ".pdf")))
+      plot(x = currCPM_v, y = currRaw_v,
+           xlim = c(0,2), ylim = c(0, 50),
+           xlab = "CPM", ylab = "Raw",
+           main = currSample_v)
+      sapply(seq_along(currRawTest_v), function(x) abline(h = currRawTest_v[x], col = colors_v[x]))
+      sapply(seq_along(currVert_v), function(x) abline(v = currVert_v[x], col = colors_v[x]))
+      legend("topright", legend = currLegend_v, col = colors_v, lwd = 2, bty = 'n')
+      graphics.off()
+    } # fi
+  } # for i
+  
+  ## Update table names
+  rownames(mapCPM_mat) <- measureCols_v
+  colnames(mapCPM_mat) <- rawTest_v
+  
+  ## Get mean raw value that corresponds to 1 and update rawtest
+  meanRaw_v <- mean(mapRaw_v)
+  rawTest_v <- c(rawTest_v, meanRaw_v)
+  
+  ## Get average cpm
+  meanCPMCut_v <- c(colMeans(mapCPM_mat), 1)
+  names(meanCPMCut_v)[length(meanCPMCut_v)] <- meanRaw_v
+  
+  ## Histogram
+  if (histPlot_v) {
+    logmeanCPM_v <- log(rowMeans(cpm_dt[,mget(measureCols_v)]))
+    pdf(file = file.path(plotDir_v, "logCPM_histogram.pdf"))
+    hist(logmeanCPM_v, breaks = 100, xlab = "log10(mean(cpm))", main = "Log10 CPM Hist")
+    graphics.off()
+  } # fi
+  
+  ## Density
+  if (densPlot_v) {
+    log10CPM_lsv <- lapply(measureCols_v, function(x) log10(cpm_dt[[x]]))
+    pdf(file = file.path(plotDir_v, "logCPM_density.pdf"))
+    plotDensity(log10CPM_lsv,
+                main_v = "Log 10 Densities",
+                x_v = "Log10(cpm)",
+                names_v = countNames_v)
+    lapply(meanCPMCut_v, function(x) abline(v = x))
+    graphics.off()
+  } # fi
+  
+} # cpmThresh
