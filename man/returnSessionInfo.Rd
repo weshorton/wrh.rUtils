@@ -4,8 +4,7 @@
 \alias{returnSessionInfo}
 \title{Output session information}
 \usage{
-returnSessionInfo(outDir_v = NULL, loadDirs_v = NULL,
-  args_lsv = NULL)
+returnSessionInfo(outDir_v = NULL, loadDirs_v = NULL, args_lsv = NULL)
 }
 \arguments{
 \item{outDir_v}{optional directory to write information to. Default is to print to stdout}

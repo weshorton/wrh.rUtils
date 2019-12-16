@@ -4,10 +4,15 @@
 \alias{plotSpecial}
 \title{Plot ggplot with extra table grob}
 \usage{
-plotSpecial(grobs_ls, loc_lsv = list(vpPlot = c(width = 0.65, height = 1,
-  x = 0.3, y = 0.5), vpLeg = c(width = 0.25, height = 0.7, x = 0.7, y =
-  0.88), vpTab = c(width = 0.45, height = 0.3, x = 0.7, y = 0.6)),
-  file_v = NA, width_v = 7, height_v = 7)
+plotSpecial(
+  grobs_ls,
+  loc_lsv = list(vpPlot = c(width = 0.65, height = 1, x = 0.3, y = 0.5), vpLeg = c(width
+    = 0.25, height = 0.7, x = 0.7, y = 0.88), vpTab = c(width = 0.45, height = 0.3, x =
+    0.7, y = 0.6)),
+  file_v = NA,
+  width_v = 7,
+  height_v = 7
+)
 }
 \arguments{
 \item{grobs_ls}{list of grobs to plot (must be same length as loc_lsv).}

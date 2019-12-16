@@ -4,8 +4,7 @@
 \alias{rmDupGenes}
 \title{Remove Duplicate Genes}
 \usage{
-rmDupGenes(data_dt, idCol_v = "ID", symbolCol_v = "Symbol",
-  method_v = "max")
+rmDupGenes(data_dt, idCol_v = "ID", symbolCol_v = "Symbol", method_v = "max")
 }
 \arguments{
 \item{data_dt}{data.table of gene expression.}

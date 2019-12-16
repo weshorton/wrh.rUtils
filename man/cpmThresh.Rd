@@ -4,9 +4,16 @@
 \alias{cpmThresh}
 \title{Plot CPM Thresh}
 \usage{
-cpmThresh(raw_dt, cpm_dt, metaCols_v = "Gene", rawTest_v = c(10, 20,
-  30), indPlot_v = F, histPlot_v = T, densPlot_v = T,
-  plotDir_v = NA)
+cpmThresh(
+  raw_dt,
+  cpm_dt,
+  metaCols_v = "Gene",
+  rawTest_v = c(10, 20, 30),
+  indPlot_v = F,
+  histPlot_v = T,
+  densPlot_v = T,
+  plotDir_v = NA
+)
 }
 \arguments{
 \item{raw_dt}{data.table of raw values. rows = genes; columns = samples.}

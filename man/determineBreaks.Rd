@@ -4,8 +4,13 @@
 \alias{determineBreaks}
 \title{Determine Breaks}
 \usage{
-determineBreaks(data_mat, colors_v = rev(colorRampPalette(brewer.pal(11,
-  "RdBu"))(100)), cut_v = "max", print_v = F, verbose_v = T)
+determineBreaks(
+  data_mat,
+  colors_v = rev(colorRampPalette(brewer.pal(11, "RdBu"))(100)),
+  cut_v = "max",
+  print_v = F,
+  verbose_v = T
+)
 }
 \arguments{
 \item{data_mat}{matrix of counts. Most likely will be row-scaled, but doesn't have to be. if data.table provided, 1st column is assumed to be

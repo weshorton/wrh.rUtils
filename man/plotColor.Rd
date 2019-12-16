@@ -4,8 +4,7 @@
 \alias{plotColor}
 \title{Plot Color}
 \usage{
-plotColor(color_v, title_v = NULL, save_v = F, pch_v = 15,
-  cex_v = 3)
+plotColor(color_v, title_v = NULL, save_v = F, pch_v = 15, cex_v = 3)
 }
 \arguments{
 \item{color_v}{- character vector of color names, hex codes, etc. to be plotted. If named, the names will be plotted as well.}

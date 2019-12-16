@@ -11,11 +11,9 @@ modelP(model, var_v = NULL, round_v = NULL, verbose_v = F)
 
 \item{var_v}{character string of variable to get p-value from. If NULL (default) will take 1st.}
 
-\item{round_v}{numeric. how many digits to round p-value output to. If NULL (default) will not round.}
+\item{round_v}{logical. TRUE - round p-value to 3 decimals; FALSE - do not round.}
 
 \item{verbose_v}{logical. TRUE - print model type; FALSE - don't print}
-
-\item{round_v}{logical. TRUE - round p-value to 3 decimals; FALSE - do not round.}
 }
 \value{
 numeric vector of p-value

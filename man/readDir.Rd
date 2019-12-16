@@ -29,8 +29,8 @@ files_v and pattern_v are blank, then all of the files in the directory will be 
 }
 \examples{
 # Make directory called "~/Desktop/readDirTest"
-write.table(matrix(1:100, nrow = 2), file = "~/Desktop/readDirTest/A.txt", row.names = F, quote = F, sep = '\\t')
-write.table(matrix(1:100, nrow = 10), file = "~/Desktop/readDirTest/B.txt", row.names = F, quote = F, sep = '\\t')
+write.table(matrix(1:100, nrow = 2), file = "~/Desktop/readDirTest/A.txt", row.names = F, quote = F, sep = '\t')
+write.table(matrix(1:100, nrow = 10), file = "~/Desktop/readDirTest/B.txt", row.names = F, quote = F, sep = '\t')
 write.table(matrix(1:100, nrow = 20), file = "~/Desktop/readDirTest/A.csv", row.names = F, quote = F, sep = ',')
 readDir(dir_v = "~/Desktop/readDirTest)
 readDir(dir_v = "~/Desktop/readDirTest, names_v = c("one", "two", "three))

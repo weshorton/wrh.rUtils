@@ -4,8 +4,7 @@
 \alias{calcOverlap}
 \title{Calculate Overlap}
 \usage{
-calcOverlap(set1_v, set2_v, total_v = NA, digits_v = 4,
-  fullOut_v = T)
+calcOverlap(set1_v, set2_v, total_v = NA, digits_v = 4, fullOut_v = T)
 }
 \arguments{
 \item{set1_v}{Character vector of values to compare}

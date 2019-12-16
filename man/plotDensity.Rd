@@ -4,8 +4,14 @@
 \alias{plotDensity}
 \title{Plot Densities}
 \usage{
-plotDensity(density_ls, colors_ls = brewer.pal(8, "Dark2"),
-  main_v = "", x_v = "", names_v = NULL, lwd_v = 2)
+plotDensity(
+  density_ls,
+  colors_ls = brewer.pal(8, "Dark2"),
+  main_v = "",
+  x_v = "",
+  names_v = NULL,
+  lwd_v = 2
+)
 }
 \arguments{
 \item{density_ls}{list of either densities or vectors}

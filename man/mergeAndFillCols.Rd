@@ -4,8 +4,14 @@
 \alias{mergeAndFillCols}
 \title{Merge and Fill Columns}
 \usage{
-mergeAndFillCols(data_dt, toMerge_v, outName_v = "merged",
-  search_lsv = NULL, replace_lsv = NULL, check_v = T)
+mergeAndFillCols(
+  data_dt,
+  toMerge_v,
+  outName_v = "merged",
+  search_lsv = NULL,
+  replace_lsv = NULL,
+  check_v = T
+)
 }
 \arguments{
 \item{data_dt}{data.table with values}
