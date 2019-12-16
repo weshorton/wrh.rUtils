@@ -5,6 +5,7 @@ findMatch <- function(counts1_v, counts2_v, checks_v) {
   #' @param counts1_v same scale as the values in checks_v
   #' @param counts2_v scale that will find equivalent
   #' @param checks_v values to test
+  #' @export
   
   idxOut_v <- sapply(checks_v, function(x) {
     idx_v <- NA
