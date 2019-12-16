@@ -30,16 +30,12 @@ cpmThresh <- function(raw_dt, cpm_dt, metaCols_v = "Gene", rawTest_v = c(10,20,3
     
     ## Get cpm values corresponding to raw
     ## What if none of them are equal??
-    currRawIDX_v <- sapply(rawTest_v, function(x) which(currRaw_v == x)[1])
-    currVert_v <- currCPM_v[currRawIDX_v]
+    currVert_v <- mapCPM_mat[i,] <- findMatch(counts1_v = currRaw_v, counts2_v = currCPM_v, checks_v = rawTest_v)
     mapCPM_mat[i,] <- currVert_v
     
     ## Get raw value corresponding with cpm of 1
-    currCPMIDX_v <- which(currCPM_v >= 0.98 & currCPM_v <= 1.02)
-    if (is.na(currCPMIDX_v[1])) currCPMIDX_v <- which(currCPM_v >= 0.95 & currCPM_v <= 1.05)
-    currCPMDiff_v <- abs(1 - currCPM_v[currCPMIDX_v])
-    currCPMFinalIDX_v <- currCPMIDX_v[which.min(currCPMDiff_v)]
-    mapRaw_v[i] <- currRaw_v[currCPMFinalIDX_v]
+    currHoriz_v <- findMatch(counts1_v = currCPM_v, counts2_v = currRaw_v, checks_v = 1)
+    mapRaw_v[i] <- currHoriz_v
     
     ## Add to other vars
     currRawTest_v <- c(rawTest_v, round(mapRaw_v[i]))
