@@ -10,6 +10,7 @@ cpmThresh <- function(raw_dt, cpm_dt, metaCols_v = "Gene", rawTest_v = c(10,20,3
   #' @param histPlot_v logical. TRUE - print summary histogram plot; FALSE - do not print
   #' @param densPlot_v logical. TRUE - print density plot; FALSE - do not print
   #' @param plotDir_v character vector of where to save plots.
+  #' @return Named vector where values are cpm and names are the corresponding raw value.
   #' @export
   
   ## Get measure columns
@@ -87,9 +88,13 @@ cpmThresh <- function(raw_dt, cpm_dt, metaCols_v = "Gene", rawTest_v = c(10,20,3
     plotDensity(log10CPM_lsv,
                 main_v = "Log 10 Densities",
                 x_v = "Log10(cpm)",
-                names_v = countNames_v)
+                names_v = measureCols_v,
+                colors_ls = rep("black", length(log10CPM_lsv)))
     lapply(meanCPMCut_v, function(x) abline(v = x))
     graphics.off()
   } # fi
+  
+  ## Return val
+  return(meanCPMCut_v)
   
 } # cpmThresh
