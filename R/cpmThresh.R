@@ -10,12 +10,15 @@ cpmThresh <- function(raw_dt, cpm_dt, metaCols_v = "Gene", rawTest_v = c(10,20,3
   #' @param indPlot_v logical. TRUE - print raw-cpm comparison plot for each sample; FALSE - do not print plot.
   #' @param histPlot_v logical. TRUE - print summary histogram plot; FALSE - do not print
   #' @param densPlot_v logical. TRUE - print density plot; FALSE - do not print
+  #' @param boxPlot_v logical. TRUE - print boxplot; FALSE - do not print
   #' @param plotDir_v character vector of where to save plots.
   #' @param meta_dt data.table containing metadata information. Should have column named "sample" that matches colnames of raw_dt/cpm_dt
   #' @param plotCols_lsv list of metadata columns to use to change plots. list element name is the plotting parameter (e.g. color or fill),
   #' while list element value is the column name (e.g. batch, treatment)
   #' @return Named vector where values are cpm and names are the corresponding raw value.
   #' @export
+  
+  require(ggplot2)
   
   ## Get measure columns
   measureCols_v <- setdiff(colnames(raw_dt), metaCols_v)
@@ -96,6 +99,7 @@ cpmThresh <- function(raw_dt, cpm_dt, metaCols_v = "Gene", rawTest_v = c(10,20,3
         } # fi
       } # for
     } # fi
+    ggsave(box_gg, filename = file.path(plotDir_v, "rawCPM_boxplot.pdf"), width = 7, height = 7)
   } # fi
   
   ## Histogram

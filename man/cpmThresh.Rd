@@ -33,6 +33,8 @@ cpmThresh(
 
 \item{densPlot_v}{logical. TRUE - print density plot; FALSE - do not print}
 
+\item{boxPlot_v}{logical. TRUE - print boxplot; FALSE - do not print}
+
 \item{plotDir_v}{character vector of where to save plots.}
 
 \item{meta_dt}{data.table containing metadata information. Should have column named "sample" that matches colnames of raw_dt/cpm_dt}
