@@ -1,5 +1,6 @@
 cpmThresh <- function(raw_dt, cpm_dt, metaCols_v = "Gene", rawTest_v = c(10,20,30),
-                      indPlot_v = F, histPlot_v = T, densPlot_v = T, plotDir_v = NA) {
+                      indPlot_v = F, histPlot_v = T, densPlot_v = T, boxPlot_v = T, plotDir_v = NA,
+                      meta_dt, plotCols_lsv = list()) {
   #' Plot CPM Thresh
   #' @description Plot the cpm counts for a dataset to determine a potential filter threshold.
   #' @param raw_dt data.table of raw values. rows = genes; columns = samples. 
@@ -10,6 +11,9 @@ cpmThresh <- function(raw_dt, cpm_dt, metaCols_v = "Gene", rawTest_v = c(10,20,3
   #' @param histPlot_v logical. TRUE - print summary histogram plot; FALSE - do not print
   #' @param densPlot_v logical. TRUE - print density plot; FALSE - do not print
   #' @param plotDir_v character vector of where to save plots.
+  #' @param meta_dt data.table containing metadata information. Should have column named "sample" that matches colnames of raw_dt/cpm_dt
+  #' @param plotCols_lsv list of metadata columns to use to change plots. list element name is the plotting parameter (e.g. color or fill),
+  #' while list element value is the column name (e.g. batch, treatment)
   #' @return Named vector where values are cpm and names are the corresponding raw value.
   #' @export
   
@@ -72,6 +76,27 @@ cpmThresh <- function(raw_dt, cpm_dt, metaCols_v = "Gene", rawTest_v = c(10,20,3
   ## Get average cpm
   meanCPMCut_v <- c(colMeans(mapCPM_mat), 1)
   names(meanCPMCut_v)[length(meanCPMCut_v)] <- meanRaw_v
+  
+  ## Boxplot
+  if (boxPlot_v) {
+    ## Make data
+    merge_dt <- merge(convertDFT(mapCPM_mat, newName_v = "sample"), meta_dt, by = "sample", sort = F)
+    melt_dt <- melt(merge_dt, measure.vars = colnames(mapCPM_mat))
+    ## Make plot
+    box_gg <- ggplot(data = melt_dt, aes(x = variable, y = value)) + 
+      geom_boxplot() +
+      big_label() + labs(x = "Raw Value", y = "CPM Value") + ggtitle("Raw to CPM relationship")
+    ## Add details
+    if (length(plotCols_lsv) > 0) {
+      for (i in 1:length(plotCols_lsv)) {
+        if (names(plotCols_lsv)[i] == "fill") {
+          box_gg <- box_gg + aes_string(fill = plotCols_lsv[[i]])
+        } else if (names(plotCols_lsv)[i] == "color") {
+          box_gg <- box_gg + aes_string(color = plotCols_lsv[[i]])
+        } # fi
+      } # for
+    } # fi
+  } # fi
   
   ## Histogram
   if (histPlot_v) {

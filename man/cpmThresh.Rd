@@ -12,7 +12,10 @@ cpmThresh(
   indPlot_v = F,
   histPlot_v = T,
   densPlot_v = T,
-  plotDir_v = NA
+  boxPlot_v = T,
+  plotDir_v = NA,
+  meta_dt,
+  plotCols_lsv = list()
 )
 }
 \arguments{
@@ -31,6 +34,14 @@ cpmThresh(
 \item{densPlot_v}{logical. TRUE - print density plot; FALSE - do not print}
 
 \item{plotDir_v}{character vector of where to save plots.}
+
+\item{meta_dt}{data.table containing metadata information. Should have column named "sample" that matches colnames of raw_dt/cpm_dt}
+
+\item{plotCols_lsv}{list of metadata columns to use to change plots. list element name is the plotting parameter (e.g. color or fill),
+while list element value is the column name (e.g. batch, treatment)}
+}
+\value{
+Named vector where values are cpm and names are the corresponding raw value.
 }
 \description{
 Plot the cpm counts for a dataset to determine a potential filter threshold.
