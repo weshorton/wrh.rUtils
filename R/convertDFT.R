@@ -36,6 +36,10 @@ convertDFT <- function(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T) {
   
   ## Get class
   class_v <- class(data_dft)
+
+  ## New for R 4.x - matrix now has two classes - matrix and arrary
+  ## So if matrix is in class, just ignore the array
+  if (length(grep("matrix", class_v)) > 0) class_v <- "matrix"
   
   ## Convert data.table to data.frame
   if ("data.table" %in% class_v){

@@ -27,7 +27,7 @@ mergeDTs <- function(data_lsdt, mergeCol_v, keepCol_v = NULL, ...) {
   } # fi
   
   ## If keepCol_v is NULL, grab all other columns
-  if (is.null(keepCol_v)){
+    if (is.null(keepCol_v)){
     keepCol_v <- colnames(data_lsdt[[1]])[-which(colnames(data_lsdt[[1]]) %in% mergeCol_v)]
   } # fi
   
