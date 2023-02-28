@@ -19,7 +19,12 @@ comparePCs <- function(obj1, obj2, dr1 = "pca", dr2 = NULL, dim1, dim2 = NULL, n
   if (is.null(dr2)) dr2 <- dr1
   
   ### Handle which_v
-  balance_v <- ifelse(which_v == "all", T, F)
+  if (which_v == "all") {
+    balance_v <- F
+  } else {
+    balance_v <- T
+    nFeat_v <- 2*nFeat_v
+  } # fi
   
   ### Get Features
   feat1 <- TopFeatures(object = obj1[[dr1]],
@@ -33,18 +38,13 @@ comparePCs <- function(obj1, obj2, dr1 = "pca", dr2 = NULL, dim1, dim2 = NULL, n
                        balanced = balance_v)
   
   ### Get either positive, negative, or both.
-  if (which_v == "all") {
-    feat1 <- unlist(feat1)
-    feat2 <- unlist(feat2)
-  } else if (which_v == "positive") {
+  if (which_v == "positive") {
     feat1 <- feat1$positive
     feat2 <- feat2$positive
   } else if (which_v == "negative") {
     feat1 <- feat1$negative
     feat2 <- feat2$negative
-  } else {
-    stop(sprintf("Argument which_v must be 'all', 'positive', or 'negative'. %s was provided", which_v))
-  } # fi
+  }  # fi
   
   ### Compare
   shared_v <- intersect(feat1, feat2)
