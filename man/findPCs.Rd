@@ -4,7 +4,7 @@
 \alias{findPCs}
 \title{Find maximum recommended PC to use.}
 \usage{
-findPCs(seurat_obj, drName_v)
+findPCs(seurat_obj, drName_v = "pca")
 }
 \arguments{
 \item{seurat_obj}{A standard seurat object that has a "pca" dimensional reduction}

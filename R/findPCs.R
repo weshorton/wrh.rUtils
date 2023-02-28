@@ -1,4 +1,4 @@
-findPCs <- function(seurat_obj, drName_v) {
+findPCs <- function(seurat_obj, drName_v="pca") {
   #' Find maximum recommended PC to use.
   #' @description 
   #' Using a seurat object with PCA dimensional reduction run on it, determine the highest PC that 
