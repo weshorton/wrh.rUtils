@@ -14,9 +14,6 @@ mcFindAllMarkers <- function(obj, nCore_v, onlyPos_v = F, test_v = "MAST", laten
   #' @return data.table of markers
   #' @export
 
-  ### Get extra arguments
-  extraParams_lsv <- list(...)
-  
   ### Grab clusters
   clusters_v <- levels(obj)
   
