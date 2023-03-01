@@ -21,11 +21,11 @@ mcFindAllMarkers <- function(obj, nCore_v, onlyPos_v = F, test_v = "MAST", laten
   markers_ls <- list()[length(clusters_v)]
   
   ### Run
-  markers_ls <- pbmclapply(clusters_v, mc.cores = nCore_v, function(x) {
+  markers_ls <- mclapply(clusters_v, mc.cores = nCore_v, function(x) {
     ### Get other clusters
     other_v <- clusters_v[clusters_v != x]
     ### Run Find Markers
-    markers_dt <- FindMarkers(object = obj,
+    markers_df <- FindMarkers(object = obj,
                               ident.1 = x,
                               ident.2 = other_v,
                               only.pos = onlyPos_v,
@@ -45,9 +45,9 @@ mcFindAllMarkers <- function(obj, nCore_v, onlyPos_v = F, test_v = "MAST", laten
   })
   
   ### Combine results into a large data.table
-  allMarkers_dt <- dplyr::bind_rows(markers_ls)
+  allMarkers_df <- dplyr::bind_rows(markers_ls)
   
   ### Return
-  return(allMarkers_dt)
+  return(allMarkers_df)
   
 } # mcFindAllMarkers
