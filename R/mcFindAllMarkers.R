@@ -21,7 +21,7 @@ mcFindAllMarkers <- function(obj, nCore_v, onlyPos_v = F, test_v = "MAST", laten
   markers_ls <- list()[length(clusters_v)]
   
   ### Run
-  markers_ls <- parallel::mclapply(clusters_v, mc.cores = nCore_v, function(x) {
+  markers_ls <- pbmclapply(clusters_v, mc.cores = nCore_v, function(x) {
     ### Get other clusters
     other_v <- clusters_v[clusters_v != x]
     ### Run Find Markers
@@ -31,14 +31,17 @@ mcFindAllMarkers <- function(obj, nCore_v, onlyPos_v = F, test_v = "MAST", laten
                               only.pos = onlyPos_v,
                               test.use = test_v,
                               latent.vars = latent_v)
-    ### Turn to data.table
-    markers_dt <- convertDFT(markers_df, newName_v = "Gene")
+    ### Add Genes as column name
+    markers_df$Gene <- rownames(markers_df)
     
-    ### Add cluster ID
-    markers_dt$cluster <- rep(x, nrow(markers_dt))
+    ### Add Cluster ID as column
+    markers_df$cluster <- rep(x, nrow(markers_df))
+    
+    ### Reorder columns
+    markers_df <- markers_df[,c("Gene", "cluster", setdiff(colnames(markers_df), c("Gene", "cluster")))]
     
     ### Output
-    return(markers_dt)
+    return(markers_df)
   })
   
   ### Combine results into a large data.table
