@@ -5,7 +5,7 @@ clusterSweep <- function(seurat_obj,
                          verbose_v = F,
                          indPlots_v = F,
                          plotDir_v = NULL,
-                         name_v = "test") {
+                         name_v = "") {
   #' Cluster Parameter Sweep
   #' @description 
   #' Run a sweep on different resolutions for clustering. Output plots to assess quality of clustering.
@@ -35,7 +35,7 @@ clusterSweep <- function(seurat_obj,
   seuratClusterQC <- clusterQC(seurat_obj = seurat_obj, embedding_v = embedding_v, ndims_v = ndims_v)
   
   ### Melt for plotting
-  meltClusterQC <- melt(seuratClusterQC$QC, id.vars = "res")
+  meltClusterQC <- reshape2::melt(seuratClusterQC$QC, id.vars = "res")
   meltClusterQC$variable <- factor(meltClusterQC$variable, levels = rev(levels(meltClusterQC$variable)))
   
   ### Determine x intercepts
@@ -86,16 +86,18 @@ clusterSweep <- function(seurat_obj,
     geom_vline(aes(xintercept=silX_v, color = "Max Sil"), linetype = "dashed") +
     geom_vline(aes(xintercept=rmsdX_v, color = "Min RMSD"), linetype = "dashed") +
     geom_vline(xintercept = silX_v, linetype = 'dashed', color = "red") +
-    geom_vline(xintercept = rmsdX_v, linetype = 'dashed', color = "blue")
+    geom_vline(xintercept = rmsdX_v, linetype = 'dashed', color = "blue") +
+    ggtitle(paste0("Sweep Results For ", name_v))
     
   ### Scatterplot of width vs RMSD
   valScatter_gg <- ggplot(seuratClusterQC$QC, aes(x = meanSilWidth, y = meanRMSD, label = res, color = nClust)) +
     geom_point() + ggrepel::geom_text_repel() + theme_bw() +
-    ggtitle("Silhouette Width by RMSD")
+    ggtitle(paste0("Silhouette Width by RMSD - ", name_v))
   
   ### Scatterplot of nClust vs width/rmsd metric
   bestMetric_gg <- ggplot(seuratClusterQC$QC, aes(x = nClust, y = meanSilWidth/meanRMSD, label = res, color = nClust)) +
-    geom_point() + ggrepel::geom_text_repel() + theme_bw()
+    geom_point() + ggrepel::geom_text_repel() + theme_bw() +
+    ggtitle(paste0("nClust by width/rmsd metric - ", name_v))
   
   ### Output
   if (!is.null(plotDir_v)) {

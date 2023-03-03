@@ -12,7 +12,7 @@ clusterSweep(
   verbose_v = F,
   indPlots_v = F,
   plotDir_v = NULL,
-  name_v = "test"
+  name_v = ""
 )
 }
 \arguments{
