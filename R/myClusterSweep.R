@@ -1,4 +1,4 @@
-clusterSweep <- function(seurat_obj, 
+myClusterSweep <- function(seurat_obj, 
                          embedding_v = seurat_obj@reductions$pca@cell.embeddings, 
                          ndims_v = 10,
                          res_v = seq(from=0.1, to=1, by=0.1),
