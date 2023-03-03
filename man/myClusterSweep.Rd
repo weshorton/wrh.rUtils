@@ -12,7 +12,8 @@ myClusterSweep(
   verbose_v = F,
   indPlots_v = F,
   plotDir_v = NULL,
-  name_v = ""
+  name_v = "",
+  print_v = T
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ myClusterSweep(
 \item{plotDir_v}{path to output directory for plots. If NULL, will print to console.}
 
 \item{name_v}{Use as a prefix for output plots. Sample1 for example.}
+
+\item{print_v}{logical. Should main plots be printed, even if they're also saved? Does not change individual plots}
 
 \item{seruat_obj}{A seurat object with dimensional reduction embeddings calculated (PCA)}
 }

@@ -5,7 +5,8 @@ myClusterSweep <- function(seurat_obj,
                          verbose_v = F,
                          indPlots_v = F,
                          plotDir_v = NULL,
-                         name_v = "") {
+                         name_v = "",
+                         print_v = T) {
   #' Cluster Parameter Sweep
   #' @description 
   #' Run a sweep on different resolutions for clustering. Output plots to assess quality of clustering.
@@ -18,6 +19,7 @@ myClusterSweep <- function(seurat_obj,
   #' @param indPlots_v logical indicating whether to print and/or save the individual QC plots
   #' @param plotDir_v path to output directory for plots. If NULL, will print to console.
   #' @param name_v Use as a prefix for output plots. Sample1 for example.
+  #' @param print_v logical. Should main plots be printed, even if they're also saved? Does not change individual plots
   #' @return Either save plots to file or print to console.
   #' @export
   
@@ -101,14 +103,22 @@ myClusterSweep <- function(seurat_obj,
   
   ### Output
   if (!is.null(plotDir_v)) {
+    
     ggsave(file.path(plotDir_v, paste0(name_v, "_compSilxRMSD.pdf")), compareVals_gg)
     ggsave(file.path(plotDir_v, paste0(name_v, "_silxRMSDScatter.pdf")), valScatter_gg)
     ggsave(file.path(plotDir_v, paste0(name_v, "_metricScatter.pdf")), bestMetric_gg)
+    
+    if (print_v) {
+      print(compareVals_gg)
+      print(valScatter_gg)
+      print(bestMetric_gg)
+    } # fi print_v
+    
   } else {
     print(compareVals_gg)
     print(valScatter_gg)
     print(bestMetric_gg)
-  } # fi
+  } # fi !is.null(plotDir_v)
   
 } # clusterSweep
 
@@ -148,6 +158,9 @@ clusterQC <- function(seurat_obj, embedding_v, ndims_v) {
     ### Grab resolution from cluster name
     currRes_v <- as.numeric(str_remove(currClusterName_v,
                                        pattern = paste0(DefaultAssay(seurat_obj), '_snn_res.')))
+    
+    ### Calculate UMAP
+    seurat_obj <- RunUMAP(seurat_obj, dims = 1:ndims_v, nn.name = currClusterName_v)
     
     ### Create DimPlot with clusters labelled.
     dim_ls[[i]] <- DimPlot(seurat_obj,
