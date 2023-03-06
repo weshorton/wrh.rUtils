@@ -160,7 +160,7 @@ clusterQC <- function(seurat_obj, embedding_v, ndims_v) {
                                        pattern = paste0(DefaultAssay(seurat_obj), '_snn_res.')))
     
     ### Calculate UMAP
-    seurat_obj <- RunUMAP(seurat_obj, dims = 1:ndims_v, nn.name = currClusterName_v)
+    seurat_obj <- RunUMAP(seurat_obj, dims = 1:ndims_v, nn.name = currClusterName_v, verbose = F)
     
     ### Create DimPlot with clusters labelled.
     dim_ls[[i]] <- DimPlot(seurat_obj,
