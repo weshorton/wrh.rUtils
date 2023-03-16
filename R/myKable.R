@@ -1,8 +1,9 @@
-myKable <- function(data, width_v) {
+myKable <- function(data, width_v, ...) {
   #' My Kable
   #' @description Function with a few common parameters I use already coded in
   #' @param data data.table/frame/matrix for plotting
   #' @param width number used as percentage of document width
+  #' @param ... extra arguments passed to knitr::kable
   #' @return kable object
   #' @export
   
@@ -10,7 +11,7 @@ myKable <- function(data, width_v) {
   width_v <- paste0("style='width:", width_v, "%;'")
   
   ### Make table
-  myKable <- knitr::kable(data, format = "html", align = "c", table.attr = width_v) %>%
+  myKable <- knitr::kable(data, format = "html", align = "c", table.attr = width_v, ...) %>%
     kable_styling(position = "center", bootstrap_options = c("striped", "hover", "condensed"))
   
   ### Output

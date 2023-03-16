@@ -4,10 +4,12 @@
 \alias{myKable}
 \title{My Kable}
 \usage{
-myKable(data, width_v)
+myKable(data, width_v, ...)
 }
 \arguments{
 \item{data}{data.table/frame/matrix for plotting}
+
+\item{...}{extra arguments passed to knitr::kable}
 
 \item{width}{number used as percentage of document width}
 }
