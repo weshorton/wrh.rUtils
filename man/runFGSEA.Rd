@@ -26,6 +26,9 @@ runFGSEA(
 
 \item{seed_v}{set for reproducibility}
 }
+\value{
+data.frame with gsea results
+}
 \description{
 Run fgsea and wrangle output
 }

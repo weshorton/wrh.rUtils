@@ -9,6 +9,8 @@ runFGSEA <- function(data_df, rankCol_v = "avg_log2FC", pathways_v, minSize_v = 
   #' @param minSize_v passed to fgsea. minimum size of gene set to test
   #' @param maxSize_v passed to fgsea. Maximum size of gene set to test
   #' @param seed_v set for reproducibility
+  #' @return data.frame with gsea results
+  #' @export
   
   ### Grab ranks and name them with genes
   rank <- data_df[[rankCol_v]]
