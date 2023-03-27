@@ -37,7 +37,7 @@ plotClusterProps = function (seurat_obj, clusters_v = "seurat_clusters", ident_v
     theme_bw() + scale_x_log10() + xlab("Cells per cluster, log10 scale") + ylab("")
   
   ### Bar chart of ident_v proportions
-  p2 <- ggplot(meltCounts_dt,aes(x=cluster,y=value,fill=dataset)) + 
+  p2 <- ggplot(meltCounts_dt,aes(x=cluster,y=value,fill=!!sym(legendName_v))) + 
     geom_bar(position="fill", stat="identity") + theme_bw() + coord_flip() + 
     scale_fill_brewer(palette = "Set2") +
     ylab("Fraction of cells in each dataset") + xlab("Cluster number") + theme(legend.position="top")
