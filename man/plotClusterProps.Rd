@@ -4,16 +4,21 @@
 \alias{plotClusterProps}
 \title{Plot Cluster Proportions}
 \usage{
-plotClusterProps(srat, clusters_v = "seurat_clusters", ident_v, legendName_v)
+plotClusterProps(
+  seurat_obj,
+  clusters_v = "seurat_clusters",
+  ident_v,
+  legendName_v
+)
 }
 \arguments{
+\item{seurat_obj}{- seurat object with at least one "seurat_clusters" column}
+
 \item{clusters_v}{- the name of the "seurat_clusters" column if not default name.}
 
 \item{ident_v}{- the name of the metadata column to use as grouping variable}
 
 \item{legendName_v}{name to put in legend to label ident_v}
-
-\item{seurat_obj}{- seurat object with at least one "seurat_clusters" column}
 }
 \value{
 Returns patchwork of two ggplots of cluster data plots

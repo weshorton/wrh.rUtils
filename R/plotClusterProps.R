@@ -1,4 +1,4 @@
-plotClusterProps = function (srat, clusters_v = "seurat_clusters", ident_v, legendName_v) { 
+plotClusterProps = function (seurat_obj, clusters_v = "seurat_clusters", ident_v, legendName_v) { 
   #' Plot Cluster Proportions
   #' @description Plot proportions of idents falling in clusters. Adapted from
   #' https://www.singlecellcourse.org/scrna-seq-dataset-integration.html#seurat-v3-3-vs-5-10k-pbmc
@@ -16,7 +16,7 @@ plotClusterProps = function (srat, clusters_v = "seurat_clusters", ident_v, lege
   library(RColorBrewer)
   
   ### Tabulate occurrences and melt for plotting
-  counts_tab <- table(srat@meta.data[[clusters_v]], srat@meta.data[[ident_v]])
+  counts_tab <- table(seurat_obj@meta.data[[clusters_v]], seurat_obj@meta.data[[ident_v]])
   counts_dt <- convertDFT(as.data.frame.matrix(counts_tab), newName_v = "cluster")
   meltCounts_dt <- melt(counts_dt, id.vars = "cluster")
   meltCounts_dt$cluster <- as.factor(meltCounts_dt$cluster)
