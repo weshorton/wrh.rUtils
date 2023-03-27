@@ -27,7 +27,7 @@ plotClusterProps = function (seurat_obj, clusters_v = "seurat_clusters", ident_v
   ### Sort clusters by size (should also be cluster name...)
   sortedLabels_v <- paste(sort(as.integer(clustSize_df$cluster),decreasing = T))
   clustSize_df$cluster <- factor(clustSize_df$cluster,levels = sortedLabels_v)
-  meltCounts_dt$cluster <- factor(meltCounts_dt$cluster,levels = sorted_labels)
+  meltCounts_dt$cluster <- factor(meltCounts_dt$cluster,levels = sortedLabels_v)
   
   colnames(meltCounts_dt)[2] <- legendName_v
   
