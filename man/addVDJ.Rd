@@ -4,7 +4,7 @@
 \alias{addVDJ}
 \title{Add 10x VDJ Data to Seurat Obj}
 \usage{
-addVDJ(seurat_obj, type_v, dir_v)
+addVDJ(seurat_obj, type_v, dir_v, barcodeString_v = "1")
 }
 \arguments{
 \item{seurat_obj}{gene expression seurat object}
@@ -12,6 +12,9 @@ addVDJ(seurat_obj, type_v, dir_v)
 \item{type_v}{either "t" for TCR or "b" for BCR}
 
 \item{dir_v}{directory where "filtered_contig_annotations.csv" and "clonotypes.csv" are found.}
+
+\item{barcodeString_v}{see details. CHARACTER string indicating what cell barcodes to grab. 
+Default is 1, other values used when loading from multiple samples)}
 }
 \value{
 Exact same seurat object with new metadata columns with clonotype information: 
@@ -20,4 +23,10 @@ Exact same seurat object with new metadata columns with clonotype information:
 \description{
 Add 10x VDJ T or B data to an initialized GEX Seurat object. Modified from function found:
 https://ucdavis-bioinformatics-training.github.io/2020-Advanced_Single_Cell_RNA_Seq/data_analysis/VDJ_Analysis_fixed
+}
+\details{
+Cell barcodes are of the format [ATCG]+\-1 in an individual seurat object. If cellranger aggregate is run on the TCR/BCR output,
+then it solves the problem of barcode duplication by changing the "1" at the end with another number. In the case I used to work on this (batch3),
+the replaced values are the sample numbers - I'm not sure if this is because of arguments provided in aggregate, 
+or if it just goes through numerically and does it. Regardless, if you're unsure take a peak at the barcode suffixes in contigs_dt
 }

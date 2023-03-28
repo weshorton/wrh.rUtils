@@ -1,10 +1,16 @@
-addVDJ <- function(seurat_obj, type_v, dir_v) {
+addVDJ <- function(seurat_obj, type_v, dir_v, barcodeString_v = "1") {
   #' Add 10x VDJ Data to Seurat Obj
   #' @description Add 10x VDJ T or B data to an initialized GEX Seurat object. Modified from function found:
   #' https://ucdavis-bioinformatics-training.github.io/2020-Advanced_Single_Cell_RNA_Seq/data_analysis/VDJ_Analysis_fixed
   #' @param seurat_obj gene expression seurat object
   #' @param type_v either "t" for TCR or "b" for BCR
   #' @param dir_v directory where "filtered_contig_annotations.csv" and "clonotypes.csv" are found.
+  #' @param barcodeString_v see details. CHARACTER string indicating what cell barcodes to grab. 
+  #' Default is 1, other values used when loading from multiple samples)
+  #' @details Cell barcodes are of the format [ATCG]+\-1 in an individual seurat object. If cellranger aggregate is run on the TCR/BCR output,
+  #' then it solves the problem of barcode duplication by changing the "1" at the end with another number. In the case I used to work on this (batch3),
+  #' the replaced values are the sample numbers - I'm not sure if this is because of arguments provided in aggregate, 
+  #' or if it just goes through numerically and does it. Regardless, if you're unsure take a peak at the barcode suffixes in contigs_dt
   #' @return Exact same seurat object with new metadata columns with clonotype information: 
   #' [type_v]_clonotype_id and [type_v]_cdr3s_aa
   #' @export
@@ -30,8 +36,16 @@ addVDJ <- function(seurat_obj, type_v, dir_v) {
   ### Add type designator to column names
   colnames(contigs_df) <- paste(type_v, colnames(contigs_df), sep = "_")
   
+  ### Subset for barcode string
+  grep_v <- paste0("\\-", barcodeString_v)
+  barcodes_v <- grep(grep_v, rownames(contigs_df), value = T)
+  subContigs_df <- contigs_df[rownames(contigs_df) %in% barcodes_v,]
+  
+  ### Replace barcode string with 1
+  rownames(subContigs_df) <- str_replace(rownames(subContigs_df), pattern = barcodeString_v, replacement = "1")
+  
   ### Add to object
-  seurat_obj <- AddMetaData(object = seurat_obj, metadata = contigs_df)
+  seurat_obj <- AddMetaData(object = seurat_obj, metadata = subContigs_df)
   
   ### Return
   return(seurat_obj)
