@@ -4,7 +4,7 @@
 \alias{addVDJ}
 \title{Add 10x VDJ Data to Seurat Obj}
 \usage{
-addVDJ(seurat_obj, type_v, dir_v, barcodeString_v = "1")
+addVDJ(seurat_obj, type_v, dir_v, barcodeString_v = "1", flag_v = T)
 }
 \arguments{
 \item{seurat_obj}{gene expression seurat object}
@@ -15,6 +15,9 @@ addVDJ(seurat_obj, type_v, dir_v, barcodeString_v = "1")
 
 \item{barcodeString_v}{see details. CHARACTER string indicating what cell barcodes to grab. 
 Default is 1, other values used when loading from multiple samples)}
+
+\item{flag_v}{default is True, which will add a column "hasT" or "hasB" (depends on type_v) that will have TRUE if that cell has
+TCR/BCR info and FALSE if it does not.}
 }
 \value{
 Exact same seurat object with new metadata columns with clonotype information: 

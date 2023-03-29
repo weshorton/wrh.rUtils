@@ -1,4 +1,4 @@
-addVDJ <- function(seurat_obj, type_v, dir_v, barcodeString_v = "1") {
+addVDJ <- function(seurat_obj, type_v, dir_v, barcodeString_v = "1", flag_v = T) {
   #' Add 10x VDJ Data to Seurat Obj
   #' @description Add 10x VDJ T or B data to an initialized GEX Seurat object. Modified from function found:
   #' https://ucdavis-bioinformatics-training.github.io/2020-Advanced_Single_Cell_RNA_Seq/data_analysis/VDJ_Analysis_fixed
@@ -7,6 +7,8 @@ addVDJ <- function(seurat_obj, type_v, dir_v, barcodeString_v = "1") {
   #' @param dir_v directory where "filtered_contig_annotations.csv" and "clonotypes.csv" are found.
   #' @param barcodeString_v see details. CHARACTER string indicating what cell barcodes to grab. 
   #' Default is 1, other values used when loading from multiple samples)
+  #' @param flag_v default is True, which will add a column "hasT" or "hasB" (depends on type_v) that will have TRUE if that cell has
+  #' TCR/BCR info and FALSE if it does not.
   #' @details Cell barcodes are of the format [ATCG]+\-1 in an individual seurat object. If cellranger aggregate is run on the TCR/BCR output,
   #' then it solves the problem of barcode duplication by changing the "1" at the end with another number. In the case I used to work on this (batch3),
   #' the replaced values are the sample numbers - I'm not sure if this is because of arguments provided in aggregate, 
@@ -44,8 +46,19 @@ addVDJ <- function(seurat_obj, type_v, dir_v, barcodeString_v = "1") {
   ### Replace barcode string with 1
   rownames(subContigs_df) <- str_replace(rownames(subContigs_df), pattern = barcodeString_v, replacement = "1")
   
+  ### Add flags
+  if (flag_v) {
+    col_v <- paste0("has", toupper(type_v))
+    subContigs_df[[col_v]] <- !is.na(subContigs_df[[1]])
+  }
+  
   ### Add to object
   seurat_obj <- AddMetaData(object = seurat_obj, metadata = subContigs_df)
+  
+  ### Change NA to false if adding flags
+  if (flag_v) {
+    seurat_obj@meta.data[is.na(seurat_obj@meta.data[[col_v]]), col_v] <- FALSE
+  }
   
   ### Return
   return(seurat_obj)
