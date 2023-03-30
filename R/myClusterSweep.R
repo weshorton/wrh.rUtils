@@ -1,18 +1,20 @@
 myClusterSweep <- function(seurat_obj, 
-                         embedding_v = seurat_obj@reductions$pca@cell.embeddings, 
-                         ndims_v = 10,
-                         res_v = seq(from=0.1, to=1, by=0.1),
-                         verbose_v = F,
-                         indPlots_v = F,
-                         plotDir_v = NULL,
-                         name_v = "",
-                         print_v = T) {
+                           embedding_v = seurat_obj@reductions$pca@cell.embeddings,
+                           reduction_v = "pca",
+                           ndims_v = 10,
+                           res_v = seq(from=0.1, to=1, by=0.1),
+                           verbose_v = F,
+                           indPlots_v = F,
+                           plotDir_v = NULL,
+                           name_v = "",
+                           print_v = T) {
   #' Cluster Parameter Sweep
   #' @description 
   #' Run a sweep on different resolutions for clustering. Output plots to assess quality of clustering.
   #' Adapted from code provided by Nick Calistri.
   #' @param seruat_obj A seurat object with dimensional reduction embeddings calculated (PCA)
   #' @param embedding_v embeddings for chosen dimensional reduction. Usually: seruat_obj@reductions$pca@cell.embeddings
+  #' @param reduction_v which reduction to use. Default is pca (which goes with default embedding). Be sure to change both!
   #' @param ndims_v number of dimensions to use. Default is 10.
   #' @param res_v vector of resolution values to pass to FindClusters()
   #' @param verbose_v logical indicating whether to print seurat function messages or not.
@@ -24,11 +26,21 @@ myClusterSweep <- function(seurat_obj,
   #' @export
   
   ###
+  ### PREP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ###
+  
+  ### Remove any clustering columns that are already in the object, to make sure that they don't interfere with QC run
+  cols_v <- grep("_res", colnames(seurat_obj@meta.data), value = T)
+  if (length(cols_v) > 0) {
+    for (col_v in cols_v) seurat_obj@meta.data[[col_v]] <- NULL
+  }
+  
+  ###
   ### CALCULATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ###
   
   ### Find neighbors using specified number of dimensions
-  seurat_obj <- FindNeighbors(seurat_obj, dims = 1:ndims_v, verbose = verbose_v)
+  seurat_obj <- FindNeighbors(seurat_obj, reduction = reduction_v, dims = 1:ndims_v, verbose = verbose_v)
   
   ### Find clusters using the specified resolutions
   seurat_obj <- FindClusters(seurat_obj, resolution = res_v, verbose = verbose_v)

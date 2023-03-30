@@ -7,6 +7,7 @@
 myClusterSweep(
   seurat_obj,
   embedding_v = seurat_obj@reductions$pca@cell.embeddings,
+  reduction_v = "pca",
   ndims_v = 10,
   res_v = seq(from = 0.1, to = 1, by = 0.1),
   verbose_v = F,
@@ -18,6 +19,8 @@ myClusterSweep(
 }
 \arguments{
 \item{embedding_v}{embeddings for chosen dimensional reduction. Usually: seruat_obj@reductions$pca@cell.embeddings}
+
+\item{reduction_v}{which reduction to use. Default is pca (which goes with default embedding). Be sure to change both!}
 
 \item{ndims_v}{number of dimensions to use. Default is 10.}
 
