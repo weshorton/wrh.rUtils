@@ -4,7 +4,7 @@
 \alias{mkdir}
 \title{Creates new directory in which to write files}
 \usage{
-mkdir(baseDir_v = NULL, newDir_v, wd_v = F)
+mkdir(baseDir_v = NULL, newDir_v, wd_v = F, recursive_v = T)
 }
 \arguments{
 \item{baseDir_v}{Character string. Relative or absolute path to directory that will be parent of newly created directory. 
@@ -13,6 +13,8 @@ If set to NULL (default), then will use working directory.}
 \item{newDir_v}{Character string. Name of new directory.}
 
 \item{wd_v}{boolean values determining if new directory should be set as working directory (T) or not (F).}
+
+\item{recursive_v}{boolean value determining if all elements of path other than last should be created. Passed to dir.create}
 }
 \value{
 Character string of path to new directory. 
