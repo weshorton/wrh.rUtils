@@ -29,7 +29,7 @@ addVDJ <- function(seurat_obj, type_v, dir_v, barcodeString_v = "1", flag_v = T)
   colnames(contigs_dt)[colnames(contigs_dt) == "raw_clonotype_id"] <- "clonotype_id"
   
   ### Merge amino acid sequences from clonotypes table
-  contigs_dt <- merge(contigs_dt, clonotypes_dt[,mget(c("clonotype_id", "cdr3s_aa"))],
+  contigs_dt <- merge(contigs_dt, clonotypes_dt[,mget(c("clonotype_id", "cdr3s_aa", "cdr3s_nt"))],
                       by = "clonotype_id", sort = F)
   
   ### Reformat with barcodes as rownames for integration with Seurat
