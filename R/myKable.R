@@ -1,4 +1,4 @@
-myKable <- function(data, width_v, ...) {
+myKable <- function(data, width_v=100, ...) {
   #' My Kable
   #' @description Function with a few common parameters I use already coded in
   #' @param data data.table/frame/matrix for plotting

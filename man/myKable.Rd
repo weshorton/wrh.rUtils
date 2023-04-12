@@ -4,7 +4,7 @@
 \alias{myKable}
 \title{My Kable}
 \usage{
-myKable(data, width_v, ...)
+myKable(data, width_v = 100, ...)
 }
 \arguments{
 \item{data}{data.table/frame/matrix for plotting}
