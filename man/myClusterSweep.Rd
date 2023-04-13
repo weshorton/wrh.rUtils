@@ -8,6 +8,7 @@ myClusterSweep(
   seurat_obj,
   embedding_v = seurat_obj@reductions$pca@cell.embeddings,
   reduction_v = "pca",
+  reductionName_v = "umap",
   ndims_v = 10,
   res_v = seq(from = 0.1, to = 1, by = 0.1),
   verbose_v = F,
@@ -21,6 +22,8 @@ myClusterSweep(
 \item{embedding_v}{embeddings for chosen dimensional reduction. Usually: seruat_obj@reductions$pca@cell.embeddings}
 
 \item{reduction_v}{which reduction to use. Default is pca (which goes with default embedding). Be sure to change both!}
+
+\item{reductionName_v}{name to call reduction on seurat object. Default is "umap", other values likely "umapR" or "umapH" for rliger/harmony}
 
 \item{ndims_v}{number of dimensions to use. Default is 10.}
 

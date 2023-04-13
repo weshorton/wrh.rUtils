@@ -1,6 +1,7 @@
 myClusterSweep <- function(seurat_obj, 
                            embedding_v = seurat_obj@reductions$pca@cell.embeddings,
                            reduction_v = "pca",
+                           reductionName_v = "umap",
                            ndims_v = 10,
                            res_v = seq(from=0.1, to=1, by=0.1),
                            verbose_v = F,
@@ -15,6 +16,7 @@ myClusterSweep <- function(seurat_obj,
   #' @param seruat_obj A seurat object with dimensional reduction embeddings calculated (PCA)
   #' @param embedding_v embeddings for chosen dimensional reduction. Usually: seruat_obj@reductions$pca@cell.embeddings
   #' @param reduction_v which reduction to use. Default is pca (which goes with default embedding). Be sure to change both!
+  #' @param reductionName_v name to call reduction on seurat object. Default is "umap", other values likely "umapR" or "umapH" for rliger/harmony
   #' @param ndims_v number of dimensions to use. Default is 10.
   #' @param res_v vector of resolution values to pass to FindClusters()
   #' @param verbose_v logical indicating whether to print seurat function messages or not.
@@ -152,7 +154,7 @@ clusterQC <- function(seurat_obj, embedding_v, ndims_v) {
   uniqClusterRunNames_v <- grep("*_res", colnames(seurat_obj@meta.data), value = T)
   
   ### Get a data.frame of all the clustering assignments
-  clusterCalls_df <- seurat_obj@meta.data[,uniqClusterRunNames_v]
+  clusterCalls_df <- seurat_obj@meta.data[,uniqClusterRunNames_v, drop = F]
   
   ### Subset embedding
   embedding_v <- embedding_v[,1:ndims_v]
@@ -171,12 +173,17 @@ clusterQC <- function(seurat_obj, embedding_v, ndims_v) {
     currRes_v <- as.numeric(str_remove(currClusterName_v,
                                        pattern = paste0(DefaultAssay(seurat_obj), '_snn_res.')))
     
+    ### Make reduction name
+    currRedName_v <- paste0(reductionName_v, currRes_v)
+    
     ### Calculate UMAP
-    seurat_obj <- RunUMAP(seurat_obj, dims = 1:ndims_v, nn.name = currClusterName_v, verbose = F)
+    seurat_obj <- RunUMAP(seurat_obj, dims = 1:ndims_v, nn.name = currClusterName_v, 
+                          reduction = reduction_v, reduction.name = currRedName_v, verbose = F)
     
     ### Create DimPlot with clusters labelled.
     dim_ls[[i]] <- DimPlot(seurat_obj,
                            group.by = currClusterName_v,
+                           reduction = currRedName_v,
                            label = T) +
       coord_equal() +
       ggtitle(currClusterName_v)
