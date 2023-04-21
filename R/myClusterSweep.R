@@ -65,7 +65,7 @@ myClusterSweep <- function(seurat_obj,
   if (indPlots_v) {
     if (!is.null(plotDir_v)) {
       
-      mkdir(baseDir_v = pathname(plotDir_v), newDir_v = basename(plotDir_v))
+      mkdir(baseDir_v = dirname(plotDir_v), newDir_v = basename(plotDir_v))
       
       ### Dim Plots
       pdf(file = file.path(plotDir_v, paste0(name_v, "_dimPlots.pdf")), onefile = T)
