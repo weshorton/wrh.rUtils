@@ -4,7 +4,7 @@
 \alias{clusterQC}
 \title{Cluster QC}
 \usage{
-clusterQC(seurat_obj, embedding_v, ndims_v)
+clusterQC(seurat_obj, embedding_v, ndims_v, reductionName_v)
 }
 \arguments{
 \item{seurat_obj}{A seurat object with dimensional reduction embeddings calculated (PCA)}
@@ -12,6 +12,8 @@ clusterQC(seurat_obj, embedding_v, ndims_v)
 \item{embedding_v}{embeddings for chosen dimensional reduction. Usually: seruat_obj@reductions$pca@cell.embeddings}
 
 \item{ndims_v}{number of dimensions to use. Default is 10.}
+
+\item{reductionName_v}{name of reduction to use.}
 }
 \value{
 List containing the following elements: 

@@ -136,13 +136,14 @@ myClusterSweep <- function(seurat_obj,
   
 } # clusterSweep
 
-clusterQC <- function(seurat_obj, embedding_v, ndims_v) {
+clusterQC <- function(seurat_obj, embedding_v, ndims_v, reductionName_v) {
   #' Cluster QC
   #' @description 
   #' Given a seurat object and embeddings, calculate qc
   #' @param seurat_obj A seurat object with dimensional reduction embeddings calculated (PCA)
   #' @param embedding_v embeddings for chosen dimensional reduction. Usually: seruat_obj@reductions$pca@cell.embeddings
   #' @param ndims_v number of dimensions to use. Default is 10.
+  #' @param reductionName_v name of reduction to use.
   #' @return List containing the following elements: 
   #'        "QC" - tibble of mean silhouette and RMSD values for each resolution
   #'        "dimPlot" - list of DimPlots, one for each resolution
