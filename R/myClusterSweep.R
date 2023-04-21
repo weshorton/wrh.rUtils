@@ -48,7 +48,7 @@ myClusterSweep <- function(seurat_obj,
   seurat_obj <- FindClusters(seurat_obj, resolution = res_v, verbose = verbose_v)
   
   ### Compute QC metrics
-  seuratClusterQC <- clusterQC(seurat_obj = seurat_obj, embedding_v = embedding_v, ndims_v = ndims_v, reductionName_v = reductionName_v)
+  seuratClusterQC <- clusterQC(seurat_obj = seurat_obj, embedding_v = embedding_v, ndims_v = ndims_v, reductionName_v = reductionName_v, reduction_v = reduction_v)
   
   ### Melt for plotting
   meltClusterQC <- reshape2::melt(seuratClusterQC$QC, id.vars = "res")
@@ -138,7 +138,7 @@ myClusterSweep <- function(seurat_obj,
   
 } # clusterSweep
 
-clusterQC <- function(seurat_obj, embedding_v, ndims_v, reductionName_v) {
+clusterQC <- function(seurat_obj, embedding_v, ndims_v, reductionName_v, reduction_v) {
   #' Cluster QC
   #' @description 
   #' Given a seurat object and embeddings, calculate qc
@@ -146,6 +146,7 @@ clusterQC <- function(seurat_obj, embedding_v, ndims_v, reductionName_v) {
   #' @param embedding_v embeddings for chosen dimensional reduction. Usually: seruat_obj@reductions$pca@cell.embeddings
   #' @param ndims_v number of dimensions to use. Default is 10.
   #' @param reductionName_v name of reduction to use.
+  #' @param reduction_v reduction to use
   #' @return List containing the following elements: 
   #'        "QC" - tibble of mean silhouette and RMSD values for each resolution
   #'        "dimPlot" - list of DimPlots, one for each resolution
