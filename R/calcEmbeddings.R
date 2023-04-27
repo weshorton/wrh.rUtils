@@ -33,7 +33,8 @@ calcEmbeddings <- function(seurat_obj, clusterName_v, reductionName_v, breaks_v 
     color_v <- breaks_lsv$colors
     break_v <- breaks_lsv$breaks
   } else {
-    color_v <- break_v <- NA
+    color_v <- colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100)
+    break_v <- NA
   } # fi
   
   ### Heatmap
