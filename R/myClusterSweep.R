@@ -188,7 +188,7 @@ clusterQC <- function(seurat_obj, embedding_v, ndims_v, reductionName_v, reducti
     dim_ls[[i]] <- DimPlot(seurat_obj,
                            group.by = currClusterName_v,
                            reduction = currRedName_v,
-                           label = T) +
+                           label = T, pt.size = 1) +
       coord_equal() +
       ggtitle(currClusterName_v)
     
