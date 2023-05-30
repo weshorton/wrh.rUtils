@@ -4,7 +4,7 @@
 \alias{findPCs}
 \title{Find maximum recommended PC to use.}
 \usage{
-findPCs(seurat_obj, drName_v = "pca")
+findPCs(seurat_obj, drName_v = "pca", min_v = T, elbow_v = T, ndims_v = 30)
 }
 \arguments{
 \item{seurat_obj}{A standard seurat object that has a "pca" dimensional reduction}
@@ -12,11 +12,24 @@ findPCs(seurat_obj, drName_v = "pca")
 \item{drName_v}{Name of pca dimensional reduction. Default is 'pca', which is Seurat default. 
 If you create a PCA on specific genes and label it something else, provide that label name 
 here (e.g. ccs_pca) for a PCA on cell cycle genes.}
+
+\item{min_v}{logical indicating to take the minimum cut-off of the two}
+
+\item{elbow_v}{logical indicating to make elbow plot}
+
+\item{ndims_v}{number of PCs to print in elbow plot}
 }
 \value{
 A single numeric value with the recommended PC cut-off
 }
 \description{
 Using a seurat object with PCA dimensional reduction run on it, determine the highest PC that 
-still provides information about variance between cells.
+still provides information about variance between cells. 
+Adapted from: https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html
+}
+\details{
+Two cut-offs are calculated
+1. The point where an individual PC contributes less than 5% of standard deviation
+and the cumulative PCs contribute at least 90% of the standard deviation
+1. The point where the percent change in variation between the consecutive PCs is less than 0.1%
 }
