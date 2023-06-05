@@ -10,7 +10,8 @@ readAllExcel <- function(file_v) {
   
   ## Read in
   data_lsdt <- lapply(sheets_v, function(x) {
-    as.data.table(readxl::read_excel(path = file_v, sheet = x))
+    # as.data.table(readxl::read_excel(path = file_v, sheet = x))
+    setDT(readxl::read_excel(path = file_v, sheet = x))
   })
   
   ## Add names
