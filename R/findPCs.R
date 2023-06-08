@@ -40,7 +40,8 @@ findPCs <- function(seurat_obj, drName_v="pca", min_v = T, elbow_v = T, ndims_v 
   
   # plot
   if (elbow_v) {
-    print(ElbowPlot(seurat_obj, ndims = ndims_v, reduction = drName_v))
+    print(ElbowPlot(seurat_obj, ndims = ndims_v, reduction = drName_v)) +
+      geom_vline(xintercept = c(co1,co2), linetype = "dashed")
   }
   
   # Return selected PC
