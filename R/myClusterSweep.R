@@ -181,14 +181,14 @@ clusterQC <- function(seurat_obj, embedding_v, ndims_v, reductionName_v, reducti
     currRedName_v <- paste0(reductionName_v, currRes_v)
     
     ### Calculate UMAP
-    seurat_obj <- RunUMAP(seurat_obj, dims = 1:ndims_v, nn.name = currClusterName_v, 
+    seurat_obj <- RunUMAP(seurat_obj, dims = 1:ndims_v, nn.name = currClusterName_v,
                           reduction = reduction_v, reduction.name = currRedName_v, verbose = F)
     
     ### Create DimPlot with clusters labelled.
     dim_ls[[i]] <- DimPlot(seurat_obj,
                            group.by = currClusterName_v,
                            reduction = currRedName_v,
-                           label = T, pt.size = 1) +
+                           label = T, pt.size = 0.1) +
       coord_equal() +
       ggtitle(currClusterName_v)
     
