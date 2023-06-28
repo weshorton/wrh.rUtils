@@ -4,7 +4,15 @@
 \alias{standardPlots}
 \title{Standard Seurat Plots}
 \usage{
-standardPlots(seurat_obj, reduction_v, clustCol_v, res_v, name_v)
+standardPlots(
+  seurat_obj,
+  reduction_v,
+  clustCol_v,
+  res_v,
+  name_v,
+  pt.size_v = 0.5,
+  featurePlots_v = T
+)
 }
 \arguments{
 \item{seurat_obj}{seurat object to use for plotting}
@@ -16,6 +24,10 @@ standardPlots(seurat_obj, reduction_v, clustCol_v, res_v, name_v)
 \item{res_v}{resolution used for clusters}
 
 \item{name_v}{name to add to plot titles}
+
+\item{pt.size_v}{argument to pt.size of DimPlot and FeaturePlot}
+
+\item{featurePlots_v}{logical indicating if set of feature plots should also be made.}
 }
 \value{
 list of ggplot objects
