@@ -85,7 +85,7 @@ standardPlots <- function(seurat_obj, reduction_v, clustCol_v, res_v, name_v, pt
     } else {
       out_lsgg[["S.Score"]] <- FeaturePlot(seurat_obj, reduction = reduction_v, features = "S.Score", max.cutoff = "q90", pt.size = pt.size_v) +
         coord_equal() + ggtitle(paste0(name_v, " S Phase Scores")) +
-        scale_color_gradientn(colors = rev(brewer.pal(n = 11, name = "RdBu")))
+        scale_color_gradientn(colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))
     } # fi
     
     ### Cell cycle Feature plot - G2M phase
@@ -94,7 +94,7 @@ standardPlots <- function(seurat_obj, reduction_v, clustCol_v, res_v, name_v, pt
     } else {
       out_lsgg[["G2M.Score"]] <- FeaturePlot(seurat_obj, reduction = reduction_v, features = "G2M.Score", max.cutoff = "q90", pt.size = pt.size_v) +
         coord_equal() + ggtitle(paste0(name_v, " G2M Phase Scores")) +
-        scale_color_gradientn(colors = rev(brewer.pal(n = 11, name = "RdBu")))
+        scale_color_gradientn(colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))
     } # fi
     
     ### Feature plot - log UMI
@@ -103,7 +103,7 @@ standardPlots <- function(seurat_obj, reduction_v, clustCol_v, res_v, name_v, pt
     } else {
       out_lsgg[["logUMI"]] <- FeaturePlot(seurat_obj, reduction = reduction_v, features = "logUMI", pt.size = pt.size_v) +
         coord_equal() + ggtitle(paste0(name_v, " Log nUMI")) +
-        scale_color_gradientn(colors = rev(brewer.pal(n = 11, name = "RdBu")))
+        scale_color_gradientn(colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))
     } # fi
     
     ### Feature plot - log UMI
@@ -112,7 +112,7 @@ standardPlots <- function(seurat_obj, reduction_v, clustCol_v, res_v, name_v, pt
     } else {
       out_lsgg[["logGene"]] <- FeaturePlot(seurat_obj, reduction = reduction_v, features = "logGene", pt.size = pt.size_v) +
         coord_equal() + ggtitle(paste0(name_v, " Log nGene")) +
-        scale_color_gradientn(colors = rev(brewer.pal(n = 11, name = "RdBu")))
+        scale_color_gradientn(colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))
     } # fi
     
   } # fi featurePlots_v
