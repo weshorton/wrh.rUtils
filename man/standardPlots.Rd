@@ -11,7 +11,8 @@ standardPlots(
   res_v,
   name_v,
   pt.size_v = 0.5,
-  featurePlots_v = T
+  featurePlots_v = T,
+  maxQ_v = "q90"
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ standardPlots(
 \item{pt.size_v}{argument to pt.size of DimPlot and FeaturePlot}
 
 \item{featurePlots_v}{logical indicating if set of feature plots should also be made.}
+
+\item{maxQ_v}{cut off for feature plots. Use this if the scale is such that you can't see differences.}
 }
 \value{
 list of ggplot objects
