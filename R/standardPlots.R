@@ -1,4 +1,5 @@
-standardPlots <- function(seurat_obj, reduction_v, clustCol_v, res_v, name_v, pt.size_v = 0.5, featurePlots_v = T) {
+standardPlots <- function(seurat_obj, reduction_v, clustCol_v, res_v, name_v, pt.size_v = 0.5, featurePlots_v = T,
+                          maxQ_v = "q90") {
   #' Standard Seurat Plots
   #' @description
     #' Make some quick plots for unintegrated, harmony, or other objects
@@ -9,6 +10,7 @@ standardPlots <- function(seurat_obj, reduction_v, clustCol_v, res_v, name_v, pt
   #' @param name_v name to add to plot titles
   #' @param pt.size_v argument to pt.size of DimPlot and FeaturePlot
   #' @param featurePlots_v logical indicating if set of feature plots should also be made.
+  #' @param maxQ_v cut off for feature plots. Use this if the scale is such that you can't see differences.
   #' @return list of ggplot objects
   #' @export
   
@@ -83,7 +85,7 @@ standardPlots <- function(seurat_obj, reduction_v, clustCol_v, res_v, name_v, pt
     if (!"S.Score" %in% colnames(seurat_obj@meta.data)) {
       warning("S.Score column not found. Will not make plot.")
     } else {
-      out_lsgg[["S.Score"]] <- FeaturePlot(seurat_obj, reduction = reduction_v, features = "S.Score", max.cutoff = "q90", pt.size = pt.size_v) +
+      out_lsgg[["S.Score"]] <- FeaturePlot(seurat_obj, reduction = reduction_v, features = "S.Score", max.cutoff = maxQ_v, pt.size = pt.size_v) +
         coord_equal() + ggtitle(paste0(name_v, " S Phase Scores")) +
         scale_color_gradientn(colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))
     } # fi
@@ -92,7 +94,7 @@ standardPlots <- function(seurat_obj, reduction_v, clustCol_v, res_v, name_v, pt
     if (!"G2M.Score" %in% colnames(seurat_obj@meta.data)) {
       warning("G2M.Score column not found. Will not make plot.")
     } else {
-      out_lsgg[["G2M.Score"]] <- FeaturePlot(seurat_obj, reduction = reduction_v, features = "G2M.Score", max.cutoff = "q90", pt.size = pt.size_v) +
+      out_lsgg[["G2M.Score"]] <- FeaturePlot(seurat_obj, reduction = reduction_v, features = "G2M.Score", max.cutoff = maxQ_v, pt.size = pt.size_v) +
         coord_equal() + ggtitle(paste0(name_v, " G2M Phase Scores")) +
         scale_color_gradientn(colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))
     } # fi
