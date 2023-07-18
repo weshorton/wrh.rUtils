@@ -117,6 +117,15 @@ standardPlots <- function(seurat_obj, reduction_v, clustCol_v, res_v, name_v, pt
         scale_color_gradientn(colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))
     } # fi
     
+    ### Feature plot - percent mito
+    if (!"percent.mt" %in% colnames(seurat_obj@meta.data)) {
+      warning("percent.mt column not found. Will not make plot.")
+    } else {
+      out_lsgg[["percent.mt"]] <- FeaturePlot(seurat_obj, reduction = reduction_v, features = "percent.mt", pt.size = pt.size_v) +
+        coord_equal() + ggtitle(paste0(name_v, " Percent Mt")) +
+        scale_color_gradientn(colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))
+    } # fi
+    
   } # fi featurePlots_v
   
   ### Output
