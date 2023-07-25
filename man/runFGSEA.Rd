@@ -6,6 +6,7 @@
 \usage{
 runFGSEA(
   data_df,
+  geneCol_v = "Gene",
   rankCol_v = "avg_log2FC",
   pathways_v,
   minSize_v = 1,
@@ -14,7 +15,9 @@ runFGSEA(
 )
 }
 \arguments{
-\item{data_df}{table of data to run. must have log2FC column and column named 'genes'}
+\item{data_df}{table of data to run. must have log2FC column and column for genes}
+
+\item{geneCol_v}{name of gene column. Default is Gene}
 
 \item{rankCol_v}{column name of data_df to use to rank. Default is avg_log2FC}
 

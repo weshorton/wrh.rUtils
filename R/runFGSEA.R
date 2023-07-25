@@ -1,9 +1,10 @@
 ### GSEA wrapper
-runFGSEA <- function(data_df, rankCol_v = "avg_log2FC", pathways_v, minSize_v = 1, 
+runFGSEA <- function(data_df, geneCol_v = "Gene", rankCol_v = "avg_log2FC", pathways_v, minSize_v = 1, 
                      maxSize_v = nrow(data_df), seed_v = 42) {
   #' FGSEA Wrapper
   #' @description Run fgsea and wrangle output
-  #' @param data_df table of data to run. must have log2FC column and column named 'genes'
+  #' @param data_df table of data to run. must have log2FC column and column for genes
+  #' @param geneCol_v name of gene column. Default is Gene
   #' @param rankCol_v column name of data_df to use to rank. Default is avg_log2FC
   #' @param pathways_v list of gene pathways to test against
   #' @param minSize_v passed to fgsea. minimum size of gene set to test
@@ -14,7 +15,7 @@ runFGSEA <- function(data_df, rankCol_v = "avg_log2FC", pathways_v, minSize_v = 
   
   ### Grab ranks and name them with genes
   rank <- data_df[[rankCol_v]]
-  names(rank) <- data_df$genes
+  names(rank) <- data_df[[geneCol_v]]
   
   ### Run function
   set.seed(seed_v)
