@@ -5,6 +5,7 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad"), by_v = NULL) 
   #' @param col_v column name that contains data
   #' @param type_v vector indicating which outlier method(s) to use. Can be either or both of "mean" and "mad"
   #' @param by_v column name indicating grouping variable. Default is no grouping.
+  #' @export
   
   ### Calculate MAD version
   if ("mad" %in% type_v) {
