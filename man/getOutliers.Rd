@@ -21,7 +21,7 @@ getOutliers(
 
 \item{by_v}{column name indicating grouping variable. Default is no grouping.}
 
-\item{mergeCol_v}{column name to merge on if doing dmad.}
+\item{mergeCol_v}{column name(s) to merge on if doing dmad.}
 }
 \description{
 find outliers in distributions using MAD or mean +- 2 SD

@@ -5,7 +5,7 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad"), by_v 
   #' @param col_v column name that contains data
   #' @param type_v vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", and "dmad"
   #' @param by_v column name indicating grouping variable. Default is no grouping.
-  #' @param mergeCol_v column name to merge on if doing dmad.
+  #' @param mergeCol_v column name(s) to merge on if doing dmad.
   #' @export
   
   ### Calculate MAD version
@@ -100,10 +100,14 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad"), by_v 
     final_dt[DMscore < -3.5 | DMscore > 3.5, dmadOutlier := "yes"]
     
     ### Notify
-    cat(sprintf("Found %s MAD outliers in %s samples.\n", final_dt[dmadOutlier == "yes",.N], final_dt[,.N]))
+    cat(sprintf("Found %s dMAD outliers in %s samples.\n", final_dt[dmadOutlier == "yes",.N], final_dt[,.N]))
     
     ### Merge with original
-    data_dt <- merge(data_dt, final_dt[,mget(c(mergeCol_v, "dMAD", "DMscore", "dmadOutlier"))])
+    if (is.null(mergeCol_v)) {
+      stop("Must specify mergeCol_v in dmad method is to be used")
+    } else {
+      data_dt <- merge(data_dt, final_dt[,mget(c(mergeCol_v, "dMAD", "DMscore", "dmadOutlier"))], by = mergeCol_v)
+    }
     
   } # fi dmad
   
