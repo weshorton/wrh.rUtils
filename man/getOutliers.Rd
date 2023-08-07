@@ -4,16 +4,24 @@
 \alias{getOutliers}
 \title{Find Outliers}
 \usage{
-getOutliers(data_dt, col_v, type_v = c("mean", "mad"), by_v = NULL)
+getOutliers(
+  data_dt,
+  col_v,
+  type_v = c("mean", "mad", "dmad"),
+  by_v = NULL,
+  mergeCol_v = NULL
+)
 }
 \arguments{
 \item{data_dt}{data.table containing distribution to search for}
 
 \item{col_v}{column name that contains data}
 
-\item{type_v}{vector indicating which outlier method(s) to use. Can be either or both of "mean" and "mad"}
+\item{type_v}{vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", and "dmad"}
 
 \item{by_v}{column name indicating grouping variable. Default is no grouping.}
+
+\item{mergeCol_v}{column name to merge on if doing dmad.}
 }
 \description{
 find outliers in distributions using MAD or mean +- 2 SD
