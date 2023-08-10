@@ -26,7 +26,9 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
     
     ### Label outliers
     data_dt$madOutlier <- "no"
-    data_dt[Mscore < -3.5 | Mscore > 3.5, madOutlier := "yes"]
+    # data_dt[Mscore < -3.5 | Mscore > 3.5, madOutlier := "yes"]
+    data_dt[Mscore < -3.5, madOutlier := "yes"]
+    data_dt[Mscore > 3.5, madOutlier := "yes"]
     
     ### Notify
     cat(sprintf("Found %s MAD outliers in %s samples.\n", data_dt[madOutlier == "yes",.N], data_dt[,.N]))
@@ -51,7 +53,9 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
     
     ### Label outliers
     data_dt$meanOutlier <- "no"
-    data_dt[get(col_v) < lowerBound | get(col_v) > upperBound, meanOutlier := "yes"]
+    # data_dt[get(col_v) < lowerBound | get(col_v) > upperBound, meanOutlier := "yes"]
+    data_dt[get(col_v) < lowerBound, meanOutlier := "yes"]
+    data_dt[get(col_v) > upperBound, meanOutlier := "yes"]
     
     ### Notify
     cat(sprintf("Found %s mean outliers in %s samples.\n", data_dt[meanOutlier == "yes",.N], data_dt[,.N]))
@@ -88,16 +92,14 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
     lower_dt[,DMscore := (0.6745*(get(col_v) - Median))/dMAD]
     upper_dt[,DMscore := (0.6745*(get(col_v) - Median))/dMAD]
     
-    ### Label outliers
-    data_dt$madOutlier <- "no"
-    data_dt[Mscore < -3.5 | Mscore > 3.5, madOutlier := "yes"]
-    
     ### Combine
     final_dt <- rbind(lower_dt, upper_dt)
     
     ### Label outliers
     final_dt$dmadOutlier <- "no"
-    final_dt[DMscore < -3.5 | DMscore > 3.5, dmadOutlier := "yes"]
+    # final_dt[DMscore < -3.5 | DMscore > 3.5, dmadOutlier := "yes"]
+    data_dt[get(col_v) < lowerBound, meanOutlier := "yes"]
+    data_dt[get(col_v) > upperBound, meanOutlier := "yes"]
     
     ### Notify
     cat(sprintf("Found %s dMAD outliers in %s samples.\n", final_dt[dmadOutlier == "yes",.N], final_dt[,.N]))
@@ -130,7 +132,9 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
     
     ### Label outliers
     data_dt$iqrOutlier <- "no"
-    data_dt[get(col_v) < iqrLower | get(col_v) > iqrUpper, iqrOutlier := "yes"]
+    # data_dt[get(col_v) < iqrLower | get(col_v) > iqrUpper, iqrOutlier := "yes"]
+    data_dt[get(col_v) < iqrLower, iqrOutlier := "yes"]
+    data_dt[get(col_v) > iqrUpper, iqrOutlier := "yes"]
     
     ### Notify
     cat(sprintf("Found %s IQR outliers in %s samples.\n", data_dt[iqrOutlier == "yes",.N], data_dt[,.N]))
