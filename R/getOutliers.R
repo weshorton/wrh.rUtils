@@ -1,4 +1,5 @@
-getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr"), by_v = NULL, mergeCol_v = NULL) {
+getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr"), by_v = NULL, mergeCol_v = NULL,
+                        scale_v = NULL) {
   #' Find Outliers
   #' @description find outliers in distributions using MAD or mean +- 2 SD
   #' @param data_dt data.table containing distribution to search for 
@@ -6,7 +7,22 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
   #' @param type_v vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", "dmad", and "iqr"
   #' @param by_v column name indicating grouping variable. Default is no grouping.
   #' @param mergeCol_v column name(s) to merge on if doing dmad.
+  #' @param scale_v vector indicating whether to scale data or not. NULL (default) is no scale. "log10", "log2", and "ln" are acceptable values.
   #' @export
+  
+  ### Scale data
+  if (!is.null(scale_v)) {
+    if (scale_v == "log10") {
+      data_dt[,(col_v) := log10(get(col_v))]
+    } else if (scale_v == "log2") {
+      data_dt[,(col_v) := log2(get(col_v))]
+    } else if (scale_v == "ln") {
+      data_dt[,(col_v) := log(get(col_v))]
+    } else {
+      stop("Acceptable values for scale_v are 'log10', 'log2', and 'ln'.")
+    }
+  }
+  
   
   ### Calculate MAD version
   if ("mad" %in% type_v) {
