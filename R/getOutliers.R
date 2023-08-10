@@ -12,6 +12,8 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
   
   ### Scale data
   if (!is.null(scale_v)) {
+    data_dt[,Scale := get(col_v)]
+    col_v <- Scale
     if (scale_v == "log10") {
       data_dt[,(col_v) := log10(get(col_v))]
     } else if (scale_v == "log2") {
