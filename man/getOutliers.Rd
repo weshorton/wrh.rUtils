@@ -7,7 +7,7 @@
 getOutliers(
   data_dt,
   col_v,
-  type_v = c("mean", "mad", "dmad"),
+  type_v = c("mean", "mad", "dmad", "iqr"),
   by_v = NULL,
   mergeCol_v = NULL
 )
@@ -17,7 +17,7 @@ getOutliers(
 
 \item{col_v}{column name that contains data}
 
-\item{type_v}{vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", and "dmad"}
+\item{type_v}{vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", "dmad", and "iqr"}
 
 \item{by_v}{column name indicating grouping variable. Default is no grouping.}
 

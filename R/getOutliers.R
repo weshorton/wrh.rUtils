@@ -1,9 +1,9 @@
-getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad"), by_v = NULL, mergeCol_v = NULL) {
+getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr"), by_v = NULL, mergeCol_v = NULL) {
   #' Find Outliers
   #' @description find outliers in distributions using MAD or mean +- 2 SD
   #' @param data_dt data.table containing distribution to search for 
   #' @param col_v column name that contains data
-  #' @param type_v vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", and "dmad"
+  #' @param type_v vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", "dmad", and "iqr"
   #' @param by_v column name indicating grouping variable. Default is no grouping.
   #' @param mergeCol_v column name(s) to merge on if doing dmad.
   #' @export
@@ -110,6 +110,32 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad"), by_v 
     }
     
   } # fi dmad
+  
+  ### Calculate IQR version
+  if ("iqr" %in% type_v) {
+    
+    ### Calculate with or without grouping variable
+    if (is.null(by_v)) {
+      data_dt[,Q1 := fivenum(get(col_v))[2]]
+      data_dt[,Q3 := fivenum(get(col_v))[4]]
+    } else {
+      data_dt[,Q1 := fivenum(get(col_v))[2], by = get(by_v)]
+      data_dt[,Q3 := fivenum(get(col_v))[4], by = get(by_v)]
+    }
+    
+    ### Finish calculations
+    data_dt[,IQR := Q3 - Q1]
+    data_dt[,iqrLower := Q1 - 1.5*IQR]
+    data_dt[,iqrUpper := Q3 + 1.5*IQR]
+    
+    ### Label outliers
+    data_dt$iqrOutlier <- "no"
+    data_dt[get(col_v) < iqrLower | get(col_v) > iqrUpper, iqrOutlier := "yes"]
+    
+    ### Notify
+    cat(sprintf("Found %s IQR outliers in %s samples.\n", data_dt[iqrOutlier == "yes",.N], data_dt[,.N]))
+    
+  } # fi mean
   
   ### Return
   return(data_dt)
