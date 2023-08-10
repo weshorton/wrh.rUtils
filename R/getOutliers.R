@@ -98,8 +98,8 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
     ### Label outliers
     final_dt$dmadOutlier <- "no"
     # final_dt[DMscore < -3.5 | DMscore > 3.5, dmadOutlier := "yes"]
-    data_dt[get(col_v) < lowerBound, meanOutlier := "yes"]
-    data_dt[get(col_v) > upperBound, meanOutlier := "yes"]
+    final_dt[DMscore < -3.5, dmadOutlier := "yes"]
+    final_dt[DMscore > 3.5, dmadOutlier := "yes"]
     
     ### Notify
     cat(sprintf("Found %s dMAD outliers in %s samples.\n", final_dt[dmadOutlier == "yes",.N], final_dt[,.N]))
