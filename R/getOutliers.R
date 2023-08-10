@@ -61,8 +61,8 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
       data_dt[,Mean := mean(get(col_v))]
       data_dt[,SD := sd(get(col_v))]
     } else {
-      data_dt[,Mean := mean(get(col_v)), by = get(by_v)]
-      data_dt[,SD := sd(get(col_v)), by = get(by_v)]
+      data_dt[,Mean := mean(get(col_v)), by = mget(by_v)]
+      data_dt[,SD := sd(get(col_v)), by = mget(by_v)]
     }
     
     ### Finish calculations
@@ -139,8 +139,8 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
       data_dt[,Q1 := fivenum(get(col_v))[2]]
       data_dt[,Q3 := fivenum(get(col_v))[4]]
     } else {
-      data_dt[,Q1 := fivenum(get(col_v))[2], by = get(by_v)]
-      data_dt[,Q3 := fivenum(get(col_v))[4], by = get(by_v)]
+      data_dt[,Q1 := fivenum(get(col_v))[2], by = mget(by_v)]
+      data_dt[,Q3 := fivenum(get(col_v))[4], by = mget(by_v)]
     }
     
     ### Finish calculations
