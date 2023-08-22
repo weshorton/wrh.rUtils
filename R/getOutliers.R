@@ -168,7 +168,7 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
       
       ### Get info
       currDir_v <- strsplit(lgt_v[i], split = ":")[[1]][1]
-      currVal_v <- strsplit(lgt_v[i], split = ":")[[1]][2]
+      currVal_v <- as.numeric(strsplit(lgt_v[i], split = ":")[[1]][2])
       currCol_v <- strsplit(lgt_v[i], split = ":")[[1]][3]
       currOutlierCol_v <- paste0(currCol_v, "Outlier")
       
