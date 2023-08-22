@@ -176,8 +176,8 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
       data_dt[[currOutlierCol_v]] <- "no"
       
       ### Update data
-      if (currDir_v == "lt") data_dt[get(currCol_v) < currVal_v, get(currOutlierCol_v) := "yes"]
-      if (currDir_v == "gt") data_dt[get(currCol_v) > currVal_v, get(currOutlierCol_v) := "yes"]
+      if (currDir_v == "lt") data_dt[get(currCol_v) < currVal_v, (currOutlierCol_v) := "yes"]
+      if (currDir_v == "gt") data_dt[get(currCol_v) > currVal_v, (currOutlierCol_v) := "yes"]
       
       ### Notify
       cat(sprintf("Found %s %s outliers in %s samples.\n", data_dt[get(currOutlierCol_v) == "yes",.N], lgt_v[i], data_dt[,.N]))
