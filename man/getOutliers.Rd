@@ -18,7 +18,8 @@ getOutliers(
 
 \item{col_v}{column name that contains data}
 
-\item{type_v}{vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", "dmad", and "iqr"}
+\item{type_v}{vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", "dmad", and "iqr".
+Can also be 'lt:colName' 'gt:val:colName' indicating less than or greater than val in column colName}
 
 \item{by_v}{column name indicating grouping variable. Default is no grouping.}
 

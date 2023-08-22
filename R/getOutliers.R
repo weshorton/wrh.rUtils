@@ -4,7 +4,8 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
   #' @description find outliers in distributions using MAD or mean +- 2 SD
   #' @param data_dt data.table containing distribution to search for 
   #' @param col_v column name that contains data
-  #' @param type_v vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", "dmad", and "iqr"
+  #' @param type_v vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", "dmad", and "iqr".
+  #' Can also be 'lt:colName' 'gt:val:colName' indicating less than or greater than val in column colName
   #' @param by_v column name indicating grouping variable. Default is no grouping.
   #' @param mergeCol_v column name(s) to merge on if doing dmad.
   #' @param scale_v vector indicating whether to scale data or not. NULL (default) is no scale. "log10", "log2", and "ln" are acceptable values.
@@ -157,7 +158,33 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
     ### Notify
     cat(sprintf("Found %s IQR outliers in %s samples.\n", data_dt[iqrOutlier == "yes",.N], data_dt[,.N]))
     
-  } # fi mean
+  } # fi iqr
+  
+  ### Calculate any less/greater than
+  lgt_v <- grep(":", type_v, value = T)
+  if (length(lgt_v) > 0) {
+    
+    for (i in 1:length(lgt_v)) {
+      
+      ### Get info
+      currDir_v <- strsplit(lgt_v[i], split = ":")[[1]][1]
+      currVal_v <- strsplit(lgt_v[i], split = ":")[[1]][2]
+      currCol_v <- strsplit(lgt_v[i], split = ":")[[1]][3]
+      currOutlierCol_v <- paste0(currCol_v, "Outlier")
+      
+      ### Start outlier column
+      data_dt[[currOutlierCol_v]] <- "no"
+      
+      ### Update data
+      if (currDir_v == "lt") data_dt[get(currCol_v) < currVal_v, get(currOutlierCol_v) := "yes"]
+      if (currDir_v == "gt") data_dt[get(currCol_v) > currVal_v, get(currOutlierCol_v) := "yes"]
+      
+      ### Notify
+      cat(sprintf("Found %s %s outliers in %s samples.\n", data_dt[get(currOutlierCol_v) == "yes",.N], lgt_v[i], data_dt[,.N]))
+      
+    } # for i
+      
+  } # fi lgt_v
   
   ### Return
   return(data_dt)
