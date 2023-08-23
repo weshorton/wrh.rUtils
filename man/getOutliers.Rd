@@ -10,7 +10,8 @@ getOutliers(
   type_v = c("mean", "mad", "dmad", "iqr"),
   by_v = NULL,
   mergeCol_v = NULL,
-  scale_v = NULL
+  scale_v = NULL,
+  verbose_v = T
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ Can also be 'lt:colName' 'gt:val:colName' indicating less than or greater than v
 \item{mergeCol_v}{column name(s) to merge on if doing dmad.}
 
 \item{scale_v}{vector indicating whether to scale data or not. NULL (default) is no scale. "log10", "log2", and "ln" are acceptable values.}
+
+\item{verbose_v}{logical. TRUE - print results of each type_v in format "Found %s <type_v> outliers in %s samples". FALSE - no output}
 }
 \description{
 find outliers in distributions using MAD or mean +- 2 SD

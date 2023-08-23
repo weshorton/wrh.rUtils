@@ -1,5 +1,5 @@
 getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr"), by_v = NULL, mergeCol_v = NULL,
-                        scale_v = NULL) {
+                        scale_v = NULL, verbose_v = T) {
   #' Find Outliers
   #' @description find outliers in distributions using MAD or mean +- 2 SD
   #' @param data_dt data.table containing distribution to search for 
@@ -9,6 +9,7 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
   #' @param by_v column name indicating grouping variable. Default is no grouping.
   #' @param mergeCol_v column name(s) to merge on if doing dmad.
   #' @param scale_v vector indicating whether to scale data or not. NULL (default) is no scale. "log10", "log2", and "ln" are acceptable values.
+  #' @param verbose_v logical. TRUE - print results of each type_v in format "Found %s <type_v> outliers in %s samples". FALSE - no output
   #' @export
   
   ### Scale data
@@ -50,7 +51,7 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
     data_dt[Mscore > 3.5, madOutlier := "yes"]
     
     ### Notify
-    cat(sprintf("Found %s MAD outliers in %s samples.\n", data_dt[madOutlier == "yes",.N], data_dt[,.N]))
+    if (verbose_v) cat(sprintf("Found %s MAD outliers in %s samples.\n", data_dt[madOutlier == "yes",.N], data_dt[,.N]))
     
   } # fi mad
   
@@ -77,7 +78,7 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
     data_dt[get(col_v) > upperBound, meanOutlier := "yes"]
     
     ### Notify
-    cat(sprintf("Found %s mean outliers in %s samples.\n", data_dt[meanOutlier == "yes",.N], data_dt[,.N]))
+    if (verbose_v) cat(sprintf("Found %s mean outliers in %s samples.\n", data_dt[meanOutlier == "yes",.N], data_dt[,.N]))
     
   } # fi mean
   
@@ -121,7 +122,7 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
     final_dt[DMscore > 3.5, dmadOutlier := "yes"]
     
     ### Notify
-    cat(sprintf("Found %s dMAD outliers in %s samples.\n", final_dt[dmadOutlier == "yes",.N], final_dt[,.N]))
+    if (verbose_v) cat(sprintf("Found %s dMAD outliers in %s samples.\n", final_dt[dmadOutlier == "yes",.N], final_dt[,.N]))
     
     ### Merge with original
     if (is.null(mergeCol_v)) {
@@ -156,7 +157,7 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
     data_dt[get(col_v) > iqrUpper, iqrOutlier := "yes"]
     
     ### Notify
-    cat(sprintf("Found %s IQR outliers in %s samples.\n", data_dt[iqrOutlier == "yes",.N], data_dt[,.N]))
+    if (verbose_v) cat(sprintf("Found %s IQR outliers in %s samples.\n", data_dt[iqrOutlier == "yes",.N], data_dt[,.N]))
     
   } # fi iqr
   
@@ -180,7 +181,7 @@ getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr")
       if (currDir_v == "gt") data_dt[get(currCol_v) > currVal_v, (currOutlierCol_v) := "yes"]
       
       ### Notify
-      cat(sprintf("Found %s %s outliers in %s samples.\n", data_dt[get(currOutlierCol_v) == "yes",.N], lgt_v[i], data_dt[,.N]))
+      if (verbose_v) cat(sprintf("Found %s %s outliers in %s samples.\n", data_dt[get(currOutlierCol_v) == "yes",.N], lgt_v[i], data_dt[,.N]))
       
     } # for i
       
