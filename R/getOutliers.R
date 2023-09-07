@@ -1,7 +1,8 @@
 getOutliers <- function(data_dt, col_v, type_v = c("mean", "mad", "dmad", "iqr"), by_v = NULL, mergeCol_v = NULL,
                         scale_v = NULL, verbose_v = T) {
   #' Find Outliers
-  #' @description find outliers in distributions using MAD or mean +- 2 SD
+  #' @description
+    #' Find outliers in distributions using MAD or mean +- 2 SD
   #' @param data_dt data.table containing distribution to search for 
   #' @param col_v column name that contains data
   #' @param type_v vector indicating which outlier method(s) to use. Can be any combination of "mean", "mad", "dmad", and "iqr".
