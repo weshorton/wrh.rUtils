@@ -31,5 +31,5 @@ Can also be 'lt:colName' 'gt:val:colName' indicating less than or greater than v
 \item{verbose_v}{logical. TRUE - print results of each type_v in format "Found %s <type_v> outliers in %s samples". FALSE - no output}
 }
 \description{
-Find outliers in distributions using MAD or mean plus or minus 2 SD
+A short description...
 }
