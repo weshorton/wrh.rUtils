@@ -61,9 +61,16 @@ determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal
   } # fi
   
   ### Table of breaks
-  colorTable_df <- as.data.frame(t(sapply(2:length(breaks_v), function(x) {
-    table_v <- apply(data_mat, 2, function(y) length(which(y < breaks_v[x] & y >= breaks_v[x-1])))
-  })))
+  if (ncol(data_mat) > 1) {
+    colorTable_df <- as.data.frame(t(sapply(2:length(breaks_v), function(x) {
+      apply(data_mat, 2, function(y) length(which(y < breaks_v[x] & y >= breaks_v[x-1])))
+    })))
+  } else {
+    colorTable_df <- as.data.frame(as.matrix(sapply(2:length(breaks_v), function(x) {
+      length(which(data_mat[,1,drop=F] < breaks_v[x] & data_mat[,1,drop=F] >= breaks_v[x-1]))
+    })))
+    colnames(colorTable_df) <- colnames(data_mat)
+  }
   colorTable_df$Hex <- outColors_v
   
   ### Print
