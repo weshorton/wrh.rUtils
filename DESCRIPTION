@@ -7,9 +7,10 @@ Depends: R (>= 3.5.1)
 Imports: 
     data.table,
     ggplot2,
-    RColorBrewer,
-    gtable,
     grDevices,
+    gtable,
+    pheatmap,
+    RColorBrewer,
     tibble
 License: GPL-3 + file LICENSE
 Encoding: UTF-8

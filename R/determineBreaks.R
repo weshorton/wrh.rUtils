@@ -1,5 +1,5 @@
 determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal(11, "RdBu"))(100)),
-                            cut_v = "max", print_v = F, verbose_v = T) {
+                            cut_v = "max", print_v = F, verbose_v = T, main = NA, show_rownames = F) {
   #' Determine Breaks
   #' @description Determine custom breaks for heatmap by excluding high values.
   #' @param data_mat matrix of counts. Most likely will be row-scaled, but doesn't have to be. if data.table provided, 1st column is assumed to be
@@ -9,6 +9,8 @@ determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal
   #' which will cut off the maximum value on either end.
   #' @param print_v logical indicating whether or not to print a test heatmap
   #' @param verbose_v logical indicating whether or not to print out messages
+  #' @return list of 3. "breaks" = numerical breaks to provide to pheatmap; "colors" = hex colors to provide to pheatmap; 
+  #' "table" = number of rows in data_mat that are in each break.
   #' @export
   
   ## Handle data
@@ -39,7 +41,8 @@ determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal
   
   ## Print test
   if (print_v) {
-    pheatmap(data_mat, cluster_rows = F, cluster_cols = F, color = outColors_v, breaks = breaks_v, cellwidth = 10)
+    pheatmap::pheatmap(data_mat, cluster_rows = F, cluster_cols = F, color = outColors_v, breaks = breaks_v, cellwidth = 10,
+                       main = main, show_rownames = show_rownames)
   }
   
   ## Print number excluded
@@ -57,7 +60,18 @@ determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal
     } # fi
   } # fi
   
+  ### Table of breaks
+  colorTable_df <- as.data.frame(t(sapply(2:length(breaks_v), function(x) {
+    table_v <- apply(data_mat, 2, function(y) length(which(y < breaks_v[x] & y >= breaks_v[x-1])))
+  })))
+  colorTable_df$Hex <- outColors_v
+  
+  ### Print
+  if (verbose_v) {
+    print(colorTable_df)
+  }
+  
   ## Return output
-  return(list("breaks" = breaks_v, "colors" = outColors_v))
+  return(list("breaks" = breaks_v, "colors" = outColors_v, "table" = colorTable_df))
   
 } # determineBreaks
