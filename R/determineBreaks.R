@@ -5,7 +5,10 @@ determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal
   #' @param data_mat matrix of counts. Most likely will be row-scaled, but doesn't have to be. if data.table provided, 1st column is assumed to be
   #' an identifier column and will be assigned to row.names.
   #' @param colors_v Vector of colors that will be used. Default is red (high) to blue (low)
-  #' @param cut_v Either a numeric value indicating which percentile to use (3 would use the 3rd and 97th percentile). Or "max" (default)
+  #' @param cut_v Three options to determine which values to exclude when making breaks:
+  #'   (1) a numeric value indicating which percentile to use for removal (3 would use the 3rd and 97th percentile)
+  #'   (2) "max" (default) remove minimum and maximum values
+  #'   (3) "none" don't remove any (to see what default behavior is)
   #' which will cut off the maximum value on either end.
   #' @param print_v logical indicating whether or not to print a test heatmap
   #' @param verbose_v logical indicating whether or not to print out messages
@@ -29,6 +32,9 @@ determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal
   if (cut_v == "max") {
     min2_v <- unique(sort(data_mat))[2]
     max2_v <- unique(sort(data_mat, decreasing = T))[2]
+  } else if (cut_v == "none") {
+    min2_v <- min(data_mat, na.rm = T)
+    max2_v <- max(data_mat, na.rm = T)
   } else {
     percentile_v <- quantile(data_mat, probs = seq(0, 1, 0.01), na.rm = T)
     min2_v <- percentile_v[[paste0(cut_v, "%")]]
@@ -36,8 +42,13 @@ determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal
   }
   
   ## Make breaks and colors
-  breaks_v <- c(min_v, seq(min2_v, max2_v, length.out = length(colors_v)+1), max_v)
-  outColors_v <- c(colors_v[1], colors_v, colors_v[length(colors_v)])
+  if (cut_v == "none") {
+    breaks_v <- seq(min2_v, max2_v, length.out = length(colors_v)+1)
+    outColors_v <- colors_v
+  } else {
+    breaks_v <- c(min_v, seq(min2_v, max2_v, length.out = length(colors_v)+1), max_v)
+    outColors_v <- c(colors_v[1], colors_v, colors_v[length(colors_v)])
+  }
   
   ## Print test
   if (print_v) {
@@ -54,6 +65,8 @@ determineBreaks <- function(data_mat, colors_v = rev(colorRampPalette(brewer.pal
     if (cut_v == "max") {
       cat(sprintf("Using second-highest value of %s and second-lowest value of %s, %s cells were collapsed on the high end and %s on the low.\n",
                   round(max2_v, digits = 4), round(min2_v, digits = 4), numAbove_v, numBelow_v))
+    }  else if (cut_v == "none") {
+      cat(sprintf("No cut - showing default color scale.\n"))
     } else {
       cat(sprintf("Using the %s and %s percentile values (%s and %s, respectively). %s cells were collapsed on the high end and %s on the low.\n",
                   (100-cut_v), cut_v, round(max2_v, digits = 4), round(min2_v, digits = 4), numAbove_v, numBelow_v))
