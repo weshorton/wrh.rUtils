@@ -6,7 +6,7 @@ mergeDTs <- function(data_lsdt, mergeCol_v, keepCol_v = NULL, ...) {
   #' @param data_lsdt list of data.tables to merge
   #' @param mergeCol_v which column from all of the data.tables to use to merge
   #' @param keepCol_v which column from all of the data.tables to use as the column of interest. If NULL, use all columns
-  #' @param ... extra parameters passed to merge
+  #' @param ... extra parameters passed to merge. So far all = T and sort = F unless changed here.
   #' @return data.table with ncol == length(data_lsdt) + 1. Column names are names of list, or defaults to V1, V2,...
   #' @export
   
@@ -48,16 +48,27 @@ mergeDTs <- function(data_lsdt, mergeCol_v, keepCol_v = NULL, ...) {
   
   for (i in 2:length(data_lsdt)) {
     
-    ## This is new (2018-10-10) - need to make new keepCol_v if the data.tables don't have same columns
-    if (!keepCol_v %in% colnames(data_lsdt[[i]])) {
-      keepCol_v <- colnames(data_lsdt[[i]])[-which(colnames(data_lsdt[[i]]) %in% mergeCol_v)]
+    ## If the data.tables in the list have different columns. First search for keepCol, then grab other columns
+    columnCheck_v <- setdiff(colnames(data_lsdt[[i]]), c(mergeCol_v, keepCol_v))
+    if (length(columnCheck_v) > 0) {
+      warning(sprintf("There are %s column(s) in data %s that aren't merge or keep columns, meaning this data.table will be subset.\n\t%s\n",
+                      length(columnCheck_v), i, paste(columnCheck_v, collapse = "; ")))
     } # fi
     
+    columnCheck2_v <- setdiff(c(mergeCol_v, keepCol_v), colnames(data_lsdt[[i]]))
+    if (length(columnCheck2_v) > 0) {
+      keepCol_v <- colnames(data_lsdt[[i]])[-which(colnames(data_lsdt[[i]]) %in% mergeCol_v)]
+      warning(sprintf("%s provided keep column(s) not in data %s. Grabbing all non-merge columns instead.\n\t%s\n\t%s\n",
+                      length(columnCheck2_v), i, paste(columnCheck2_v, collapse = "; "), paste(keepCol_v, collapse = "; ")))
+    } # fi
+    
+
     ## Merge
     merge_dt <- merge(merge_dt,
                       data_lsdt[[i]][,mget(c(mergeCol_v, keepCol_v))],
                       by = mergeCol_v,
                       all = all_v, sort = sort_v)
+    
     ## Update column names
     if (length(keepCol_v) > 1){
       colNames_v <- c(colNames_v, paste(names(data_lsdt)[i], keepCol_v, sep = "_"))
