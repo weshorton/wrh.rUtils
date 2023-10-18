@@ -8,6 +8,7 @@ mergeDTs <- function(data_lsdt, mergeCol_v, keepCol_v = NULL, ...) {
   #' @param keepCol_v which column from all of the data.tables to use as the column of interest. If NULL, use all columns
   #' @param ... extra parameters passed to merge. So far all = T and sort = F unless changed here.
   #' @return data.table with ncol == length(data_lsdt) + 1. Column names are names of list, or defaults to V1, V2,...
+  #' @import data.table
   #' @export
   
   ## Grab extra arguments
@@ -78,6 +79,8 @@ mergeDTs <- function(data_lsdt, mergeCol_v, keepCol_v = NULL, ...) {
     
     ## Rename columns
     colnames(merge_dt) <- colNames_v
+    
   } # for i
   return(merge_dt)
+  
 } # mergeDTs
