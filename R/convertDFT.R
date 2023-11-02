@@ -1,4 +1,4 @@
-convertDFT <- function(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T, split_v = NULL) {
+convertDFT <- function(data_dft, col_v = NA, newName_v = NULL, rmCol_v = T, split_v = NULL) {
   #' Convert between data.table and data.frame
   #' @description 
   #' Change data.tables into data.frames with specified row.names or
@@ -34,10 +34,31 @@ convertDFT <- function(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T, spli
   #' @export
   
   ## Row names function
-  addRowNames <- function(data_dft, out_dft, newName_v) {
-    newName_v <- ifelse(newName_v %in% colnames(out_dft), paste0(newName_v, "_2"), newName_v)
-    out_dft[[newName_v]] <- rownames(data_dft)
-    out_dft <- out_dft[, c(ncol(out_dft), 1:(ncol(out_dft)-1)), with = F]
+  addRowNames <- function(data_dft, out_dft, newName_v, split_v = NULL) {
+    
+    ### For no split
+    if (is.null(split_v)) {
+      
+      newName_v <- ifelse(newName_v %in% colnames(out_dft), paste0(newName_v, "_2"), newName_v)
+      out_dft[[newName_v]] <- rownames(data_dft)
+      out_dft <- out_dft[, c(ncol(out_dft), 1:(ncol(out_dft)-1)), with = F]
+      
+    } else {
+      
+      for (i in 1:length(newName_v)) {
+        
+        currNewName_v <- newName_v[i]
+        currNewName_v <- ifelse(currNewName_v %in% colnames(out_dft), paste0(currNewName_v, "_2"), currNewName_v)
+        currNewVals_v <- sapply(rownames(data_dft), function(x) strsplit(x, split = split_v)[[1]][i])
+        out_dft[,(currNewName_v) := currNewVals_v]
+        #out_dft[[currNewName_v]] <- sapply(rownames(data_dft), function(x) strsplit(x, split = split_v)[[1]][i])
+          
+      } # for i
+      
+    } # fi split_v
+    
+    return(out_dft)
+    
   } # addRowNames
   
   ## Get class
@@ -89,16 +110,28 @@ convertDFT <- function(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T, spli
   ## Convert data.frame to data.table
   } else if (class_v == "data.frame"){
     
+    ## If no newName provided, assign V1
+    ## If split_v, will split the name.
+    if (is.null(newName_v)) {
+      newName_v <- "V1"
+    } else {
+      if (!is.null(split_v)) {
+        newName_v <- strsplit(newName_v, split = split_v)[[1]]
+      } # fi
+    } # fi
+    
     ## Convert
     out_dft <- as.data.table(data_dft)
     
     ## Handle row names
     if (!identical(rownames(data_dft), as.character(1:nrow(data_dft)))) {
-      out_dft <- addRowNames(data_dft, out_dft, newName_v)
+      out_dft <- addRowNames(data_dft, out_dft, newName_v, split_v = split_v)
     } # fi
 
   ## Convert matrix to data.table
   } else if (class_v == "matrix") {
+    
+    if (length(col_v) > 1) stop("Can only handle 1 col_v if input is matrix")
     
     ## Convert
     out_dft <- as.data.table(data_dft)
