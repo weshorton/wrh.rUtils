@@ -48,7 +48,7 @@ convertDFT <- function(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T, spli
   if (length(grep("matrix", class_v)) > 0) class_v <- "matrix"
   
   ## Convert data.table to data.frame
-  if ("data.table" %in% class_v){
+  if ("data.table" %in% class_v) {
     
     ## Convert
     out_dft <- as.data.frame(data_dft)
@@ -60,7 +60,8 @@ convertDFT <- function(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T, spli
       out_dft[[col_v]] <- apply(out_dft[,c(cols_v)], 1, function(x) paste(x, collapse = "_"))
       for (c_v in cols_v) out_dft[[c_v]] <- NULL
     } else if (length(col_v) == 1) {
-      col_v <- ifelse(is.na(col_v), colnames(data_dft)[1], colnames(data_dft)[col_v])
+      col_v <- ifelse(is.na(col_v), colnames(data_dft)[1], 
+                      ifelse(is.numeric(col_v), colnames(data_dft)[col_v], col_v))
     } else if (is.null(col_v)) {
       col_v <- NULL
     } else {
