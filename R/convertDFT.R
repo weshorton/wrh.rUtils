@@ -1,4 +1,4 @@
-convertDFT <- function(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T) {
+convertDFT <- function(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T, split_v = NULL) {
   #' Convert between data.table and data.frame
   #' @description 
   #' Change data.tables into data.frames with specified row.names or
@@ -6,10 +6,16 @@ convertDFT <- function(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T) {
   #' If data.frame/matrix doesn't have row.names, then no columns will be added to data.table
   #' @param data_dft data in either data.table or data.frame format (can also be a matrix)
   #' @param col_v character or numeric vector. if converting from dt to df, column name or index of which column to use as row.names.
-  #' NA (default) will use 1st column; NULL will not add rownames
+  #' NA (default) will use 1st column; NULL will not add rownames. NEW can also provide multiple columns here. The names and values
+  #' will be pasted together with "_" to create one column to become the rownames.
   #' @param newName_v character vector. if converting from df/mat to dt, what to name new column. (default is "V1")
   #' if newName_v is already a column name, will paste "_2" to end of newName_v.
   #' @param rmCol_v boolean value indicating whether to remove the column used to make the rownames from the output table (T) or to leave it (F)
+  #' @param split_v character vector. default = NULL. Used for converting TO data.table. If there are multiple columns' worth of data in the rownames, split
+  #' both the column names and the values by the provided delimiter.
+  #' @description
+    #' TODO! STILL HAVEN'T ACTUALLY IMPLEMENTED SPLIT_V. EXAMPLE IS THE REVERSE OF LUNGADENO CONVERTDFT IN MAKE PIE. SPLIT ON _
+    #' 
   #' @return either a data.table or data.frame (opposite class of input)
   #' @examples 
   #' # Data
@@ -47,19 +53,33 @@ convertDFT <- function(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T) {
     ## Convert
     out_dft <- as.data.frame(data_dft)
     
-    ## Get column for row names
-    col_v <- ifelse(is.na(col_v), colnames(data_dft)[1],
-                    ifelse(is.null(col_v), NULL,
-                           ifelse(is.numeric(col_v), colnames(data_dft)[col_v], col_v)))
+    ## Special case for multiple columns. Have to paste together and then remove the others
+    if (length(col_v) > 1) {
+      cols_v <- col_v
+      col_v <- paste(cols_v, collapse = "_")
+      out_dft[[col_v]] <- apply(out_dft[,c(cols_v)], 1, function(x) paste(x, collapse = "_"))
+      for (c_v in cols_v) out_dft[[c_v]] <- NULL
+    } else if (length(col_v) == 1) {
+      col_v <- ifelse(is.na(col_v), colnames(data_dft)[1], colnames(data_dft)[col_v])
+    } else if (is.null(col_v)) {
+      col_v <- NULL
+    } else {
+      stop("Didn't expect this to get triggered...check your if statements!")
+    } # fi
+    
+    ### Original.
+    # col_v <- ifelse(is.na(col_v), colnames(data_dft)[1],
+    #                 ifelse(is.null(col_v), NULL,
+    #                        ifelse(is.numeric(col_v), colnames(data_dft)[col_v], col_v)))
     
     ## Add row names and handle column that provided names
     if (length(col_v) > 0) {
       
-      rownames(out_dft) <- data_dft[[col_v]]
+      rownames(out_dft) <- out_dft[[col_v]]
     
       ## Remove column that provided rownames
       if (rmCol_v) {
-        whichCol_v <- which(colnames(data_dft) == col_v)
+        whichCol_v <- which(colnames(out_dft) == col_v)
         out_dft <- out_dft[,-whichCol_v, drop = F]
       } # fi
       

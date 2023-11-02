@@ -4,18 +4,22 @@
 \alias{convertDFT}
 \title{Convert between data.table and data.frame}
 \usage{
-convertDFT(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T)
+convertDFT(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T, split_v = NULL)
 }
 \arguments{
 \item{data_dft}{data in either data.table or data.frame format (can also be a matrix)}
 
 \item{col_v}{character or numeric vector. if converting from dt to df, column name or index of which column to use as row.names.
-NA (default) will use 1st column; NULL will not add rownames}
+NA (default) will use 1st column; NULL will not add rownames. NEW can also provide multiple columns here. The names and values
+will be pasted together with "_" to create one column to become the rownames.}
 
 \item{newName_v}{character vector. if converting from df/mat to dt, what to name new column. (default is "V1")
 if newName_v is already a column name, will paste "_2" to end of newName_v.}
 
 \item{rmCol_v}{boolean value indicating whether to remove the column used to make the rownames from the output table (T) or to leave it (F)}
+
+\item{split_v}{character vector. default = NULL. Used for converting TO data.table. If there are multiple columns' worth of data in the rownames, split
+both the column names and the values by the provided delimiter.}
 }
 \value{
 either a data.table or data.frame (opposite class of input)
@@ -24,6 +28,8 @@ either a data.table or data.frame (opposite class of input)
 Change data.tables into data.frames with specified row.names or
 data.frames/matrices into data.tables, copying over row.names as the first column.
 If data.frame/matrix doesn't have row.names, then no columns will be added to data.table
+
+TODO! STILL HAVEN'T ACTUALLY IMPLEMENTED SPLIT_V. EXAMPLE IS THE REVERSE OF LUNGADENO CONVERTDFT IN MAKE PIE. SPLIT ON _
 }
 \examples{
 # Data
