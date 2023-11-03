@@ -1,4 +1,4 @@
-determineGrid <- function(obj, col_v = NULL, method_v = "grid", by_v = "column", verbose_v = T) {
+determineGrid <- function(obj, col_v = NULL, method_v = "grid", by_v = "column", verbose_v = F) {
   #' Determine Grid
   #' @description
     #' Determine rows and columns for a data.table for facet or a list for ggarrange 
@@ -29,10 +29,8 @@ determineGrid <- function(obj, col_v = NULL, method_v = "grid", by_v = "column",
   
   ### Simplify longer classes
   if (is.logical(all.equal(class_v, c("matrix", "array")))) {
-    cat("Matrix provided\n")
     class_v <- "matrix"
   } else if (is.logical(all.equal(class_v, c("data.table", "data.frame")))) {
-    cat("data.table provided\n")
     class_v <- "data.table"
   } 
   
@@ -63,7 +61,7 @@ determineGrid <- function(obj, col_v = NULL, method_v = "grid", by_v = "column",
   } # fi
   
   ### Construct function
-  fxn <- function(x, add_v = method_v) ceiling(sqrt(x))+add_v
+  fxn <- function(x, toAdd_v = add_v) ceiling(sqrt(x))+toAdd_v
   
   ###
   ### Determine values ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,7 +72,7 @@ determineGrid <- function(obj, col_v = NULL, method_v = "grid", by_v = "column",
     size_v <- length(obj)
   } else {
     if (!is.null(col_v)) {
-      size_v <- unique(obj[[col_v]])
+      size_v <- length(unique(obj[[col_v]]))
     } else {
       size_v <- nrow(obj)
     } # fi is.null
@@ -86,9 +84,9 @@ determineGrid <- function(obj, col_v = NULL, method_v = "grid", by_v = "column",
   
   ### Assign to row and column
   if (by_v %in% c("row", "Row", "r")) {
-    out_ls <- list("row" = val1_v, "column" = val2_v)
+    out_ls <- list("nrow" = val1_v, "ncol" = val2_v)
   } else if (by_v %in% c("column", "col", "Column", "Col", "c")) {
-    out_ls <- list("row" = val2_v, "column" = val1_v)
+    out_ls <- list("nrow" = val2_v, "ncol" = val1_v)
   } else {
     stop(sprintf("by_v must be 'row' or 'column'.\n%s provided.\n", paste0(by_v, collapse = ", ")))
   } # fi

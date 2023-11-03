@@ -9,7 +9,7 @@ determineGrid(
   col_v = NULL,
   method_v = "grid",
   by_v = "column",
-  verbose_v = T
+  verbose_v = F
 )
 }
 \arguments{
