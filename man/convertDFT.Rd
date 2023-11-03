@@ -4,7 +4,7 @@
 \alias{convertDFT}
 \title{Convert between data.table and data.frame}
 \usage{
-convertDFT(data_dft, col_v = NA, newName_v = "V1", rmCol_v = T, split_v = NULL)
+convertDFT(data_dft, col_v = NA, newName_v = NULL, rmCol_v = T, split_v = NULL)
 }
 \arguments{
 \item{data_dft}{data in either data.table or data.frame format (can also be a matrix)}
