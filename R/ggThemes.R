@@ -33,8 +33,32 @@ big_label <- function() {
           axis.text = element_text(size = 16),
           axis.text.y = element_text(angle = 45),
           axis.title = element_text(size = 18),
+	  strip.text = element_text(size = 18),
           legend.text = element_text(size = 16),
           legend.title = element_text(size = 18))
+}
+
+###
+### Massive Label  ggplot theme #####################################################################################################
+###
+
+massive_label <- function(multiplier_v = 1) {
+  #' Massive Label Theme
+  #' @description Same as big_label() theme, but even LARGER text and also y-axis labels are angled 45
+  #' @param multiplier_v numeric. multiple text sizes by this factor. 
+  #' @export
+  
+  theme_classic() +
+    theme(plot.title = element_text(hjust = 0.5, size = 40*multiplier_v),
+          plot.subtitle = element_text(hjust = 0.5, size = 26*multiplier_v),
+          axis.text.x = element_text(size = 28*multiplier_v),
+	  strip.text = element_text(size = 32*multiplier_v),
+          axis.text.y = element_text(angle = 45, size = 24*multiplier_v),
+          axis.title = element_text(size = 32*multiplier_v),
+	  axis.ticks = element_line(linewidth=2.5),
+	  axis.ticks.length = unit(15, "points"),
+          legend.text = element_text(size = 22*multiplier_v),
+          legend.title = element_text(size = 28*multiplier_v))
 }
 
 ###
