@@ -6,7 +6,7 @@ readComplexArgs <- function(arg_v, colSep_v = ";", varValSep_v = "\\.", valSep_v
   #' @param colSep_v character. default is ";". Whatever character separates different columns in arg_v. See details
   #' @param varvalSep_v character. default is "\\." Whatever character separates a column name from its factor levels in arg_v. See details
   #' @param valSep_v character. default is ",'. Whatever character separates factor levels in arg_v. See details
-  #' @param simplify_v logical. default is TRUE.
+  #' @param simplify_v logical. default is TRUE. TO DO - should I simplify the empty list to a vector?
   #' @details
     #' When running a command-line Rscript, sometimes you need to pass complex arguments like comma-separated
     #' lists of variables. You can't have any spaces in command-line args, so have to provide the argument all together
@@ -45,7 +45,7 @@ readComplexArgs <- function(arg_v, colSep_v = ";", varValSep_v = "\\.", valSep_v
   ### Make output
   out_ls <- list()
   for (i in 1:length(vars_v)) {
-    out_ls[[vars_v[i]]] <- strsplit(vals_v, split = valSep_v)[[1]]
+    out_ls[[vars_v[i]]] <- strsplit(vals_v[i], split = valSep_v)[[1]]
   }
   
   ### Return

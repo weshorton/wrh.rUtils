@@ -19,7 +19,7 @@ readComplexArgs(
 
 \item{valSep_v}{character. default is ",'. Whatever character separates factor levels in arg_v. See details}
 
-\item{simplify_v}{logical. default is TRUE.}
+\item{simplify_v}{logical. default is TRUE. TO DO - should I simplify the empty list to a vector?}
 
 \item{varvalSep_v}{character. default is "\\." Whatever character separates a column name from its factor levels in arg_v. See details}
 }
