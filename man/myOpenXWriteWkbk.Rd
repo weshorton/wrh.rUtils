@@ -4,14 +4,17 @@
 \alias{myOpenXWriteWkbk}
 \title{Write list to excel workbook}
 \usage{
-myOpenXWriteWkbk(data_ls, file_v, overwrite_v = T)
+myOpenXWriteWkbk(data_ls, file_v, append_v = T)
 }
 \arguments{
 \item{data_ls}{list of tables to write}
 
 \item{file_v}{path to output file.}
 
-\item{overwrite_v}{logical to overwrite workbook.}
+\item{append_v}{logical ind}
+
+\item{overwrite_v}{logical. Only matters if file_v already exists. If true, will append to existing workbook.
+If false, will overwrite existing workbook.}
 }
 \value{
 writes to file
