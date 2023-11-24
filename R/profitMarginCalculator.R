@@ -1,5 +1,5 @@
 profitMarginCalculator <- function(price_v, margin_v = NULL, shippingWeight_v = 0, shop_v,
-                                   includeShippingInMargin_v = F, method_v = 1) {
+                                   includeShippingInMargin_v = F, method_v = 1, factor_v = 2) {
   #' Profit Margin Calculator
   #' @description
     #' Calculate appropriate price depending on desired margin and potential shipping costs.
@@ -9,6 +9,7 @@ profitMarginCalculator <- function(price_v, margin_v = NULL, shippingWeight_v = 
   #' @param shop_v either "PlantBoy" or "PlantShop" indicating which supplier
   #' @param includeShippingInMargin_v logical to add shipping cost before calculating margin
   #' @param method_v either 1, meaning the original method, or 2, the 2x cost - shipping method.
+  #' @param factor_v factor to multiply wholesale price by when determining margin if using method 2.
   #' @details
     #' Use supplied info to calculate the appropriate price for a product.
   #' @return numeric vector of suggested price
@@ -40,7 +41,7 @@ profitMarginCalculator <- function(price_v, margin_v = NULL, shippingWeight_v = 
   } else if (method_v == 2) {
     
     # Final price
-    finalPrice_v <- round(2*price_v + shippingCost_v, digits = 2)
+    finalPrice_v <- round(factor_v*price_v + shippingCost_v, digits = 2)
     
     # Backcalc markup
     calculatedMarkup_v <- finalPrice_v - (price_v + shippingCost_v)

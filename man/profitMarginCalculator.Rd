@@ -10,7 +10,8 @@ profitMarginCalculator(
   shippingWeight_v = 0,
   shop_v,
   includeShippingInMargin_v = F,
-  method_v = 1
+  method_v = 1,
+  factor_v = 2
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ profitMarginCalculator(
 \item{includeShippingInMargin_v}{logical to add shipping cost before calculating margin}
 
 \item{method_v}{either 1, meaning the original method, or 2, the 2x cost - shipping method.}
+
+\item{factor_v}{factor to multiply wholesale price by when determining margin if using method 2.}
 }
 \value{
 numeric vector of suggested price

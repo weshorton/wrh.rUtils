@@ -55,7 +55,6 @@ renderPrint({
                          shippingWeight_v = input$shippingWeight_v,
                          shop_v = as.character(input$shop_v),
                          includeShippingInMargin_v = as.logical(input$includeShipping_v),
-                         #potSize_v = as.character(input$potSize),
                          method_v = as.numeric(input$method_v))
 })
 ```
