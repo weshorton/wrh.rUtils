@@ -23,6 +23,8 @@ profitMarginCalculator <- function(price_v, margin_v = NULL, shippingWeight_v = 
     markup_v <- price_v * margin_v
   } # fi
   
+  markup_v <- round(markup_v, digits = 2)
+  
   # Final price
   finalPrice_v <- round(price_v + shippingCost_v + markup_v, digits = 2)
   

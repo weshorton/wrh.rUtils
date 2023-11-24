@@ -1,0 +1,54 @@
+---
+title: "Product Pricing"
+author: "Wes Horton"
+date: "2023-11-24"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    runtime: shiny
+    vertical_layout: scroll
+    smooth_scroll: yes
+---
+
+```{r setup, include=FALSE}
+#library(wrh.rUtils)
+devtools::load_all("~/my_tool_repos/wrh.rUtils")
+```
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+Enter a product's wholesale cost, shipping weight, and desired profit margin and receive the appropriate price.
+
+```{r}
+numericInput("price_v", label = "Wholesale Price",
+             value = 10, min = 0)
+
+numericInput("shipping_v", label = "Shipping Weight",
+            value = 5, min = 0)
+
+selectInput("shop_v", label = "Supplier",
+            choices = c("PlantBoy", "PlantShop"))
+
+# selectInput("shipping_v", label = "Shipping Cost",
+#             choices = c(), selected = 7)
+
+selectInput("margin_v", label = "Profit Margin",
+            choices = seq(from = 0.1, to = 0.5, by = 0.01), selected = 0.36)
+
+checkboxInput("includeShipping_v", label = "Include Shipping in Margin?", value = F)
+
+```
+
+Column
+-----------------------------------------------------------------------
+
+```{r}
+renderPrint({
+  profitMarginCalculator(price_v = as.numeric(input$price_v),
+                         margin_v = as.numeric(input$margin_v),
+                         shippingWeight_v = as.numeric(input$shipping_v),
+                         shop_v = as.character(input$shop_v),
+                         includeShippingInMargin_v = as.logical(input$includeShipping_v))
+})
+```
