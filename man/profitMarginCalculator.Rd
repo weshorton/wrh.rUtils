@@ -9,7 +9,8 @@ profitMarginCalculator(
   margin_v = NULL,
   shippingWeight_v = 0,
   shop_v,
-  includeShippingInMargin_v = F
+  includeShippingInMargin_v = F,
+  method_v = 1
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ profitMarginCalculator(
 \item{shop_v}{either "PlantBoy" or "PlantShop" indicating which supplier}
 
 \item{includeShippingInMargin_v}{logical to add shipping cost before calculating margin}
+
+\item{method_v}{either 1, meaning the original method, or 2, the 2x cost - shipping method.}
 }
 \value{
 numeric vector of suggested price
