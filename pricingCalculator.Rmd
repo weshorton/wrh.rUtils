@@ -21,22 +21,27 @@ Column {.sidebar}
 Enter a product's wholesale cost, shipping weight, and desired profit margin and receive the appropriate price.
 
 ```{r}
+### Price
 numericInput("price_v", label = "Wholesale Price",
              value = 10, min = 0)
 
-numericInput("shipping_v", label = "Shipping Weight",
-            value = 5, min = 0)
+### Shipping Weight and/or Pot Size
+textInput("shippingWeight_v", label = "Shipping Weight",
+            value = '', placeholder = '1, 2.5, 5, or 2in, 4in, 8in, etc.')
 
+### Select supplier
 selectInput("shop_v", label = "Supplier",
             choices = c("PlantBoy", "PlantShop"))
 
-# selectInput("shipping_v", label = "Shipping Cost",
-#             choices = c(), selected = 7)
-
+### Select margin
 selectInput("margin_v", label = "Profit Margin",
             choices = seq(from = 0.1, to = 0.5, by = 0.01), selected = 0.36)
 
-checkboxInput("includeShipping_v", label = "Include Shipping in Margin?", value = F)
+### Which method
+selectInput("method_v", label = "Calculation Method",
+            choices = c(1,2), selected = 1)
+
+checkboxInput("includeShipping_v", label = "Include Shipping in Margin?", value = T)
 
 ```
 
@@ -47,8 +52,10 @@ Column
 renderPrint({
   profitMarginCalculator(price_v = as.numeric(input$price_v),
                          margin_v = as.numeric(input$margin_v),
-                         shippingWeight_v = as.numeric(input$shipping_v),
+                         shippingWeight_v = input$shippingWeight_v,
                          shop_v = as.character(input$shop_v),
-                         includeShippingInMargin_v = as.logical(input$includeShipping_v))
+                         includeShippingInMargin_v = as.logical(input$includeShipping_v),
+                         #potSize_v = as.character(input$potSize),
+                         method_v = as.numeric(input$method_v))
 })
 ```
