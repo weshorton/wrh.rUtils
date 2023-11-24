@@ -4,14 +4,24 @@
 \alias{profitMarginCalculator}
 \title{Profit Margin Calculator}
 \usage{
-profitMarginCalculator(price_v, margin_v = NULL, shipping_v = NULL)
+profitMarginCalculator(
+  price_v,
+  margin_v = NULL,
+  shippingWeight_v = 0,
+  shop_v,
+  includeShippingInMargin_v = F
+)
 }
 \arguments{
 \item{price_v}{numeric vector of the price of the product in dollars}
 
 \item{margin_v}{numeric value from 0.0 to 1.0 that is the profit margin in a decimal percentage (e.g. 15% == 0.15)}
 
-\item{shipping_v}{numeric value of shipping cost in dollars.}
+\item{shippingWeight_v}{numeric value of shipping weight in pounds.}
+
+\item{shop_v}{either "PlantBoy" or "PlantShop" indicating which supplier}
+
+\item{includeShippingInMargin_v}{logical to add shipping cost before calculating margin}
 }
 \value{
 numeric vector of suggested price
