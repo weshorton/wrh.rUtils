@@ -7,7 +7,7 @@
 shippingCalculator(weight_v = 0, shop_v)
 }
 \arguments{
-\item{weight_v}{numeric value of product weight in pounds.}
+\item{weight_v}{numeric value of product weight in pounds. Can also be a character vector of pot size.}
 
 \item{shop_v}{character vector. either "PlantBoy" or "PlantShop"}
 }
