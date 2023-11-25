@@ -13,35 +13,61 @@ output:
 ```{r setup, include=FALSE}
 #library(wrh.rUtils)
 devtools::load_all("~/my_tool_repos/wrh.rUtils")
+
+### Things to think about
+### Would be good to see an average markup (i.e. profit) for all items and per item class or something
+
+### To Do:
+### How to I format this text so that it is above the output and each sentence has a newline at the end?
+# Enter a product's wholesale cost, shipping weight, and desired profit margin and receive the appropriate price.  
+# 
+# You need to pre-upload appropriate shipping weight pricing tables and then select them with the Supplier option.  
+# 
+# Calculation method 1 is the default method. This uses the profit margin supplied to calculate an appropriate markup and subsequent selling price. You can choose to include the shipping costs in the markup calculation or not. This calculation  multplies either "price alone" or "price + shipping" by the selected margin.  
+# 
+# Calculation 2 arrives at a product price by multiplying the wholesale price by a factor and then adding shipping. The default factor is 2.
 ```
+
+Pricing Calculator
+=====================================
 
 Column {.sidebar}
 -----------------------------------------------------------------------
-
-Enter a product's wholesale cost, shipping weight, and desired profit margin and receive the appropriate price.
 
 ```{r}
 ### Price
 numericInput("price_v", label = "Wholesale Price",
              value = 10, min = 0)
 
+numericInput("itemNum_v", label = "Number of Items",
+             value = 1, min = 1)
+
 ### Shipping Weight and/or Pot Size
 textInput("shippingWeight_v", label = "Shipping Weight",
             value = '', placeholder = '1, 2.5, 5, or 2in, 4in, 8in, etc.')
 
-### Select supplier
-selectInput("shop_v", label = "Supplier",
-            choices = c("PlantBoy", "PlantShop"))
+### Recurring shipping?
+numericInput("recurring_v", label = "Recurring Order? (In months)",
+             value = 1, min = 1)
+
+### Include shipping?
+checkboxInput("includeShipping_v", label = "Include Shipping in Margin?", value = T)
 
 ### Select margin
 selectInput("margin_v", label = "Profit Margin",
             choices = seq(from = 0.1, to = 0.5, by = 0.01), selected = 0.36)
 
+### Select supplier
+selectInput("shop_v", label = "Supplier",
+            choices = c("PlantBoy", "PlantShop"))
+
 ### Which method
 selectInput("method_v", label = "Calculation Method",
             choices = c(1,2), selected = 1)
 
-checkboxInput("includeShipping_v", label = "Include Shipping in Margin?", value = T)
+### Price multiplier
+numericInput("factor_v", label = "Retail Price Multiplier (Method 2 Only)",
+             value = 2, min = 1)
 
 ```
 
@@ -51,10 +77,13 @@ Column
 ```{r}
 renderPrint({
   profitMarginCalculator(price_v = as.numeric(input$price_v),
+                         itemNum_v = as.numeric(input$itemNum_v),
                          margin_v = as.numeric(input$margin_v),
                          shippingWeight_v = input$shippingWeight_v,
+                         recurring_v = as.numeric(input$recurring_v),
                          shop_v = as.character(input$shop_v),
+                         method_v = as.numeric(input$method_v),
                          includeShippingInMargin_v = as.logical(input$includeShipping_v),
-                         method_v = as.numeric(input$method_v))
+                         factor_v = as.numeric(input$factor_v))
 })
 ```
