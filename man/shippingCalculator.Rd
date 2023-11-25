@@ -4,12 +4,14 @@
 \alias{shippingCalculator}
 \title{Calculate Shipping}
 \usage{
-shippingCalculator(weight_v = 0, shop_v)
+shippingCalculator(weight_v = 0, shop_v, itemNum_v = 1)
 }
 \arguments{
 \item{weight_v}{numeric value of product weight in pounds. Can also be a character vector of pot size.}
 
 \item{shop_v}{character vector. either "PlantBoy" or "PlantShop"}
+
+\item{itemNum_v}{numeric indicating number of items to ship (multiply shipping weight by that)}
 }
 \value{
 vector of price

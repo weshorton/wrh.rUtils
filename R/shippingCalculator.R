@@ -1,22 +1,30 @@
-shippingCalculator <- function(weight_v = 0, shop_v) {
+shippingCalculator <- function(weight_v = 0, shop_v, itemNum_v = 1) {
   #' Calculate Shipping
   #' @description
     #' Calculate shipping cost based on weight for plantboy
   #' @param weight_v numeric value of product weight in pounds. Can also be a character vector of pot size.
   #' @param shop_v character vector. either "PlantBoy" or "PlantShop"
+  #' @param itemNum_v numeric indicating number of items to ship (multiply shipping weight by that)
   #' @return vector of price
   #' @export
   
   
-  ### Conversion table
+  ### Weight Conversion tables
   plantBoyTable_dt <- data.table("Weight" = c(0.5, 1, 1.5, 3, 5, 8, 12, 16, 20, 40, 50, 60, 70, 80, 100),
                                  "Cost" = c(5, 7, 9, 12, 15, 20, 25, 35, 41, 55, 98, 130, 150, 178, 210))
   
   plantShopTable_dt <- data.table("Weight" = c(0.75, 1, 1.51, 3, 5, 8, 12, 16, 20, 40, 50, 60, 70, 80, 100),
                                   "Cost" = c(7.5, 9, 11, 15, 19, 24, 29, 35, 41, 55, 98, 130, 150, 178, 210))
   
-  potWeightTable_dt <- data.table("Size" = paste0(c(2, 3, 4, 5, 6, 8, 10, 12), "in"),
-                                   "Weight" = c(0.75, 0.75, 1, 3, 5, 8, 12, 16))
+  ### Pot size conversion table
+  pottedWeightTable_dt <- data.table("Size" = paste0(c(2, 3, 4, 6, 9, 10), "inP"),
+                                     "Weight" = c(0.75, 0.75, 1, 3, 8, 8))
+  
+  prePottedWeightTable_dt <- data.table("Size" = paste0(c(4, 6), "inPP"),
+                                        "Weight" = c(3, 5))
+  
+  potWeightTable_dt <- rbind(pottedWeightTable_dt, prePottedWeightTable_dt)
+
   
   ### Get which table
   if (shop_v %in% c("pb", "PB", "Pb", "plantboy", "Plantboy", "PlantBoy", "plantBoy")) {
@@ -26,6 +34,11 @@ shippingCalculator <- function(weight_v = 0, shop_v) {
     table_dt <- plantShopTable_dt
     shop_v <- "ps"
   } # fi shop_v
+  
+  if (grepl("oz", weight_v)) {
+    weight_v <- as.numeric(gsub("oz", "", weight_v))
+    weight_v <- weight_v / 16
+  } # fi
   
   ### Handle pot size weights
   if (grepl("in", weight_v)) {
@@ -63,6 +76,9 @@ shippingCalculator <- function(weight_v = 0, shop_v) {
     } # fi weight == 0
     
   } # fi is.null
+  
+  ### Add multiplier
+  cost_v <- cost_v * itemNum_v
 
   ### Output
   return(cost_v)
