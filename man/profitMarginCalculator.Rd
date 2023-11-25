@@ -8,10 +8,12 @@ profitMarginCalculator(
   price_v,
   margin_v = NULL,
   shippingWeight_v = 0,
+  recurring_v = 1,
   shop_v,
   includeShippingInMargin_v = F,
   method_v = 1,
-  factor_v = 2
+  factor_v = 2,
+  itemNum_v = 1
 )
 }
 \arguments{
@@ -21,6 +23,8 @@ profitMarginCalculator(
 
 \item{shippingWeight_v}{numeric value of shipping weight in pounds.}
 
+\item{recurring_v}{multiplier for recurring shipping charges.}
+
 \item{shop_v}{either "PlantBoy" or "PlantShop" indicating which supplier}
 
 \item{includeShippingInMargin_v}{logical to add shipping cost before calculating margin}
@@ -28,6 +32,8 @@ profitMarginCalculator(
 \item{method_v}{either 1, meaning the original method, or 2, the 2x cost - shipping method.}
 
 \item{factor_v}{factor to multiply wholesale price by when determining margin if using method 2.}
+
+\item{itemNum_v}{number of items ordered (passed to shippingCost)}
 }
 \value{
 numeric vector of suggested price
