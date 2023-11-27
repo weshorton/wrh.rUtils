@@ -14,14 +14,14 @@ shippingCalculator <- function(weight_v = 0, shop_v, itemNum_v = 1) {
                                  "Cost" = c(5, 7, 9, 12, 15, 20, 25, 35, 41, 55, 98, 130, 150, 178, 210))
   
   plantShopTable_dt <- data.table("Weight" = c(0.75, 1, 1.51, 3, 5, 8, 12, 16, 20, 40, 50, 60, 70, 80, 100),
-                                  "Cost" = c(7.5, 9, 11, 15, 19, 24, 29, 35, 41, 55, 98, 130, 150, 178, 210))
+                                  "Cost" =   c(7.5, 9, 11, 15, 19, 24, 29, 35, 41, 55, 98, 130, 150, 178, 210))
   
   ### Pot size conversion table
-  pottedWeightTable_dt <- data.table("Size" = paste0(c(2, 3, 4, 6, 9, 10), "inP"),
-                                     "Weight" = c(0.75, 0.75, 1, 3, 8, 8))
+  pottedWeightTable_dt <- data.table("Size" = paste0(c(2, 3, 4, 5, 6, 8, 9, 10), "inP"),
+                                     "Weight" = c(0.75, 0.75, 1, 3, 3, 12, 12, 12))
   
-  prePottedWeightTable_dt <- data.table("Size" = paste0(c(4, 6), "inPP"),
-                                        "Weight" = c(3, 5))
+  prePottedWeightTable_dt <- data.table("Size" = paste0(c(4, 6, 8), "inPP"),
+                                        "Weight" = c(3, 8, 16))
   
   potWeightTable_dt <- rbind(pottedWeightTable_dt, prePottedWeightTable_dt)
 
