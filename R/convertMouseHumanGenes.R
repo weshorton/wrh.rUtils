@@ -11,13 +11,13 @@ convertMouseHumanGenes <- function(genes_v, species_v = "mmu", host_v = "https:/
   #' @export
   
   ### Load ensemble marts
-  humanMart = useMart("ensembl", dataset = "hsapiens_gene_ensembl", host = host_v)
-  mouseMart = useMart("ensembl", dataset = "mmusculus_gene_ensembl", host = host_v)
+  humanMart = biomaRt::useMart("ensembl", dataset = "hsapiens_gene_ensembl", host = host_v)
+  mouseMart = biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl", host = host_v)
   
   ### Map genes
   if (species_v %in% c("mmu", "mouse")) {
     
-    genes_df <- getLDS(attributes = "mgi_symbol", filters = "", values = genes_v,
+    genes_df <- biomaRt::getLDS(attributes = "mgi_symbol", filters = "", values = genes_v,
                        mart = mouseMart, attributesL = "hgnc_symbol", martL = humanMart, uniqueRows = T)
     
     ref_v <- "MGI.symbol"
@@ -25,7 +25,7 @@ convertMouseHumanGenes <- function(genes_v, species_v = "mmu", host_v = "https:/
     
   } else if (species_v %in% c("hg", "human")) {
     
-    genes_df <- getLDS(attributes = "hgnc_symbol", filters = "", values = genes_v,
+    genes_df <- biomaRt::getLDS(attributes = "hgnc_symbol", filters = "", values = genes_v,
                        mart = humanMart, attributesL = "mgi_symbol", martL = mouseMart, uniqueRows = T)
     
     ref_v <- "HGNC.symbol"
