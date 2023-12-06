@@ -5,6 +5,7 @@ getAllListNames <- function(list_ls, names_lsv = NULL, counter_v = 1) {
   #' @param list_ls named list
   #' @param names_lsv holds output. Recursively updated.
   #' @param counter_v counter for recursion tracking
+  #' @export
   
   if (is.null(names_lsv)) names_lsv <- list()
   if (is.logical(all.equal(class(list_ls), "list"))) {
