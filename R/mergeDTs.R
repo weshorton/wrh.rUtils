@@ -27,6 +27,12 @@ mergeDTs <- function(data_lsdt, mergeCol_v, keepCol_v = NULL, ...) {
     sort_v <- F
   } # fi
   
+  if (!is.null(extraParams_lsv$suffixes)) {
+    suffixes_v <- extraParams_lsv$suffixes
+  } else {
+    suffixes_v <- c(".x", ".y")
+  }
+  
   ## If keepCol_v is NULL, grab all other columns
     if (is.null(keepCol_v)){
     keepCol_v <- colnames(data_lsdt[[1]])[-which(colnames(data_lsdt[[1]]) %in% mergeCol_v)]
@@ -68,7 +74,9 @@ mergeDTs <- function(data_lsdt, mergeCol_v, keepCol_v = NULL, ...) {
     merge_dt <- merge(merge_dt,
                       data_lsdt[[i]][,mget(c(mergeCol_v, keepCol_v))],
                       by = mergeCol_v,
-                      all = all_v, sort = sort_v)
+                      all = all_v, 
+                      sort = sort_v,
+                      suffixes = suffixes_v)
     
     ## Update column names
     if (length(keepCol_v) > 1){
