@@ -11,6 +11,7 @@ kableHighlightColumns <- function(data_dt, cols_v, condition_v, bgColor_v = c("w
   #' condition_v = "> 5" will be evaluated such that background = ifelse(data_dt[[col_v[i]]] > 5, bgColor_v[1], bgColor_v[2]), where i is
   #' the index of the current column. (And the same for text color).
   #' @return Output a kable with "standard" formatting updated with highlighted cells as defined in arguments.
+  #' @export
   
   ### Set condition
   condition_v <- paste0("data_dt[[col_v]] ", condition_v)
