@@ -16,6 +16,10 @@ kableHighlightColumns <- function(data_dt, cols_v, condition_v, bgColor_v = c("w
   ### Set condition
   condition_v <- paste0("data_dt[[col_v]] ", condition_v)
   
+  ### Add NA ignore to condition
+  naCondition_v <- "is.na(data_dt[[col_v]])"
+  #condition_v <- paste0(condition_v, "|!is.na(data_dt[[col_v]])")
+  
   ### Copy data.table to leave original unaltered
   cdata_dt <- copy(data_dt)
   
@@ -23,8 +27,19 @@ kableHighlightColumns <- function(data_dt, cols_v, condition_v, bgColor_v = c("w
   for (col_v in cols_v) {
     whichCol_v = which(colnames(cdata_dt) == col_v)
     set(cdata_dt, j = col_v, value = cell_spec(x = cdata_dt[[col_v]],
-                                               color = ifelse(eval(parse(text = condition_v)), tColor_v[1], tColor_v[2]),
-                                               background = ifelse(eval(parse(text = condition_v)), bgColor_v[1], bgColor_v[2])))
+                                               
+                                               ### Somewhat complex b/c have to handle NAs
+                                               color = ifelse(eval(parse(text = naCondition_v)), 
+                                                              tColor_v[1],
+                                                              ifelse(eval(parse(text = condition_v)), 
+                                                                     tColor_v[1],
+                                                                     tColor_v[2])),
+                                               
+                                               background = ifelse(eval(parse(text = naCondition_v)), 
+                                                                   bgColor_v[1],
+                                                                   ifelse(eval(parse(text = condition_v)), 
+                                                                          bgColor_v[1],
+                                                                          bgColor_v[2]))))
   }
   
   ### Make kable
@@ -37,4 +52,3 @@ kableHighlightColumns <- function(data_dt, cols_v, condition_v, bgColor_v = c("w
   return(out_kb)
   
 } # kableHighlightColumns
-
