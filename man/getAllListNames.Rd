@@ -2,17 +2,26 @@
 % Please edit documentation in R/getAllListNames.R
 \name{getAllListNames}
 \alias{getAllListNames}
-\title{Get All List Names}
+\title{Get List Names Pretty}
 \usage{
-getAllListNames(list_ls, names_lsv = NULL, counter_v = 1)
+getAllListNames(list_ls)
 }
 \arguments{
-\item{list_ls}{named list}
-
-\item{names_lsv}{holds output. Recursively updated.}
-
-\item{counter_v}{counter for recursion tracking}
+\item{list_ls}{named list to get names of}
+}
+\value{
+data.table with ncol = max list depth. One row for every list_ls$elementName$elementName$etc.
+If different elements have different depths, shallower elements are padded with NAs. Example:
+If list_ls$element1$element1Child1$element1Child1Grand1 and list_ls$element2$element2Child1 are
+both present, then they will be output: 
+[1] element1  element1Child1 element1Child1Grand1
+[2] element2 element2Child1 NA
 }
 \description{
-Given a named list, compile names from each level until no more lists.
+Get all names from all elements of a nested list
+and output into a data.table
+}
+\details{
+Calls listNames() internally to get all of the names. Output
+is then wrangled into a data.table
 }
