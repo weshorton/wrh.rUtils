@@ -26,17 +26,26 @@ readComplexArgs <- function(arg_v, colSep_v = ";", varValSep_v = "\\.", valSep_v
   #' @return Returns a list of length = number of elements split by colSep_v, with those elements as the names. 
   #' If factors provided, lists will have values in factor order. If not provided, lists will be empty with names only.
   #' @export
+
+  ### Count columns
+  hasColSep_v <- grepl(colSep_v, arg_v)
   
   ### Split columns
   args_lsv <- strsplit(arg_v, split = colSep_v)[[1]]
   
   ### Check split
   if (length(args_lsv) == 1) {
-    warning(sprintf("After separating arg_v: %s with separator: %s, vector of length 1 returned: %s
+    
+    if (hasColSep_v) {
+      warning(sprintf("After separating arg_v: %s with separator: %s, vector of length 1 returned: %s
                     Going to use ',' as separator instead. Make sure this is correct!\n",
-                    arg_v, colSep_v, args_lsv))
-    args_lsv <- strsplit(arg_v, split = ',')[[1]]
-  }
+                      arg_v, colSep_v, args_lsv))
+      args_lsv <- strsplit(arg_v, split = ',')[[1]]
+    } else {
+      cat(sprintf("No column separator found, assuming only one column with values."))
+    } # fi hasColSep_v
+    
+  } # fi args_lsv -- 1
   
   ### Split vars from vals
   vars_v <- sapply(args_lsv, function(x) strsplit(x, split = varValSep_v)[[1]][1], USE.NAMES = F)
