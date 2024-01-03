@@ -4,7 +4,7 @@
 \alias{myOpenXWriteWkbk}
 \title{Write list to excel workbook}
 \usage{
-myOpenXWriteWkbk(data_ls, file_v, append_v = T)
+myOpenXWriteWkbk(data_ls, file_v, append_v = T, overwrite_v = T)
 }
 \arguments{
 \item{data_ls}{list of tables to write}
@@ -21,4 +21,11 @@ writes to file
 }
 \description{
 Write a named list to a workbook using openxlsx. Sheet names are list names.
+}
+\details{
+If file_v doesn't exist, then append_v and overwrite_v don't matter
+If file_v does exist, there are two options:
+1. Overwrite the existing file completely (requires append_v = F and overwrite_v = T)
+1. Only append new sheets (requires append_v = T and overwrite_v = F)
+1. Append new sheets and also overwrite existing sheets (requires append_v = T and overwrite_v = T) (Think this is the same as the firt one...)
 }

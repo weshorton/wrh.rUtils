@@ -1,4 +1,4 @@
-myOpenXWriteWkbk <- function(data_ls, file_v, append_v = T) {
+myOpenXWriteWkbk <- function(data_ls, file_v, append_v = T, overwrite_v = T) {
   #' Write list to excel workbook
   #' @description Write a named list to a workbook using openxlsx. Sheet names are list names.
   #' @param data_ls list of tables to write
@@ -6,6 +6,13 @@ myOpenXWriteWkbk <- function(data_ls, file_v, append_v = T) {
   #' @param append_v logical ind
   #' @param overwrite_v logical. Only matters if file_v already exists. If true, will append to existing workbook.
   #' If false, will overwrite existing workbook.
+  #' @details
+    #' If file_v doesn't exist, then append_v and overwrite_v don't matter
+    #' If file_v does exist, there are two options:
+    #' 1. Overwrite the existing file completely (requires append_v = F and overwrite_v = T)
+    #' 1. Only append new sheets (requires append_v = T and overwrite_v = F)
+    #' 1. Append new sheets and also overwrite existing sheets (requires append_v = T and overwrite_v = T) (Think this is the same as the firt one...)
+    #' 
   #' @return writes to file
   #' @export
   
@@ -29,15 +36,24 @@ myOpenXWriteWkbk <- function(data_ls, file_v, append_v = T) {
     ### Read in existing data
     origData_lsdt <- wrh.rUtils::readAllExcel(file_v)
     
-    ### Either add or overwrite it
-    if (append_v) {
-      origData_lsdt <- c(origData_lsdt, data_ls)
-    } else {
+    ### Get sheets to append
+    if (append_v) newSheets_v <- setdiff(names(data_ls), names(origData_lsdt))
+    
+    ### Create output
+    if (append_v & overwrite_v) {
       origData_lsdt <- data_ls
-    } # fi append
+    } else if (append_v & !overwrite_v) {
+      origData_lsdt <- c(origData_lsdt, data_ls[newSheets_v])
+    } else if (!append_v & overwrite_v) {
+      origData_lsdt <- data_ls
+    } else {
+      stop("File exists, but neither append nor overwrite were selected.\n")
+    }
     
   } else {
+    
     origData_lsdt <- data_ls
+    
   } # fi fileExists_v
   
   ### Check names of the added data
@@ -49,7 +65,7 @@ myOpenXWriteWkbk <- function(data_ls, file_v, append_v = T) {
     } # for i
   } # fi length > 0
   
-  ### Check duplicate names
+  ### Check duplicate names - shouldn't be needed now.
   dupNames_dt <- as.data.table(table(names(origData_lsdt)))[N>1]
   if (dupNames_dt[,.N] > 0) {
     for (i in 1:nrow(dupNames_dt)) {
@@ -59,6 +75,18 @@ myOpenXWriteWkbk <- function(data_ls, file_v, append_v = T) {
       names(origData_lsdt)[whichNames_v] <- newNames_v                                             # Add back
     } # for i
   } # fi dupNames_v
+  
+  ### Check long names
+  for (i in 1:length(origData_lsdt)) {
+    currName_v <- names(origData_lsdt)[i]
+    if (nchar(currName_v) > 31) {
+      newName_v <- paste(splitChar(currName_v)[1:31], collapse = "")
+      names(origData_lsdt)[i] <- newName_v
+      warning(sprintf("Worksheet name %s is too long. Shortened to: %s\n",
+                      currName_v, newName_v))
+    } # fi
+  } # for i
+  
   
   ### Create workbook
   wb <- openxlsx::createWorkbook()
@@ -73,3 +101,24 @@ myOpenXWriteWkbk <- function(data_ls, file_v, append_v = T) {
   openxlsx::saveWorkbook(wb = wb, file = file_v, overwrite = T)
   
 } # myOpenXWriteWkbk
+
+
+### Testing Data - add this to example?
+### Step 1 - make a list and run it through
+# data_ls <- list("A" = matrix(1:10), "B" = matrix(1:20), "C" = matrix(2:21))
+# file_v <- "~/Desktop/test.xlsx"
+
+### Append = F and overwrite = T
+# data_ls <- list("A" = matrix(1:10), "B" = matrix(1:20), "C" = matrix(2:21), "D" = matrix(1:10))
+# append_v <- F
+# overwrite_v <- T
+
+### Append = T and overwrite = F (adding D only, NOT updating A, even though it's different)
+# data_ls <- list("A" = matrix(1:50), "B" = matrix(1:20), "C" = matrix(2:21), "D" = matrix(1:10))
+# append_v <- T
+# overwrite_v <- F
+
+### Append = T and overwrite = T (adding D and updating A)
+# data_ls <- list("A" = matrix(1:50), "B" = matrix(1:20), "C" = matrix(2:21), "D" = matrix(1:10))
+# append_v <- T
+# overwrite_v <- T
