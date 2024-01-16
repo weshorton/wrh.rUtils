@@ -11,10 +11,10 @@ convertDFT <- function(data_dft, col_v = NA, newName_v = NULL, rmCol_v = T, spli
   #' @param newName_v character vector. if converting from df/mat to dt, what to name new column. (default is "V1")
   #' if newName_v is already a column name, will paste "_2" to end of newName_v.
   #' @param rmCol_v boolean value indicating whether to remove the column used to make the rownames from the output table (T) or to leave it (F)
-  #' @param split_v character vector. default = NULL. Used for converting TO data.table. If there are multiple columns' worth of data in the rownames, split
+  #' @param split_v character vector. default = NULL. Used for converting TO data.table. If there are multiple columns' worth of data in the rownames, split on this and assign results to multiple columns.
   #' both the column names and the values by the provided delimiter.
   #' @description
-    #' TODO! STILL HAVEN'T ACTUALLY IMPLEMENTED SPLIT_V. EXAMPLE IS THE REVERSE OF LUNGADENO CONVERTDFT IN MAKE PIE. SPLIT ON _
+    #' TODO! Add description
     #' 
   #' @return either a data.table or data.frame (opposite class of input)
   #' @examples 
@@ -77,8 +77,9 @@ convertDFT <- function(data_dft, col_v = NA, newName_v = NULL, rmCol_v = T, spli
     ## Special case for multiple columns. Have to paste together and then remove the others
     if (length(col_v) > 1) {
       cols_v <- col_v
-      col_v <- paste(cols_v, collapse = "_")
-      out_dft[[col_v]] <- apply(out_dft[,c(cols_v)], 1, function(x) paste(x, collapse = "_"))
+      collapse_v <- ifelse(is.null(split_v), "-_-", split_v)
+      col_v <- paste(cols_v, collapse = collapse_v)
+      out_dft[[col_v]] <- apply(out_dft[,c(cols_v)], 1, function(x) paste(x, collapse = collapse_v))
       for (c_v in cols_v) out_dft[[c_v]] <- NULL
     } else if (length(col_v) == 1) {
       col_v <- ifelse(is.na(col_v), colnames(data_dft)[1], 

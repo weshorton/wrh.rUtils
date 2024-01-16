@@ -18,7 +18,7 @@ if newName_v is already a column name, will paste "_2" to end of newName_v.}
 
 \item{rmCol_v}{boolean value indicating whether to remove the column used to make the rownames from the output table (T) or to leave it (F)}
 
-\item{split_v}{character vector. default = NULL. Used for converting TO data.table. If there are multiple columns' worth of data in the rownames, split
+\item{split_v}{character vector. default = NULL. Used for converting TO data.table. If there are multiple columns' worth of data in the rownames, split on this and assign results to multiple columns.
 both the column names and the values by the provided delimiter.}
 }
 \value{
@@ -29,7 +29,7 @@ Change data.tables into data.frames with specified row.names or
 data.frames/matrices into data.tables, copying over row.names as the first column.
 If data.frame/matrix doesn't have row.names, then no columns will be added to data.table
 
-TODO! STILL HAVEN'T ACTUALLY IMPLEMENTED SPLIT_V. EXAMPLE IS THE REVERSE OF LUNGADENO CONVERTDFT IN MAKE PIE. SPLIT ON _
+TODO! Add description
 }
 \examples{
 # Data
