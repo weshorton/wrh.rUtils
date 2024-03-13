@@ -11,8 +11,19 @@ convertMouseHumanGenes <- function(genes_v, species_v = "mmu", host_v = "https:/
   #' @export
   
   ### Load ensemble marts
-  humanMart = biomaRt::useMart("ensembl", dataset = "hsapiens_gene_ensembl", host = host_v)
-  mouseMart = biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl", host = host_v)
+  if ("humanMart" %in% ls(envir = .GlobalEnv)) {
+    get("humanMart", envir = .GlobalEnv)
+  } else {
+    humanMart = biomaRt::useMart("ensembl", dataset = "hsapiens_gene_ensembl", host = host_v)
+    assign("humanMart", humanMart, envir = .GlobalEnv)
+  } # fi
+  
+  if ("mouseMart" %in% ls(envir = .GlobalEnv)) {
+    get("mouseMart", envir = .GlobalEnv)
+  } else {
+    mouseMart = biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl", host = host_v)
+    assign("mouseMart", mouseMart, envir = .GlobalEnv)
+  }
   
   ### Map genes
   if (species_v %in% c("mmu", "mouse")) {
@@ -58,3 +69,4 @@ convertMouseHumanGenes <- function(genes_v, species_v = "mmu", host_v = "https:/
   return(out_v)
   
 } # convertMouseHumanGenes
+
