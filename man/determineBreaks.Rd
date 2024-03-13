@@ -9,7 +9,7 @@ determineBreaks(
   colors_v = rev(colorRampPalette(brewer.pal(11, "RdBu"))(100)),
   cut_v = "max",
   print_v = F,
-  verbose_v = T,
+  verbose_v = F,
   main = NA,
   show_rownames = F
 )
@@ -29,6 +29,8 @@ which will cut off the maximum value on either end.}
 \item{print_v}{logical indicating whether or not to print a test heatmap}
 
 \item{verbose_v}{logical indicating whether or not to print out messages}
+
+\item{main}{title passed to pheatmap}
 }
 \value{
 list of 3. "breaks" = numerical breaks to provide to pheatmap; "colors" = hex colors to provide to pheatmap; 
