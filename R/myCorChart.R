@@ -14,7 +14,7 @@ myCorChart <- function (R, histogram = TRUE, method = c("pearson", "kendall",
   #' Needed to change the point type and add a title so copied the function and added that. Everything else is the same.
   #' @export
   
-  x = checkData(R, method = "matrix")
+  x = PerformanceAnalytics::checkData(R, method = "matrix")
   if (missing(method)) 
     method = method[1]
   cormeth <- method
