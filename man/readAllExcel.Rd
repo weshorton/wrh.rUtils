@@ -4,10 +4,12 @@
 \alias{readAllExcel}
 \title{Read All Excel}
 \usage{
-readAllExcel(file_v)
+readAllExcel(file_v, ...)
 }
 \arguments{
 \item{file_v}{path to excel file. Can be '.xlsx' or '.xls'}
+
+\item{...}{extra options to pass to readxl::read_excel}
 }
 \value{
 list of data.tables
