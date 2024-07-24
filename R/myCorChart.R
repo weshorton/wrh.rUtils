@@ -12,6 +12,7 @@ myCorChart <- function (R, histogram = TRUE, method = c("pearson", "kendall",
   #' @details
   #' PerformanceAnalytics::chart.Correlation() has a '...' argument to pass arguments to pairs(), but it doesn't work.
   #' Needed to change the point type and add a title so copied the function and added that. Everything else is the same.
+  #' @export
   
   x = checkData(R, method = "matrix")
   if (missing(method)) 
