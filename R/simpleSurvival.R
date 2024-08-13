@@ -53,7 +53,7 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
                        paste0("Survival Based on ", exprCol_v, " ", simpleCap(method_v), " Expression"),
                        paste0("Survival of ", name_v, " Based on\n", exprCol_v, " ", simpleCap(method_v), " Expression"))
   
-  plot(currFit, col=c("blue", "red"), frame = F, lwd = 2, 
+  plot(fit, col=c("blue", "red"), frame = F, lwd = 2, 
        main = plotName_v,
        mark.time = T, cex.main = 2, cex.lab = 1.5, cex.axis = 1.2,
        xlab = gsub("\\.", " ", timeCol_v), ylab = "Prop. Survival")
