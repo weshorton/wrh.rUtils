@@ -40,6 +40,10 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
   # Subset
   data_dt <- data_dt[!is.na(survCol),]
   
+  # Check
+  nGrp_v <- length(unique(data_dt$survCol))
+  if (nGrp_v < 2) return("Fewer than 2 groups.")
+  
   # Survival
   survObj <- survival::Surv(time = data_dt[[timeCol_v]], event = data_dt[[deathCol_v]])
   survDiff <- survival::survdiff(survObj ~ data_dt$survCol)
