@@ -9,6 +9,7 @@ Imports:
     ggplot2,
     grDevices,
     gtable,
+    kableExtra,
     pheatmap,
     RColorBrewer,
     tibble
