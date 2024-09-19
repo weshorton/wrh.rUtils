@@ -42,7 +42,7 @@ readComplexArgs <- function(arg_v, colSep_v = ";", varValSep_v = "\\.", valSep_v
                       arg_v, colSep_v, args_lsv))
       args_lsv <- strsplit(arg_v, split = ',')[[1]]
     } else {
-      cat(sprintf("No column separator found, assuming only one column with values."))
+      cat(sprintf("No column separator found, assuming only one column with values.\n"))
     } # fi hasColSep_v
     
   } # fi args_lsv -- 1
