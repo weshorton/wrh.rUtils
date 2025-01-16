@@ -3,6 +3,7 @@
 export(angle_both)
 export(angle_x)
 export(angle_y)
+export(annotatedBar)
 export(big_label)
 export(bl_black)
 export(bl_times)
