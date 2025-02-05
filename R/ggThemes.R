@@ -57,6 +57,7 @@ massive_label <- function(multiplier_v = 1) {
           axis.title = element_text(size = 32*multiplier_v),
 	  axis.ticks = element_line(linewidth=2.5),
 	  axis.ticks.length = unit(15, "points"),
+	  axis.line = element_line(linewidth = 2),
           legend.text = element_text(size = 22*multiplier_v),
           legend.title = element_text(size = 28*multiplier_v))
 }
