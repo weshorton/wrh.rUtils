@@ -14,7 +14,8 @@ annotatedBar(
   title_v = NULL,
   annot_lsv = NULL,
   annotColors_lsv,
-  testTime_v = F
+  testTime_v = F,
+  backgroundCol_v = "white"
 )
 }
 \arguments{
@@ -35,6 +36,10 @@ annotatedBar(
 \item{annot_lsv}{list of annotations to add below the plot. e.g. annot_lsv = list("outName1" = "colName1", "outName2" = "colName2")}
 
 \item{annotColors_lsv}{list of colors for annotations. list element names are same as annot_lsv names; list elements are named color vectors, names are values of annot_lsv colNames in data_dt}
+
+\item{testTime_v}{logical indicating whether to see how long it takes to plot}
+
+\item{backgroundCol_v}{sent to panel.background element of ggplot theme. Needs to be white for a specific use case where I want to plot a percentage using fill_v = "fill", but I only want a subset of the identities to be shown.}
 }
 \value{
 list of gg objects output by ggarrange. Combo plot, data only, annotations only.

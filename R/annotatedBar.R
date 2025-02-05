@@ -1,5 +1,5 @@
 annotatedBar <- function(data_dt, x_v, stat_v = "count", position_v = "stack", fill_v, fillColors_v = NULL,
-                         title_v = NULL, annot_lsv = NULL, annotColors_lsv, testTime_v = F) {
+                         title_v = NULL, annot_lsv = NULL, annotColors_lsv, testTime_v = F, backgroundCol_v = "white") {
   #' Annotated Bar Plot
   #' @description Standard bar-plot with heatmap-like x-axis annotations
   #' @param data_dt melted data table for plotting
@@ -11,6 +11,8 @@ annotatedBar <- function(data_dt, x_v, stat_v = "count", position_v = "stack", f
   #' @param title_v optional plot title
   #' @param annot_lsv list of annotations to add below the plot. e.g. annot_lsv = list("outName1" = "colName1", "outName2" = "colName2")
   #' @param annotColors_lsv list of colors for annotations. list element names are same as annot_lsv names; list elements are named color vectors, names are values of annot_lsv colNames in data_dt
+  #' @param testTime_v logical indicating whether to see how long it takes to plot
+  #' @param backgroundCol_v sent to panel.background element of ggplot theme. Needs to be white for a specific use case where I want to plot a percentage using fill_v = "fill", but I only want a subset of the identities to be shown.
   #' @details make a standard ggplot bar plot with extra annotations
   #' @return list of gg objects output by ggarrange. Combo plot, data only, annotations only.
   #' @export
@@ -21,7 +23,8 @@ annotatedBar <- function(data_dt, x_v, stat_v = "count", position_v = "stack", f
     geom_bar(stat = stat_v, position = position_v) + 
     scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) + # make 0 the bottom
     theme(legend.position = "bottom", 
-          plot.title = element_text(size = 32, hjust = 0.5))
+          plot.title = element_text(size = 32, hjust = 0.5),
+          panel.background = element_rect(fill = backgroundCol_v))
   
   ### Add title
   if (!is.null(title_v)) plot_gg <- plot_gg + ggtitle(title_v)
