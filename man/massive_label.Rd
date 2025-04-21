@@ -4,7 +4,7 @@
 \alias{massive_label}
 \title{Massive Label Theme}
 \usage{
-massive_label(multiplier_v = 1)
+massive_label(multiplier_v = 1, angleX_v = T, angleY_v = F)
 }
 \arguments{
 \item{multiplier_v}{numeric. multiple text sizes by this factor.}
