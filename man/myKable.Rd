@@ -4,10 +4,12 @@
 \alias{myKable}
 \title{My Kable}
 \usage{
-myKable(data, width_v = 100, ...)
+myKable(data, width_v = 100, position_v = "center", ...)
 }
 \arguments{
 \item{data}{data.table/frame/matrix for plotting}
+
+\item{position_v}{given to kable_styling position argument. Center is default. float_left, right, etc.}
 
 \item{...}{extra arguments passed to knitr::kable}
 
@@ -18,4 +20,7 @@ kable object
 }
 \description{
 Function with a few common parameters I use already coded in
+}
+\details{
+Use "float_left" and "right" in conjunction to put multiple tables on the same line
 }
