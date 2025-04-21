@@ -4,7 +4,13 @@
 \alias{readDir}
 \title{Read Directory}
 \usage{
-readDir(dir_v, files_v = NULL, pattern_v = NULL, names_v = NULL)
+readDir(
+  dir_v,
+  files_v = NULL,
+  pattern_v = NULL,
+  names_v = NULL,
+  which_v = "old"
+)
 }
 \arguments{
 \item{dir_v}{Path to directory containing files that should be read in}
@@ -14,6 +20,8 @@ readDir(dir_v, files_v = NULL, pattern_v = NULL, names_v = NULL)
 \item{pattern_v}{Regex pattern to search for files within dir_v to read. See details for more info.}
 
 \item{names_v}{Vector containing names to assign to each element. If blank, will use file name minus extension.}
+
+\item{which_v}{I added new functionality, but don't want to break anything because haven't tested. Change this to use new stuff.}
 }
 \value{
 List of data.tables

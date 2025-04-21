@@ -1,10 +1,11 @@
-readDir <- function(dir_v, files_v = NULL, pattern_v = NULL, names_v = NULL) {
+readDir <- function(dir_v, files_v = NULL, pattern_v = NULL, names_v = NULL, which_v = "old") {
   #' Read Directory
   #' @description Read in all of the files in a given directory
   #' @param dir_v Path to directory containing files that should be read in
   #' @param files_v Vector containing the files within dir_v to read. See details for more info.
   #' @param pattern_v Regex pattern to search for files within dir_v to read. See details for more info.
   #' @param names_v Vector containing names to assign to each element. If blank, will use file name minus extension.
+  #' @param which_v I added new functionality, but don't want to break anything because haven't tested. Change this to use new stuff.
   #' @details There are multiple ways to determine which files will be read. First, files_v will be checked. If
   #' this argument has been specified, then these are the files that will be read in. If it is blank (NA), then
   #' pattern_v will be checked. If this has been specified, then it will be used to find matching files. If both
@@ -26,7 +27,18 @@ readDir <- function(dir_v, files_v = NULL, pattern_v = NULL, names_v = NULL) {
   if (is.null(files_v)) files_v <- list.files(dir_v, pattern = pattern_v)
   
   ### Read in
+  if (which_v == "old") {
   data_lsdt <- lapply(files_v, function(x) fread(file.path(dir_v, x)))
+  } else {
+    data_lsdt <- lapply(files_v, function(x) {
+      ext_v <- tools::file_ext(x)
+      if (ext_v %in% c("xls", "xlsx")) {
+        readAllExcel(file.path(dir_v, x))
+      } else {
+        fread(file.path(dir_v, x))
+      } # fi
+    })
+  } # fi
   
   ### Add names
   if (is.null(names_v)) names_v <- tools::file_path_sans_ext(files_v)
