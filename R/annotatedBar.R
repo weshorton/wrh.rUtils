@@ -1,8 +1,9 @@
-annotatedBar <- function(data_dt, x_v, stat_v = "count", position_v = "stack", fill_v, fillColors_v = NULL,
+annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, stat_v = "count", position_v = "stack", fill_v = NULL, fillColors_v = NULL,
                          title_v = NULL, annot_lsv = NULL, annotColors_lsv, testTime_v = F, backgroundCol_v = "white") {
   #' Annotated Bar Plot
   #' @description Standard bar-plot with heatmap-like x-axis annotations
-  #' @param data_dt melted data table for plotting
+  #' @param data_dt melted data table for plotting (see details. Must supply this or plot_gg)
+  #' @param plot_gg ggplot to annotate (see details. Must supply this or data_dt)
   #' @param x_v name of x-axis variable (usually Sample_ID, Treatment, etc.). Must be column in data_dt
   #' @param stat_v argument to 'stat' parameter of geom_bar. Haven't played around with having this be anything but 'count'
   #' @param position_v argument to 'position' parameter of geom_bar. 'stack' (default) is counts; 'fill' turns to percentage by filling out of 1.
@@ -13,24 +14,48 @@ annotatedBar <- function(data_dt, x_v, stat_v = "count", position_v = "stack", f
   #' @param annotColors_lsv list of colors for annotations. list element names are same as annot_lsv names; list elements are named color vectors, names are values of annot_lsv colNames in data_dt
   #' @param testTime_v logical indicating whether to see how long it takes to plot
   #' @param backgroundCol_v sent to panel.background element of ggplot theme. Needs to be white for a specific use case where I want to plot a percentage using fill_v = "fill", but I only want a subset of the identities to be shown.
-  #' @details make a standard ggplot bar plot with extra annotations
+  #' @details make a standard ggplot bar plot with extra annotations. Can provide a pre-existing plot instead of data.
+  #' If a plot is provided, the x_v variable is still required, along with annot_lsv and annotColors_lsv. 
+  #' Not required if plot is given: stat_v, position_v, fill_v, fillColors_v
+  #' Note that data_dt overrules plot_gg. If both are provided, plot_gg is ignored
   #' @return list of gg objects output by ggarrange. Combo plot, data only, annotations only.
   #' @export
   
   if (testTime_v) tocs_lsv <- list()
-  ### Make Base Plot
-  plot_gg <- ggplot(data = data_dt, aes(x = !!sym(x_v), fill = !!sym(fill_v))) +
-    geom_bar(stat = stat_v, position = position_v) + 
-    scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) + # make 0 the bottom
-    theme(legend.position = "bottom", 
-          plot.title = element_text(size = 32, hjust = 0.5),
-          panel.background = element_rect(fill = backgroundCol_v))
   
-  ### Add title
-  if (!is.null(title_v)) plot_gg <- plot_gg + ggtitle(title_v)
-  
-  ### Add colors
-  if (!is.null(fillColors_v)) plot_gg <- plot_gg + scale_fill_manual(values = fillColors_v, breaks = names(fillColors_v))
+  if (!is.null(data_dt)) {
+    
+    if (is.null(fill_v)) stop("Need to provide fill column.")
+    
+    ### Make Base Plot
+    plot_gg <- ggplot(data = data_dt, aes(x = !!sym(x_v), fill = !!sym(fill_v))) +
+      geom_bar(stat = stat_v, position = position_v) + 
+      scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) + # make 0 the bottom
+      theme(legend.position = "bottom", 
+            plot.title = element_text(size = 32, hjust = 0.5),
+            panel.background = element_rect(fill = backgroundCol_v))
+    
+    ### Add title
+    if (!is.null(title_v)) plot_gg <- plot_gg + ggtitle(title_v)
+    
+    ### Add colors
+    if (!is.null(fillColors_v)) plot_gg <- plot_gg + scale_fill_manual(values = fillColors_v, breaks = names(fillColors_v))
+    
+  } else if (!is.null(plot_gg)) {
+    
+    ### Extract data from plot
+    data_dt <- as.data.table(plot_gg$data)
+    
+    ### Factorize x-axis to maintain order
+    if (!is.factor(data_dt[[x_v]])) {
+      data_dt[[x_v]] <- factor(data_dt[[x_v]], levels = data_dt[[x_v]])
+    }
+    
+  } else {
+    
+    stop("Must provide either data_dt or plot_gg.\n")
+    
+  } # fi !is.null(data_dt)
   
   ### Begin annotations
   if (is.null(annot_lsv)) {
@@ -62,6 +87,9 @@ annotatedBar <- function(data_dt, x_v, stat_v = "count", position_v = "stack", f
       currColName_v <- annot_lsv[[currName_v]]
       
       if (testTime_v) tictoc::tic()
+      
+      ### If plot_gg is supplied, have to make a new data_dt here (or in the first ifelse)
+      ### that uses the params from the ggplot object.
       
       ### Make bar
       currBar_gg <- suppressWarnings(ggplot(data_dt, aes(x = !!sym(x_v), y = 1, fill = !!sym(currColName_v)))) +

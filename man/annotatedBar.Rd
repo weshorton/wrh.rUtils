@@ -5,11 +5,12 @@
 \title{Annotated Bar Plot}
 \usage{
 annotatedBar(
-  data_dt,
+  data_dt = NULL,
+  plot_gg = NULL,
   x_v,
   stat_v = "count",
   position_v = "stack",
-  fill_v,
+  fill_v = NULL,
   fillColors_v = NULL,
   title_v = NULL,
   annot_lsv = NULL,
@@ -19,7 +20,9 @@ annotatedBar(
 )
 }
 \arguments{
-\item{data_dt}{melted data table for plotting}
+\item{data_dt}{melted data table for plotting (see details. Must supply this or plot_gg)}
+
+\item{plot_gg}{ggplot to annotate (see details. Must supply this or data_dt)}
 
 \item{x_v}{name of x-axis variable (usually Sample_ID, Treatment, etc.). Must be column in data_dt}
 
@@ -48,5 +51,8 @@ list of gg objects output by ggarrange. Combo plot, data only, annotations only.
 Standard bar-plot with heatmap-like x-axis annotations
 }
 \details{
-make a standard ggplot bar plot with extra annotations
+make a standard ggplot bar plot with extra annotations. Can provide a pre-existing plot instead of data.
+If a plot is provided, the x_v variable is still required, along with annot_lsv and annotColors_lsv. 
+Not required if plot is given: stat_v, position_v, fill_v, fillColors_v
+Note that data_dt overrules plot_gg. If both are provided, plot_gg is ignored
 }
