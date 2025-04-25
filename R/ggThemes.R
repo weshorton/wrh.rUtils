@@ -22,16 +22,18 @@ my_theme <- function() {
 ### Big Label  ggplot theme #####################################################################################################
 ###
 
-big_label <- function() {
+big_label <- function(angleY_v = T) {
   #' Big Label Theme
   #' @description Same as my_theme(), but even larger text and also y-axis labels are angled 45
   #' @export
+  
+  y_v <- ifelse(angleY_v, 45, 0)
   
   theme_classic() +
     theme(plot.title = element_text(hjust = 0.5, size = 20),
           plot.subtitle = element_text(hjust = 0.5, size = 16),
           axis.text = element_text(size = 16),
-          #axis.text.y = element_text(angle = 45),
+          axis.text.y = element_text(angle = y_v),
           axis.title = element_text(size = 18),
 	  strip.text = element_text(size = 18),
           legend.text = element_text(size = 16),

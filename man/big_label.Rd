@@ -4,7 +4,7 @@
 \alias{big_label}
 \title{Big Label Theme}
 \usage{
-big_label()
+big_label(angleY_v = T)
 }
 \description{
 Same as my_theme(), but even larger text and also y-axis labels are angled 45
