@@ -8,8 +8,10 @@ annotatedBar(
   data_dt = NULL,
   plot_gg = NULL,
   x_v,
+  y_v = NULL,
   stat_v = "count",
   position_v = "stack",
+  yLab_v = "count",
   fill_v = NULL,
   fillColors_v = NULL,
   title_v = NULL,
@@ -26,9 +28,13 @@ annotatedBar(
 
 \item{x_v}{name of x-axis variable (usually Sample_ID, Treatment, etc.). Must be column in data_dt}
 
-\item{stat_v}{argument to 'stat' parameter of geom_bar. Haven't played around with having this be anything but 'count'}
+\item{y_v}{name of y-axis variable (onnly used if stat_v = "identity")}
+
+\item{stat_v}{argument to 'stat' parameter of geom_bar. 'count' is default and does not use y_v. "identity" requires y_v to be set}
 
 \item{position_v}{argument to 'position' parameter of geom_bar. 'stack' (default) is counts; 'fill' turns to percentage by filling out of 1.}
+
+\item{yLab_v}{name of y-axis label.}
 
 \item{fill_v}{name of fill variable. Must be column in data_dt}
 

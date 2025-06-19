@@ -1,12 +1,14 @@
-annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, stat_v = "count", position_v = "stack", fill_v = NULL, fillColors_v = NULL,
+annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL, stat_v = "count", position_v = "stack", yLab_v = "count", fill_v = NULL, fillColors_v = NULL,
                          title_v = NULL, annot_lsv = NULL, annotColors_lsv, testTime_v = F, backgroundCol_v = "white") {
   #' Annotated Bar Plot
   #' @description Standard bar-plot with heatmap-like x-axis annotations
   #' @param data_dt melted data table for plotting (see details. Must supply this or plot_gg)
   #' @param plot_gg ggplot to annotate (see details. Must supply this or data_dt)
   #' @param x_v name of x-axis variable (usually Sample_ID, Treatment, etc.). Must be column in data_dt
-  #' @param stat_v argument to 'stat' parameter of geom_bar. Haven't played around with having this be anything but 'count'
+  #' @param y_v name of y-axis variable (onnly used if stat_v = "identity")
+  #' @param stat_v argument to 'stat' parameter of geom_bar. 'count' is default and does not use y_v. "identity" requires y_v to be set
   #' @param position_v argument to 'position' parameter of geom_bar. 'stack' (default) is counts; 'fill' turns to percentage by filling out of 1.
+  #' @param yLab_v name of y-axis label.
   #' @param fill_v name of fill variable. Must be column in data_dt
   #' @param fillColors_v optional named color vector. Values are colors, names are values of data_dt[[fill_v]]
   #' @param title_v optional plot title
@@ -27,13 +29,25 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, stat_v = "count", 
     
     if (is.null(fill_v)) stop("Need to provide fill column.")
     
-    ### Make Base Plot
-    plot_gg <- ggplot(data = data_dt, aes(x = !!sym(x_v), fill = !!sym(fill_v))) +
+    ### Base plot depends on stat argument
+    if (stat_v == "identity") {
+      if (is.null(y_v)) stop("Must provide y_v argument if stat is identity.\n")
+      plot_gg <- ggplot(data = data_dt, aes(x = !!sym(x_v), y = !!sym(y_v), fill = !!sym(fill_v)))
+    } else if (stat_v == "count") {
+      plot_gg <-  ggplot(data = data_dt, aes(x = !!sym(x_v), fill = !!sym(fill_v)))
+    } else {
+      stop("Can only handle 'identity' or 'count' for stat_v argument")
+    } # fi
+    
+    ### Add the rest to the base plot
+    plot_gg <- plot_gg +
       geom_bar(stat = stat_v, position = position_v) + 
       scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) + # make 0 the bottom
       theme(legend.position = "bottom", 
-            plot.title = element_text(size = 32, hjust = 0.5),
-            panel.background = element_rect(fill = backgroundCol_v))
+            plot.title = element_text(size = 26, hjust = 0.5),
+            axis.text = element_text(size = 16),
+            panel.background = element_rect(fill = backgroundCol_v)) +
+      ylab(yLab_v)
     
     ### Add title
     if (!is.null(title_v)) plot_gg <- plot_gg + ggtitle(title_v)
@@ -48,7 +62,7 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, stat_v = "count", 
     
     ### Factorize x-axis to maintain order
     if (!is.factor(data_dt[[x_v]])) {
-      data_dt[[x_v]] <- factor(data_dt[[x_v]], levels = data_dt[[x_v]])
+      data_dt[[x_v]] <- factor(data_dt[[x_v]], levels = unique(data_dt[[x_v]]))
     }
     
   } else {
