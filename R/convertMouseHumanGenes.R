@@ -1,4 +1,4 @@
-convertMouseHumanGenes <- function(genes_v, species_v = "mmu", host_v = "https://dec2021.archive.ensembl.org/") {
+convertMouseHumanGenes <- function(genes_v, species_v = "mmu", host_v = "https://may2025.archive.ensembl.org/") {
   #' Convert Gene Names
   #' @description Convert gene names between mouse and human using ensembl database (adapted from Rossin Erbe)
   #' @param genes_v vector of genes to convert
@@ -6,7 +6,7 @@ convertMouseHumanGenes <- function(genes_v, species_v = "mmu", host_v = "https:/
   #' If "human" or "hg", will be converted to mouse.
   #' @description TO DO - add either verbose option or multiple output option to also output the genes that didn't get converted.
   #' original host: "https://dec2021.archive.ensembl.org/" this worked at first, but keep on getting connection time outs. The biomart
-  #' functions should check other mirrors, but can also try "https://www.ensembl.org".
+  #' functions should check other mirrors, but can also try "https://www.ensembl.org". oct2025 is the lastest release.
   #' @return genes_v with updated names
   #' @export
   
