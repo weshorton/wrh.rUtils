@@ -4,7 +4,7 @@
 \alias{plotColor}
 \title{Plot Color}
 \usage{
-plotColor(color_v, title_v = NULL, save_v = F, pch_v = 15, cex_v = 3)
+plotColor(color_v, title_v = NULL, save_v = F, pch_v = 15, cex_v = 3, gg_v = T)
 }
 \arguments{
 \item{color_v}{- character vector of color names, hex codes, etc. to be plotted. If named, the names will be plotted as well.}
@@ -18,6 +18,8 @@ T - save file to working directory. File name will be title_v with spaces change
 \item{pch_v}{- standard graphical parameter controlling point type. Default is 15 (square). see ?pch for list of options}
 
 \item{cex_v}{- standard graphical parameter controlling point size. Default is 3.}
+
+\item{gg_v}{logical indicating if the plot should be made with ggplot (T) or base r (F)}
 }
 \value{
 print plot to stdout or to file
