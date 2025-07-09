@@ -1,4 +1,6 @@
-annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL, stat_v = "count", position_v = "stack", yLab_v = "count", fill_v = NULL, fillColors_v = NULL,
+annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL, 
+                         stat_v = "count", position_v = "stack", yLab_v = "count", 
+                         fill_v = NULL, fillColors_v = NULL, keepXAxis_v = F,
                          title_v = NULL, annot_lsv = NULL, annotColors_lsv, testTime_v = F, backgroundCol_v = "white") {
   #' Annotated Bar Plot
   #' @description Standard bar-plot with heatmap-like x-axis annotations
@@ -11,6 +13,7 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL, stat_v
   #' @param yLab_v name of y-axis label.
   #' @param fill_v name of fill variable. Must be column in data_dt
   #' @param fillColors_v optional named color vector. Values are colors, names are values of data_dt[[fill_v]]
+  #' @param keepXAxis_v logical indicating if x-axis labels should be included. Default is false. Should only be used if there aren't too many x-axis values
   #' @param title_v optional plot title
   #' @param annot_lsv list of annotations to add below the plot. e.g. annot_lsv = list("outName1" = "colName1", "outName2" = "colName2")
   #' @param annotColors_lsv list of colors for annotations. list element names are same as annot_lsv names; list elements are named color vectors, names are values of annot_lsv colNames in data_dt
@@ -84,11 +87,12 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL, stat_v
     plot_gg <- plot_gg + theme(legend.position = "none")
     
     ### Extract axis
-    mainXAxis_gg <- cowplot::get_x_axis(plot_gg)
+    mainXAxis_gg <- ggpubr::as_ggplot(cowplot::get_x_axis(plot_gg))
     plot_gg <- plot_gg + theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
     ### Set margin
     plot_gg <- plot_gg + theme(plot.margin = unit(c(1, 1, 0, 1), "cm"))
+    #mainXAxis_gg <- mainXAxis_gg + theme(plot.margin = unit(c(-0.1, 1, -0.1, 1), "cm"))
     
     if (testTime_v) tocs_lsv[["legend"]] <- tictoc::toc()$callback_msg
     
@@ -101,9 +105,6 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL, stat_v
       currColName_v <- annot_lsv[[currName_v]]
       
       if (testTime_v) tictoc::tic()
-      
-      ### If plot_gg is supplied, have to make a new data_dt here (or in the first ifelse)
-      ### that uses the params from the ggplot object.
       
       ### Make bar
       currBar_gg <- suppressWarnings(ggplot(data_dt, aes(x = !!sym(x_v), y = 1, fill = !!sym(currColName_v)))) +
@@ -133,12 +134,18 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL, stat_v
       
     } # for i
     
-    ### Combine them into a list
-    toPlot_lsgg <- c(list("plot" = plot_gg), bar_lsgg)
+    ### Add axis
+    if (keepXAxis_v) {
+      toPlot_lsgg <- c(list("plot" = plot_gg), bar_lsgg, list("axis" = mainXAxis_gg))
+    } else {
+      toPlot_lsgg <- c(list("plot" = plot_gg), bar_lsgg)
+    }
+    
     toPlotLegend_lsgg <- c(list("plot" = mainLegend_gg), barLegend_lsgg)
     
     ### Get heights
     heights_v <- c(1, rep(0.05, length(bar_lsgg)))
+    if (keepXAxis_v) heights_v <- c(heights_v, 0.1)
     if (length(bar_lsgg) > 3) heights_v[1] <- 0.95
     
     if (testTime_v) tictoc::tic()
