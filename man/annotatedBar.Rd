@@ -37,7 +37,7 @@ annotatedBar(
 
 \item{yLab_v}{name of y-axis label.}
 
-\item{fill_v}{name of fill variable. Must be column in data_dt}
+\item{fill_v}{name of fill variable. Must be column in data_dt (only used if data_dt used)}
 
 \item{fillColors_v}{optional named color vector. Values are colors, names are values of data_dt[[fill_v]]}
 
