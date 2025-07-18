@@ -82,16 +82,28 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL,
     
     if (testTime_v) tictoc::tic()
     
+    # This doesn't seem to work...
+    # ### Check legend size
+    # tmp_gg <- ggplot_build(plot_gg)
+    # legendVar_v <- tmp_gg$plot$labels$fill
+    # legendVals_v <- levels(tmp_gg$plot$data[, get(legendVar_v)])
+    # 
+    # ### If many values in legend, make it 2 columns
+    # if (length(legendVals_v) > 9) {
+    #   plot_gg <- plot_gg + guides(fill = guide_legend(ncol = 2))
+    # }
+    
     ### Extract legend
-    mainLegend_gg <- wrh.rUtils::g_legend(plot_gg + theme(legend.text = element_text(size = 18), legend.title = element_text(size = 20)))
+    mainLegend_gg <- wrh.rUtils::g_legend(plot_gg + theme(legend.text = element_text(size = 18), legend.title = element_text(size = 20), 
+                                                          plot.margin = unit(c(t = 0, r = 1, b = 1, l = 1), "cm")))
     plot_gg <- plot_gg + theme(legend.position = "none")
     
     ### Extract axis
-    mainXAxis_gg <- ggpubr::as_ggplot(cowplot::get_x_axis(plot_gg))
+    mainXAxis_gg <- ggpubr::as_ggplot(cowplot::get_x_axis(plot_gg + theme(plot.margin = unit(c(t = -0.1, r = 1, b = 1, l = 1), "cm"))))
     plot_gg <- plot_gg + theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
     ### Set margin
-    plot_gg <- plot_gg + theme(plot.margin = unit(c(1, 1, 0, 1), "cm"))
+    plot_gg <- plot_gg + theme(plot.margin = unit(c(t = 1, r = 1, b = 0, l = 1), "cm"))
     #mainXAxis_gg <- mainXAxis_gg + theme(plot.margin = unit(c(-0.1, 1, -0.1, 1), "cm"))
     
     if (testTime_v) tocs_lsv[["legend"]] <- tictoc::toc()$callback_msg
@@ -120,14 +132,14 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL,
         labs(fill = currName_v)
       
       ### Thin legend margin
-      currBar_gg <- currBar_gg + theme(legend.margin = margin(t = 0.1, r = 0.1, b = 0.1, l = 0.1, "cm"))
+      ###currBar_gg <- currBar_gg + theme(legend.margin = margin(t = 0.1, r = 0.5, b = 1, l = 0.5, "cm"))
       
       ### Split legend
       currBarLegend_gg <- suppressWarnings(wrh.rUtils::g_legend(currBar_gg))
       currBar_gg <- currBar_gg + theme(legend.position = "none")
       
       ### Set margin
-      currBar_gg <- currBar_gg + theme(plot.margin = unit(c(-0.1, 1, -0.1, 1), "cm"))
+      currBar_gg <- currBar_gg + theme(plot.margin = unit(c(t = -0.1, r = 1, b = -0.1, l = 1), "cm"))
       
       ### Save
       bar_lsgg[[currName_v]] <- currBar_gg
@@ -143,24 +155,31 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL,
     names(tmpColor) <- gsub("^.*\\.", "", names(tmpColor))
     tmpColor <- tmpColor[names(annotColors_lsv)]
     comboBarLegend_gg <- ggplot(tmp, aes(x = !!sym(x_v), y = 1, fill = variable)) + geom_boxplot() +
-      scale_fill_manual(values = tmpColor, breaks = names(tmpColor))
-    comboBarLegend_gg <- comboBarLegend_gg + theme(legend.margin = margin(t = 0, r = 0, b = 0, l = 0, "cm"))
+      scale_fill_manual(values = tmpColor, breaks = names(tmpColor)) + my_theme()
+    comboBarLegend_gg <- comboBarLegend_gg + theme(legend.margin = margin(t = 0, r = 0.5, b = 0, l = 0.5, "cm"))
     comboBarLegend_gg <- get_legend(comboBarLegend_gg)
     
     ### Add axis
     if (keepXAxis_v) {
       toPlot_lsgg <- c(list("plot" = plot_gg), bar_lsgg, list("axis" = mainXAxis_gg))
+      heights_v <- c(2, rep(0.1, length(bar_lsgg)), 1)
     } else {
       toPlot_lsgg <- c(list("plot" = plot_gg), bar_lsgg)
+      heights_v <- c(2, rep(0.1, length(bar_lsgg)))
     }
     
     # toPlotLegend_lsgg <- c(list("plot" = mainLegend_gg), barLegend_lsgg)
     toPlotLegend_lsgg <- c(list("plot" = mainLegend_gg, "annot" = comboBarLegend_gg))
     
-    ### Get heights
-    heights_v <- c(1, rep(0.05, length(bar_lsgg)))
-    if (keepXAxis_v) heights_v <- c(heights_v, 0.1)
-    if (length(bar_lsgg) > 3) heights_v[1] <- 0.95
+    if (length(bar_lsgg) > 3) heights_v[1] <- 1.9
+    
+    ### Get heights - old version
+    # heights_v <- c(1, rep(0.03, length(bar_lsgg)))
+    # if (keepXAxis_v) {
+    #   heights_v <- c(heights_v, 0.08)
+    #   heights_v[1] <- 0.9
+    # } # add space for axis if keeping
+    # if (length(bar_lsgg) > 3) heights_v[1] <- 0.95 # shorten plot if more than 3 annotation rows
     
     if (testTime_v) tictoc::tic()
     ### Combine plots
@@ -174,8 +193,8 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL,
     comboLegend_gg <- ggpubr::ggarrange(plotlist = toPlotLegend_lsgg, nrow = nrow_v, ncol = ncol_v)
     
     ### Combine both
-    # finalCombo_gg <- ggpubr::ggarrange(plotlist = list(combo_gg, comboLegend_gg), ncol = 1, nrow = 2, heights = c(5, 1))
-    finalCombo_gg <- ggpubr::ggarrange(plotlist = list(combo_gg, comboLegend_gg), ncol = 1, nrow = 2, heights = c(1, 1))
+    finalCombo_gg <- ggpubr::ggarrange(plotlist = list(combo_gg, comboLegend_gg), ncol = 1, nrow = 2, heights = c(2, 1))
+    #finalCombo_gg <- ggpubr::ggarrange(plotlist = list(combo_gg, comboLegend_gg), ncol = 1, nrow = 2, heights = c(1, 1))
     if (testTime_v) tocs_lsv[["combo2and3"]] <- tictoc::toc()$callback_msg
     
     ### Make outputt
