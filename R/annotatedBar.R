@@ -1,6 +1,6 @@
 annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL, 
                          stat_v = "count", position_v = "stack", yLab_v = "count", 
-                         fill_v = NULL, fillColors_v = NULL, keepXAxis_v = F,
+                         fill_v = NULL, fillColors_v = NULL, keepXAxis_v = F, legendPos_v = "bottom",
                          title_v = NULL, annot_lsv = NULL, annotColors_lsv, testTime_v = F, backgroundCol_v = "white") {
   #' Annotated Bar Plot
   #' @description Standard bar-plot with heatmap-like x-axis annotations
@@ -14,6 +14,7 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL,
   #' @param fill_v name of fill variable. Must be column in data_dt (only used if data_dt used)
   #' @param fillColors_v optional named color vector. Values are colors, names are values of data_dt[[fill_v]]
   #' @param keepXAxis_v logical indicating if x-axis labels should be included. Default is false. Should only be used if there aren't too many x-axis values
+  #' @param legendPos_v character vector indicating where to place legends. Either below plot ("bottom"), or to the right of the plot ("right")
   #' @param title_v optional plot title
   #' @param annot_lsv list of annotations to add below the plot. e.g. annot_lsv = list("outName1" = "colName1", "outName2" = "colName2")
   #' @param annotColors_lsv list of colors for annotations. list element names are same as annot_lsv names; list elements are named color vectors, names are values of annot_lsv colNames in data_dt
@@ -153,9 +154,16 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL,
     tmp <- melt(data_dt[,mget(c(x_v, names(annot_lsv)))], measure.vars = names(annot_lsv))
     tmpColor <- unlist(annotColors_lsv)
     names(tmpColor) <- gsub("^.*\\.", "", names(tmpColor))
-    tmpColor <- tmpColor[names(annotColors_lsv)]
-    comboBarLegend_gg <- ggplot(tmp, aes(x = !!sym(x_v), y = 1, fill = variable)) + geom_boxplot() +
-      scale_fill_manual(values = tmpColor, breaks = names(tmpColor)) + my_theme()
+    ### This is new...need to check with clinical3x plots and tumorBurden to make sure works for both situations.
+    if (is.logical(all.equal(tmpColor[names(annotColors_lsv)], NA_character_))) {
+      tmpColor <- tmpColor[names(annotColors_lsv)]
+      comboBarLegend_gg <- ggplot(tmp, aes(x = !!sym(x_v), y = 1, fill = variable)) + geom_boxplot() +
+        scale_fill_manual(values = tmpColor, breaks = names(tmpColor)) + my_theme()
+    } else {
+      comboBarLegend_gg <- ggplot(tmp, aes(x = !!sym(x_v), y = 1, fill = value)) + geom_boxplot() +
+        scale_fill_manual(values = tmpColor, breaks = names(tmpColor)) + my_theme()
+    }
+    
     comboBarLegend_gg <- comboBarLegend_gg + theme(legend.margin = margin(t = 0, r = 0.5, b = 0, l = 0.5, "cm"))
     comboBarLegend_gg <- get_legend(comboBarLegend_gg)
     
@@ -193,8 +201,13 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL,
     comboLegend_gg <- ggpubr::ggarrange(plotlist = toPlotLegend_lsgg, nrow = nrow_v, ncol = ncol_v)
     
     ### Combine both
-    finalCombo_gg <- ggpubr::ggarrange(plotlist = list(combo_gg, comboLegend_gg), ncol = 1, nrow = 2, heights = c(2, 1))
-    #finalCombo_gg <- ggpubr::ggarrange(plotlist = list(combo_gg, comboLegend_gg), ncol = 1, nrow = 2, heights = c(1, 1))
+    if (legendPos_v == "bottom") {
+      finalCombo_gg <- ggpubr::ggarrange(plotlist = list(combo_gg, comboLegend_gg), ncol = 1, nrow = 2, heights = c(2, 1))
+    } else if (legendPos_v == "right") {
+      finalCombo_gg <- ggpubr::ggarrange(plotlist = list(combo_gg, comboLegend_gg), ncol = 2, nrow = 1, widths = c(2, 1))
+    } else {
+      stop("Only 'bottom' and 'right' are available for legend position.")
+    }
     if (testTime_v) tocs_lsv[["combo2and3"]] <- tictoc::toc()$callback_msg
     
     ### Make outputt

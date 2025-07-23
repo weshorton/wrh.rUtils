@@ -15,6 +15,7 @@ annotatedBar(
   fill_v = NULL,
   fillColors_v = NULL,
   keepXAxis_v = F,
+  legendPos_v = "bottom",
   title_v = NULL,
   annot_lsv = NULL,
   annotColors_lsv,
@@ -42,6 +43,8 @@ annotatedBar(
 \item{fillColors_v}{optional named color vector. Values are colors, names are values of data_dt[[fill_v]]}
 
 \item{keepXAxis_v}{logical indicating if x-axis labels should be included. Default is false. Should only be used if there aren't too many x-axis values}
+
+\item{legendPos_v}{character vector indicating where to place legends. Either below plot ("bottom"), or to the right of the plot ("right")}
 
 \item{title_v}{optional plot title}
 
