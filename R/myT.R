@@ -13,10 +13,16 @@ myT <- function(data_dt, newName_v = NA, toClass_v = 'numeric', outType_v = 'dt'
   t_mat <- t(data_dt)
   
   ### New Column Names - when did I put this in here??
-  if (!is.logical(all.equal(rev(dim(data_dt)), dim(t_mat)))) {
+  if (is.null(colnames(t_mat))) {
     colnames(t_mat) <- t_mat[1,]
     t_mat <- t_mat[-1,,drop=F]
-  } # fi
+  }
+  
+  ### Originally had this, but don't think if statement is correct
+  # if (!is.logical(all.equal(rev(dim(data_dt)), dim(t_mat)))) {
+  #   colnames(t_mat) <- t_mat[1,]
+  #   t_mat <- t_mat[-1,,drop=F]
+  # } # fi
     
   ### Convert class, if desired
   ### Doesn't work. turns it into numeric instead of matrix, if it only has one row.
