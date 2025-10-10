@@ -10,8 +10,11 @@ simpleSurvival(
   timeCol_v = "OS.time",
   deathCol_v = "OS",
   method_v = "quartile",
+  cutOff_v = NULL,
   outputFile_v = NULL,
-  name_v = NULL
+  name_v = NULL,
+  plotType_v = "gg",
+  return_v = F
 )
 }
 \arguments{
@@ -23,11 +26,17 @@ simpleSurvival(
 
 \item{deathCol_v}{column that indicates death (vital) status. "DECEASED" == 1; "LIVING" == 0}
 
-\item{method_v}{which method to use to divide expression groups. quartile (default) will take the upper and lower quartiles. Median will split in half on the median.}
+\item{method_v}{which method to use to divide expression groups. quartile (default), median, or tertile.}
+
+\item{cutOff_v}{optional pre-calculated cut-off value to use to create groups (instead of calculating within function call)}
 
 \item{outputFile_v}{optional path to an output location if saving file is desired}
 
 \item{name_v}{optional name to add to the title. Usually the title of the dataset used as input.}
+
+\item{plotType_v}{character vector. Either 'gg' or 'base' to indicate how to make the plot}
+
+\item{return_v}{logical indicating to return coxph and logrank test results (T) or not (F)}
 }
 \value{
 plot
@@ -43,4 +52,10 @@ dataset that is accessed by this tool. There are multiple survival classificatio
   2. DSS: disease-specific survival
   3. DFI: disease-free interval
   4. PFI: progression-free interval
+method_v options:
+  1. quartile - will take the 1st and 3rd quartiles. inclusive
+  1. median - will split in half on the median. exclusive
+  1. tertile - will take the bottom 3rd and upper 3rd. inclusive
+plotType_v == 'gg' will use `survminer::ggsurvplot()` to make the plot
+plotType_v == 'base' will just use `base::plot()` and `lines()` to make the plot
 }
