@@ -150,7 +150,8 @@ annotatedBar <- function(data_dt = NULL, plot_gg = NULL, x_v, y_v = NULL,
       
     } # for i
     
-    ### New legend version
+    ### New legend version - this is messed up. Doesn't work with the scale fill manual...
+    ### As it is now, annot_lsv has to be list("Name" = "Name") and annotColors_lsv must be list("Name" = colorVector_v)
     tmp <- melt(data_dt[,mget(c(x_v, names(annot_lsv)))], measure.vars = names(annot_lsv))
     tmpColor <- unlist(annotColors_lsv)
     names(tmpColor) <- gsub("^.*\\.", "", names(tmpColor))
