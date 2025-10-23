@@ -1,5 +1,5 @@
 simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v = "OS", method_v = "quartile", cutOff_v = NULL,
-                           outputFile_v = NULL, name_v = NULL, plotType_v = "gg", return_v = F) {
+                           outputFile_v = NULL, name_v = NULL, plotType_v = "gg", return_v = F, printPlot_v = T) {
   #' Simple Survival
   #' @description
     #' Calculate Kaplan Meier survival estimate and plot. Split groups based on expression.
@@ -13,6 +13,7 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
   #' @param name_v optional name to add to the title. Usually the title of the dataset used as input.
   #' @param plotType_v character vector. Either 'gg' or 'base' to indicate how to make the plot
   #' @param return_v logical indicating to return coxph and logrank test results (T) or not (F)
+  #' @param printPlot_v logical indicating to output plot or not.
   #' @details
     #' This function is specifically made for data that has been downloaded from the TCGA hub by the UCSCXenaTools package.
     #' [here](https://xenabrowser.net/datapages/?dataset=survival%2FBRCA_survival.txt&host=https%3A%2F%2Ftcga.xenahubs.net&removeHub=https%3A%2F%2Fxena.treehouse.gi.ucsc.edu%3A443) is an example of the BRCA
@@ -111,78 +112,85 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
   survDiff <- survival::survdiff(survObj ~ data_dt$survCol)
   pval_v <- pchisq(survDiff$chisq, df = 1, lower = F)
   
+  ### Get medians
+  medians_v <- summary(fit)$table[,'median']
+  names(medians_v) <- gsub("^.*=", "", names(medians_v))
+  
   ###
   ### Plot ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ###
-  
+
   ### Make title
   plotName_v <- ifelse(is.null(name_v), 
                        paste0("Survival Based on ", exprCol_v, " ", simpleCap(method_v), " Expression"),
                        paste0("Survival of ", name_v, " Based on\n", exprCol_v, " ", simpleCap(method_v), " Expression"))
   
-  if (plotType_v == "gg") {
+  if (printPlot_v) {
     
-    surv_gg <- suppressWarnings(survminer::ggsurvplot(fit = fit,
-                                                      data = data_dt,
-                                                      pval = T,
-                                                      title = plotName_v,
-                                                      surv.median.line = "hv",
-                                                      ggtheme = my_theme(),
-                                                      risk.table = T,
-                                                      xlab = timeCol_v,
-                                                      legend.title = exprCol_v,
-                                                      legend.labs = labs_v,
-                                                      legend = c(0.8,0.8),
-                                                      palette = c("blue", "red")))
-    
-    if (!is.null(outputFile_v)) {
+    if (plotType_v == "gg") {
       
-      pdf(file = outputFile_v)
-      print(surv_gg)
-      dev.off()
+      plotName_v <- paste0(plotName_v, "\nMedian Surv - ", paste(paste(names(medians_v), medians_v, sep = ": "), collapse = "; "))
+      
+      surv_gg <- suppressWarnings(survminer::ggsurvplot(fit = survminer::surv_fit(survObj ~ survCol, data = data_dt),
+                                                        data = data_dt,
+                                                        pval = T,
+                                                        title = plotName_v,
+                                                        surv.median.line = "hv",
+                                                        ggtheme = my_theme(),
+                                                        risk.table = T,
+                                                        xlab = timeCol_v,
+                                                        legend.title = exprCol_v,
+                                                        legend.labs = labs_v,
+                                                        legend = c(0.8,0.8),
+                                                        palette = c("blue", "red")))
+      
+      if (!is.null(outputFile_v)) {
+        
+        pdf(file = outputFile_v, onefile = F)
+        print(surv_gg)
+        dev.off()
+        
+      } else {
+        
+        print(surv_gg)
+        
+      } # fi
+      
+    } else if (plotType_v == "base") {
+      
+      if (!is.null(outputFile_v)) pdf(file = outputFile_v)
+      
+      ## Base plot
+      plot(fit, col=c("blue", "red"), frame = F, lwd = 2, 
+           main = plotName_v,
+           mark.time = T, cex.main = 2, cex.lab = 1.5, cex.axis = 1.2,
+           xlab = gsub("\\.", " ", timeCol_v), ylab = "Prop. Survival")
+      
+      ## Add median survival lines
+      lines(c(0,max(medians_v)),c(0.5,0.5), lty = "dashed")
+      mapply(function(x,y) lines(rep(x,2),c(0,0.5),col=y, lty="dashed"), medians_v, c("blue", "red"))
+      
+      ## Get number of records
+      records_v <- summary(fit)$table[,'records']
+      names(records_v) <- gsub("^.*=", "", names(records_v))
+      
+      ## Add legends
+      max_x <- max(data_dt[[timeCol_v]], na.rm = T) * 0.95
+      legend(max_x, .5, legend = paste0("p.val = ", round(pval_v, digits = 4)), bty = "n", xjust=1, cex = 1.2)
+      legend(max_x, 1, legend = c(paste0("Low = ", medians_v[["low"]]), paste0("High = ", medians_v[["up"]])),
+             bty = "n", xjust = 1, col=c("blue", "red"), lwd=2,  cex = 1.2, title = "Median Survival")
+      # Not sure why I had this?
+      # legend(max_x, .73, legend = c(paste0("Low = ", records_v[["low"]]), paste0("High = ", records_v[["up"]])),
+      #        bty  = "n", xjust = 1, col=c("blue", "red"), lwd=2, cex=1.2, title = "N. Patients")
+      
+      if (!is.null(outputFile_v)) dev.off()
       
     } else {
       
-      print(surv_gg)
+      stop(sprintf("Only 'gg' and 'base' supported for plotType_v. %s provided.", plotType_v))
       
-    } # fi
-    
-  } else if (plotType_v == "base") {
-    
-    if (!is.null(outputFile_v)) pdf(file = outputFile_v)
-    
-    ## Base plot
-    plot(fit, col=c("blue", "red"), frame = F, lwd = 2, 
-         main = plotName_v,
-         mark.time = T, cex.main = 2, cex.lab = 1.5, cex.axis = 1.2,
-         xlab = gsub("\\.", " ", timeCol_v), ylab = "Prop. Survival")
-    
-    ## Add median survival lines
-    medians_v <- summary(fit)$table[,'median']
-    names(medians_v) <- gsub("^.*=", "", names(medians_v))
-    lines(c(0,max(medians_v)),c(0.5,0.5), lty = "dashed")
-    mapply(function(x,y) lines(rep(x,2),c(0,0.5),col=y, lty="dashed"), medians_v, c("blue", "red"))
-    
-    ## Get number of records
-    records_v <- summary(fit)$table[,'records']
-    names(records_v) <- gsub("^.*=", "", names(records_v))
-    
-    ## Add legends
-    max_x <- max(data_dt[[timeCol_v]], na.rm = T) * 0.95
-    legend(max_x, .5, legend = paste0("p.val = ", round(pval_v, digits = 4)), bty = "n", xjust=1, cex = 1.2)
-    legend(max_x, 1, legend = c(paste0("Low = ", medians_v[["low"]]), paste0("High = ", medians_v[["up"]])),
-           bty = "n", xjust = 1, col=c("blue", "red"), lwd=2,  cex = 1.2, title = "Median Survival")
-    # Not sure why I had this?
-    # legend(max_x, .73, legend = c(paste0("Low = ", records_v[["low"]]), paste0("High = ", records_v[["up"]])),
-    #        bty  = "n", xjust = 1, col=c("blue", "red"), lwd=2, cex=1.2, title = "N. Patients")
-    
-    if (!is.null(outputFile_v)) dev.off()
-    
-  } else {
-    
-    stop(sprintf("Only 'gg' and 'base' supported for plotType_v. %s provided.", plotType_v))
-    
-  }
+    } # fi plotType_v
+  } # fi printPlot_v
   
   ### Output
   out_lsls <- list("cox" = list("pVal" = coxP_v, "result" = cox),

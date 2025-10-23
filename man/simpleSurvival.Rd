@@ -14,7 +14,8 @@ simpleSurvival(
   outputFile_v = NULL,
   name_v = NULL,
   plotType_v = "gg",
-  return_v = F
+  return_v = F,
+  printPlot_v = T
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ simpleSurvival(
 \item{plotType_v}{character vector. Either 'gg' or 'base' to indicate how to make the plot}
 
 \item{return_v}{logical indicating to return coxph and logrank test results (T) or not (F)}
+
+\item{printPlot_v}{logical indicating to output plot or not.}
 }
 \value{
 plot
