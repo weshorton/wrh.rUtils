@@ -4,10 +4,12 @@
 \alias{myKable}
 \title{My Kable}
 \usage{
-myKable(data, width_v = 100, position_v = "center", ...)
+myKable(data, format_v = "html", width_v = 100, position_v = "center", ...)
 }
 \arguments{
 \item{data}{data.table/frame/matrix for plotting}
+
+\item{format_v}{argument to kable's `format`. Usually 'html' or 'latex', see ?knitr for others.}
 
 \item{position_v}{given to kable_styling position argument. Center is default. float_left, right, etc.}
 
