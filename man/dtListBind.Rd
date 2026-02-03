@@ -4,12 +4,14 @@
 \alias{dtListBind}
 \title{Data table list bind}
 \usage{
-dtListBind(list_lsdt, newName_v = "Name")
+dtListBind(list_lsdt, newName_v = "Name", front_v = T)
 }
 \arguments{
 \item{list_lsdt}{named list of data.tables}
 
 \item{newName_v}{character vector that will be the new column name}
+
+\item{front_v}{logical indicating if new column should be moved to the first column}
 }
 \value{
 single data.table with one more column that input data.tables and as 
