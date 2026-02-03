@@ -11,11 +11,13 @@ simpleSurvival(
   deathCol_v = "OS",
   method_v = "quartile",
   cutOff_v = NULL,
+  break_v = NULL,
   outputFile_v = NULL,
   name_v = NULL,
   plotType_v = "gg",
   return_v = F,
-  printPlot_v = T
+  printPlot_v = T,
+  title_v = "Survival"
 )
 }
 \arguments{
@@ -40,6 +42,10 @@ simpleSurvival(
 \item{return_v}{logical indicating to return coxph and logrank test results (T) or not (F)}
 
 \item{printPlot_v}{logical indicating to output plot or not.}
+
+\item{title_v}{prefix for plot title. Default is just 'Survival', could change to '5-year Survival' for example}
+
+\item{breaks_v}{optional custom x-axis breaks}
 }
 \value{
 plot
