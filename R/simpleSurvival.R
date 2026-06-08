@@ -1,5 +1,5 @@
 simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v = "OS", method_v = "quartile", cutOff_v = NULL, break_v = NULL,
-                           outputFile_v = NULL, name_v = NULL, plotType_v = "gg", return_v = F, printPlot_v = T, title_v = "Survival") {
+                           outputFile_v = NULL, name_v = NULL, plotType_v = "gg", return_v = F, printPlot_v = T, title_v = "Survival", subtitle_v = "hazard") {
   #' Simple Survival
   #' @description
     #' Calculate Kaplan Meier survival estimate and plot. Split groups based on expression.
@@ -16,6 +16,7 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
   #' @param return_v logical indicating to return coxph and logrank test results (T) or not (F)
   #' @param printPlot_v logical indicating to output plot or not.
   #' @param title_v prefix for plot title. Default is just 'Survival', could change to '5-year Survival' for example
+  #' @param subtitle_v either 'hazard' or 'medianSurv' indicating what to print as the sub-title
   #' @details
     #' This function is specifically made for data that has been downloaded from the TCGA hub by the UCSCXenaTools package.
     #' [here](https://xenabrowser.net/datapages/?dataset=survival%2FBRCA_survival.txt&host=https%3A%2F%2Ftcga.xenahubs.net&removeHub=https%3A%2F%2Fxena.treehouse.gi.ucsc.edu%3A443) is an example of the BRCA
@@ -75,6 +76,7 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
       up_v <- cutOff_v[2]
     } # fi
     
+    labs_v <- c("below 1st T.", "above 3rd T.")
   } else {
     stop(sprintf("Bad value for method_v. Can be either 'quartile' (default), 'median', or 'tertile'. %s was provided.\n", method_v))
   }
@@ -122,6 +124,8 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
   out_lsls <- list("cox" = list("pVal" = coxP_v, "result" = cox),
                    "logRank" = list("pVal" = pval_v, "result" = survDiff))
   
+  hr_v <- round(summary(cox)$coefficients[,2], digits = 2)
+  
   ###
   ### Plot ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ###
@@ -133,7 +137,11 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
   
   if (plotType_v == "gg") {
     
-    plotName_v <- paste0(plotName_v, "\nMedian Surv - ", paste(paste(names(medians_v), medians_v, sep = ": "), collapse = "; "))
+    if (subtitle_v == "medianSurv") {
+      plotName_v <- paste0(plotName_v, "\nMedian Surv - ", paste(paste(names(medians_v), medians_v, sep = ": "), collapse = "; "))
+    } else if (subtitle_v == "hazard") {
+      plotName_v <- paste0(plotName_v, "\nHazard Ratio: ", hr_v)
+    }
     
     surv_gg <- suppressWarnings(survminer::ggsurvplot(fit = survminer::surv_fit(survObj ~ survCol, data = data_dt),
                                                       data = data_dt,

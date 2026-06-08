@@ -17,7 +17,8 @@ simpleSurvival(
   plotType_v = "gg",
   return_v = F,
   printPlot_v = T,
-  title_v = "Survival"
+  title_v = "Survival",
+  subtitle_v = "hazard"
 )
 }
 \arguments{
@@ -44,6 +45,8 @@ simpleSurvival(
 \item{printPlot_v}{logical indicating to output plot or not.}
 
 \item{title_v}{prefix for plot title. Default is just 'Survival', could change to '5-year Survival' for example}
+
+\item{subtitle_v}{either 'hazard' or 'medianSurv' indicating what to print as the sub-title}
 
 \item{breaks_v}{optional custom x-axis breaks}
 }
