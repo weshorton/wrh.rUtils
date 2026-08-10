@@ -1,5 +1,6 @@
 simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v = "OS", method_v = "quartile", cutOff_v = NULL, break_v = NULL,
-                           outputFile_v = NULL, name_v = NULL, plotType_v = "gg", return_v = F, printPlot_v = T, title_v = "Survival", subtitle_v = "hazard") {
+                           outputFile_v = NULL, name_v = NULL, plotType_v = "gg", return_v = F, printPlot_v = T, title_v = "Survival", subtitle_v = "hazard",
+                           scale_v = "days", timeCut_v = NULL) {
   #' Simple Survival
   #' @description
     #' Calculate Kaplan Meier survival estimate and plot. Split groups based on expression.
@@ -9,7 +10,7 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
   #' @param deathCol_v column that indicates death (vital) status. "DECEASED" == 1; "LIVING" == 0
   #' @param method_v which method to use to divide expression groups. quartile (default), median, or tertile.
   #' @param cutOff_v optional pre-calculated cut-off value to use to create groups (instead of calculating within function call)
-  #' @param breaks_v optional custom x-axis breaks
+  #' @param break_v optional custom x-axis breaks
   #' @param outputFile_v optional path to an output location if saving file is desired
   #' @param name_v optional name to add to the title. Usually the title of the dataset used as input.
   #' @param plotType_v character vector. Either 'gg' or 'base' to indicate how to make the plot
@@ -17,6 +18,8 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
   #' @param printPlot_v logical indicating to output plot or not.
   #' @param title_v prefix for plot title. Default is just 'Survival', could change to '5-year Survival' for example
   #' @param subtitle_v either 'hazard' or 'medianSurv' indicating what to print as the sub-title
+  #' @param scale_v What scale to put the x-axis (time) in. 'days' results in a value of 1 being passed to ggsurvplot's xscale argument, 'years' results in 365.25 being passed
+  #' @param timeCut_v optional timepoint cut-off to only consider data before a certain amount.
   #' @details
     #' This function is specifically made for data that has been downloaded from the TCGA hub by the UCSCXenaTools package.
     #' [here](https://xenabrowser.net/datapages/?dataset=survival%2FBRCA_survival.txt&host=https%3A%2F%2Ftcga.xenahubs.net&removeHub=https%3A%2F%2Fxena.treehouse.gi.ucsc.edu%3A443) is an example of the BRCA
@@ -65,7 +68,7 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
     labs_v <- c("below Med", "above Med")
   } else if (method_v == "tertile") {
     
-    summary_v <- quantile(data_dt[[exprCol_v]], probs = c(0, 0.33, 0.67, 1))
+    summary_v <- quantile(data_dt[[exprCol_v]], probs = c(0, 0.33, 0.67, 1), na.rm = T)
     
     if (is.null(cutOff_v)) {
       low_v <- summary_v[2]
@@ -97,6 +100,25 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
   # Check
   nGrp_v <- length(unique(data_dt$survCol))
   if (nGrp_v < 2) return("Fewer than 2 groups.")
+  
+  ###
+  ### Time Cutoff ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ###
+  
+  if (!is.null(timeCut_v)) {
+    
+    ### Cap survival time at the cut-off
+    data_dt[, newTime := ifelse(get(timeCol_v) > timeCut_v, timeCut_v, get(timeCol_v))]
+    
+    ### Re-do censor column
+    data_dt$newDeath <- 1
+    data_dt[newTime >= timeCut_v, newDeath := 0]
+    
+    ### Reassign columns
+    timeCol_v <- "newTime"
+    deathCol_v <- "newDeath"
+    
+  } # fi
   
   ###
   ### Survival ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -135,6 +157,15 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
                        paste0(title_v, " Based on ", exprCol_v, " ", simpleCap(method_v), " Expression"),
                        paste0(title_v, " of ", name_v, " Based on\n", exprCol_v, " ", simpleCap(method_v), " Expression"))
   
+  ### Determine scale
+  if (scale_v == "days") {
+    xscale_v <- 1
+  } else if (scale_v == "years") {
+    xscale_v <- 365.25
+  } else {
+    stop("scale_v can only be 'days' or 'years'")
+  }
+  
   if (plotType_v == "gg") {
     
     if (subtitle_v == "medianSurv") {
@@ -157,7 +188,7 @@ simpleSurvival <- function(data_dt, exprCol_v, timeCol_v = "OS.time", deathCol_v
                                                       palette = c("blue", "red"),
                                                       linewidth = 1.5, censor.size = 10,
                                                       break.x.by = break_v,
-                                                      xscale = 365.25))
+                                                      xscale = xscale_v))
     
     out_lsls[["plot"]] <- surv_gg
     

@@ -18,7 +18,9 @@ simpleSurvival(
   return_v = F,
   printPlot_v = T,
   title_v = "Survival",
-  subtitle_v = "hazard"
+  subtitle_v = "hazard",
+  scale_v = "days",
+  timeCut_v = NULL
 )
 }
 \arguments{
@@ -34,6 +36,8 @@ simpleSurvival(
 
 \item{cutOff_v}{optional pre-calculated cut-off value to use to create groups (instead of calculating within function call)}
 
+\item{break_v}{optional custom x-axis breaks}
+
 \item{outputFile_v}{optional path to an output location if saving file is desired}
 
 \item{name_v}{optional name to add to the title. Usually the title of the dataset used as input.}
@@ -48,7 +52,9 @@ simpleSurvival(
 
 \item{subtitle_v}{either 'hazard' or 'medianSurv' indicating what to print as the sub-title}
 
-\item{breaks_v}{optional custom x-axis breaks}
+\item{scale_v}{What scale to put the x-axis (time) in. 'days' results in a value of 1 being passed to ggsurvplot's xscale argument, 'years' results in 365.25 being passed}
+
+\item{timeCut_v}{optional timepoint cut-off to only consider data before a certain amount.}
 }
 \value{
 plot
